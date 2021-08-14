@@ -19,10 +19,11 @@ void setup() {
   mp3Player.begin(mySoftwareSerial) ;
   
   initializeButtons();
-  handleButtons();
 }
 
-void loop() {}
+void loop() {
+    handleButtons();
+}
 
 /* 
 - On initialise tous les états de boutons à "LOW" (non enfoncés)
