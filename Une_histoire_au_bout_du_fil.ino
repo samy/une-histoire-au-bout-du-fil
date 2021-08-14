@@ -8,21 +8,21 @@ int lastButtonPressedIndex;       //Numéro du dernier bouton pressé
 int buttonsPins[] = { 2, 3, 4 };  //Liste des ports sur lesquels sont branchés les boutons
 bool isAButtonPressed = false;
 bool isADifferentButtonPressed = false;
-int MP3_PIN1 = 12; //Le port de l'Ardunino branché sur le TX du DFPlayer
-int MP3_PIN2 = 8; //Le port de l'Ardunino branché sur le RX du DFPlayer
+int MP3_PIN1 = 12;  //Le port de l'Ardunino branché sur le TX du DFPlayer
+int MP3_PIN2 = 8;   //Le port de l'Ardunino branché sur le RX du DFPlayer
 SoftwareSerial mySoftwareSerial(MP3_PIN1, MP3_PIN2);
 DFRobotDFPlayerMini mp3Player;
 
 void setup() {
   //Initialisation du lecteur MP3
-  mySoftwareSerial.begin(9600) ;
-  mp3Player.begin(mySoftwareSerial) ;
-  
+  mySoftwareSerial.begin(9600);
+  mp3Player.begin(mySoftwareSerial);
+
   initializeButtons();
 }
 
 void loop() {
-    handleButtons();
+  handleButtons();
 }
 
 /* 
@@ -46,7 +46,7 @@ void handleButtons() {
   isAButtonPressed = false;
   isADifferentButtonPressed = false;
   for (int i = 0; i < buttonCount; i++) {
-    if (digitalRead(i) == LOW) { //Dans le cas de INPUT_PULLUP, c'est la valeur LOW qui indique que le port est alimenté
+    if (digitalRead(i) == LOW) {  //Dans le cas de INPUT_PULLUP, c'est la valeur LOW qui indique que le port est alimenté
       lastButtonPressedIndex = i;
       isAButtonPressed = true;
       //Inutile de retester 60 fois / seconde si un bouton est enfoncé :)
@@ -60,16 +60,16 @@ void handleButtons() {
   //Si un bouton a été pressé
   if (isAButtonPressed) {
 
-      //Si c'est un autre bouton que celui d'avant, on arrête la lecture seulement si elle est en cours
-      //Valable aussi au premier bouton
-      if (isADifferentButtonPressed) {
-          if (-1 != mp3Player.readState()) {
-            mp3Player.pause();
-          }
-          mp3Player.play(lastButtonPressedIndex); //On joue le morçeau associé (entre 0 et 9)
+    //Si c'est un autre bouton que celui d'avant, on arrête la lecture seulement si elle est en cours
+    //Valable aussi au premier bouton
+    if (isADifferentButtonPressed) {
+      if (-1 != mp3Player.readState()) {
+        mp3Player.pause();
       }
+      mp3Player.play(lastButtonPressedIndex);  //On joue le morçeau associé (entre 0 et 9)
+    }
   }
-  
+
   //Si aucun bouton n'est actuellement appuyé
   if (!isAButtonPressed) {
     //On stocke toute lecture de MP3
