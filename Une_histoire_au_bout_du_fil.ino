@@ -14,12 +14,12 @@ SoftwareSerial mySoftwareSerial(MP3_PIN1, MP3_PIN2);
 DFRobotDFPlayerMini mp3Player;
 
 void setup() {
-  initializeButtons();
-  checkButtonStates();
-
   //Initialisation du lecteur MP3
   mySoftwareSerial.begin(9600) ;
   mp3Player.begin(mySoftwareSerial) ;
+  
+  initializeButtons();
+  handleButtons();
 }
 
 void loop() {}
@@ -38,7 +38,10 @@ void initializeButtons() {
   }
 }
 
-void checkButtonStates() {
+/*
+Fonction principale de gestion des boutons/lecture
+*/
+void handleButtons() {
   isAButtonPressed = false;
   isADifferentButtonPressed = false;
   for (int i = 0; i < buttonCount; i++) {
