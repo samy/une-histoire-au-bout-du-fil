@@ -1,8 +1,7 @@
 # Une histoire au bout du fil
 
-Ce projet a pour objectif principal de convertir le vieux téléphone présent sur l'image ci-dessous (de la marque AOIP) en boîte à histoires!
-
-![telephone](https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg)
+| Ce projet a pour objectif principal de convertir ce vieux téléphone (de la marque AOIP) en boîte à histoires!  |![telephone](https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg) |
+| ------------- | ------------- |
 
 # Technologie
 
