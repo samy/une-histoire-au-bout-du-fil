@@ -4,12 +4,12 @@
 /* Boutons */
 const int buttonCount = 10;       //Nombre de boutons
 int buttonStates[buttonCount];    //Etat des boutons
-int lastButtonPressedIndex;       //Numéro du dernier bouton pressé
-int buttonsPins[] = { 2, 3, 4 };  //Liste des ports sur lesquels sont branchés les boutons
+int lastButtonPressedIndex = -1;       //Numéro du dernier bouton pressé
+int buttonsPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };  //Liste des ports sur lesquels sont branchés les boutons
 bool isAButtonPressed = false;
 bool isADifferentButtonPressed = false;
-int MP3_PIN1 = 12;  //Le port de l'Ardunino branché sur le TX du DFPlayer
-int MP3_PIN2 = 8;   //Le port de l'Ardunino branché sur le RX du DFPlayer
+int MP3_PIN1 = A6;  //Le port de l'Ardunino branché sur le TX du DFPlayer
+int MP3_PIN2 = A5;   //Le port de l'Ardunino branché sur le RX du DFPlayer
 SoftwareSerial mySoftwareSerial(MP3_PIN1, MP3_PIN2);
 DFRobotDFPlayerMini mp3Player;
 
@@ -17,7 +17,8 @@ void setup() {
   //Initialisation du lecteur MP3
   mySoftwareSerial.begin(9600);
   mp3Player.begin(mySoftwareSerial);
-
+  mp3Player.volume(25);
+  Serial.begin(115200);
   initializeButtons();
 }
 
@@ -25,9 +26,9 @@ void loop() {
   handleButtons();
 }
 
-/* 
-- On initialise tous les états de boutons à "LOW" (non enfoncés)
-- On écoute désormais tous les 10 ports reliés aux boutons
+/*
+  - On initialise tous les états de boutons à "LOW" (non enfoncés)
+  - On écoute désormais tous les 10 ports reliés aux boutons
 */
 
 void initializeButtons() {
@@ -40,33 +41,42 @@ void initializeButtons() {
 }
 
 /*
-Fonction principale de gestion des boutons/lecture
+  Fonction principale de gestion des boutons/lecture
 */
 void handleButtons() {
   isAButtonPressed = false;
   isADifferentButtonPressed = false;
   for (int i = 0; i < buttonCount; i++) {
-    if (digitalRead(i) == LOW) {  //Dans le cas de INPUT_PULLUP, c'est la valeur LOW qui indique que le port est alimenté
-      lastButtonPressedIndex = i;
+    if (digitalRead(buttonsPins[i]) == LOW) {  //Dans le cas de INPUT_PULLUP, c'est la valeur LOW qui indique que le port est alimenté
+      Serial.println((String)"Bouton :" + i);
+      Serial.println((String)"lastButtonPressedIndex :" + lastButtonPressedIndex);
       isAButtonPressed = true;
       //Inutile de retester 60 fois / seconde si un bouton est enfoncé :)
-      delay(100);
-      if (lastButtonPressedIndex != i || lastButtonPressedIndex == 0) {
+      if (lastButtonPressedIndex != i || lastButtonPressedIndex == -1) {
+        Serial.println("A different button has been pressed1");
+
         isADifferentButtonPressed = true;
       }
+      lastButtonPressedIndex = i;
+        delay(1000);
+
+      break;
     }
   }
 
   //Si un bouton a été pressé
   if (isAButtonPressed) {
-
+    Serial.println("A button has been pressed");
     //Si c'est un autre bouton que celui d'avant, on arrête la lecture seulement si elle est en cours
     //Valable aussi au premier bouton
     if (isADifferentButtonPressed) {
+      Serial.println("A different button has been pressed2");
       if (-1 != mp3Player.readState()) {
         mp3Player.pause();
       }
       mp3Player.play(lastButtonPressedIndex);  //On joue le morçeau associé (entre 0 et 9)
+        delay(3000);
+
     }
   }
 
