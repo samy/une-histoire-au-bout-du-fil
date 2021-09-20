@@ -2,14 +2,15 @@
 #include <DFRobotDFPlayerMini.h>
 
 /* Boutons */
-const int buttonCount = 10;       //Nombre de boutons
-int buttonStates[buttonCount];    //Etat des boutons
-int lastButtonPressedIndex = -1;       //Numéro du dernier bouton pressé
+const int buttonCount = 10;                              //Nombre de boutons
+int buttonStates[buttonCount];                           //Etat des boutons
+int lastButtonPressedIndex = -1;                         //Numéro du dernier bouton pressé
 int buttonsPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };  //Liste des ports sur lesquels sont branchés les boutons
+int powerPin = 12;
 bool isAButtonPressed = false;
 bool isADifferentButtonPressed = false;
 int MP3_PIN1 = A6;  //Le port de l'Ardunino branché sur le TX du DFPlayer
-int MP3_PIN2 = A5;   //Le port de l'Ardunino branché sur le RX du DFPlayer
+int MP3_PIN2 = A5;  //Le port de l'Ardunino branché sur le RX du DFPlayer
 SoftwareSerial mySoftwareSerial(MP3_PIN1, MP3_PIN2);
 DFRobotDFPlayerMini mp3Player;
 
@@ -23,6 +24,9 @@ void setup() {
 }
 
 void loop() {
+  if (!checkPower()) {
+    return;
+  }
   handleButtons();
 }
 
@@ -38,6 +42,21 @@ void initializeButtons() {
     // https://www.arduino.cc/en/Tutorial/Foundations/DigitalPins
     pinMode(buttonsPins[i], INPUT_PULLUP);
   }
+  pinMode(powerPin, INPUT_PULLUP);
+}
+
+/*
+Vérification de l'alimentation du port déclenché par le fait de décrocher le téléphone
+*/
+
+bool checkPower() {
+  if (HIGH == digitalRead(powerPin)) {  //Si le téléphone est raccroché, on réinitialise tout
+    initializeButtons();
+    lastButtonPressedIndex - 1;
+    mp3Player.pause();
+    return false;
+  }
+  return true;
 }
 
 /*
@@ -48,8 +67,8 @@ void handleButtons() {
   isADifferentButtonPressed = false;
   for (int i = 0; i < buttonCount; i++) {
     if (digitalRead(buttonsPins[i]) == LOW) {  //Dans le cas de INPUT_PULLUP, c'est la valeur LOW qui indique que le port est alimenté
-      Serial.println((String)"Bouton :" + i);
-      Serial.println((String)"lastButtonPressedIndex :" + lastButtonPressedIndex);
+      Serial.println((String) "Bouton :" + i);
+      Serial.println((String) "lastButtonPressedIndex :" + lastButtonPressedIndex);
       isAButtonPressed = true;
       //Inutile de retester 60 fois / seconde si un bouton est enfoncé :)
       if (lastButtonPressedIndex != i || lastButtonPressedIndex == -1) {
@@ -58,7 +77,7 @@ void handleButtons() {
         isADifferentButtonPressed = true;
       }
       lastButtonPressedIndex = i;
-        delay(1000);
+      delay(1000);
 
       break;
     }
@@ -75,8 +94,7 @@ void handleButtons() {
         mp3Player.pause();
       }
       mp3Player.play(lastButtonPressedIndex);  //On joue le morçeau associé (entre 0 et 9)
-        delay(3000);
-
+      delay(3000);
     }
   }
 
