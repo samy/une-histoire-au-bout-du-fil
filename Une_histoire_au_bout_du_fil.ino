@@ -37,7 +37,10 @@ void setup() {
   MP3Serial.begin(9600);
   mp3Player.begin(MP3Serial);
   mp3Player.volume(25);
+<<<<<<< HEAD
   Serial.begin(9600);
+=======
+>>>>>>> d69fc2cbd0474826006fcac157f5d71a940bee77
 }
 
 void loop() {
@@ -153,5 +156,32 @@ void Ecran() {
 
 /* Lit le CSV depuis la carte SD et stocke les données pour chaque colonne/ligne */
 void readFromSd() {
+<<<<<<< HEAD
   hasReadCSV = true;
 }
+=======
+
+  SdFat SD;
+  File dir;
+  File file;
+  int SD_PIN = A0;
+
+#define SD_CONFIG SdSpiConfig(SD_PIN)
+#define error(s) SD.errorHalt(&Serial, F(s))
+
+  // Initialize the SD.
+  if (!SD.begin(SD_CONFIG)) {
+    Serial.println("BAD");
+
+    SD.initErrorHalt(&Serial);
+  }
+  // Create the file.
+  if (!file.open("liste.csv", FILE_READ)) {
+    error("open failed");
+  }
+
+  // Rewind file for read.
+  file.rewind();
+  hasReadCSV = true;
+}
+>>>>>>> d69fc2cbd0474826006fcac157f5d71a940bee77
