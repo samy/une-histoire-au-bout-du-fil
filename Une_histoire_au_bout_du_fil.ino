@@ -1,6 +1,4 @@
 /* Gestion CSV */
-#define CSV_PARSER_DONT_IMPORT_SD 1
-#include <CSV_Parser.h>
 char** MP3Authors;
 char** MP3Titles;
 bool hasReadCSV = false;
@@ -18,15 +16,6 @@ bool hasReadCSV = false;
 #include "Show_Lib.h"
 #include "Debug.h"
 bool isScreenInitialized = false;
-
-/* Lecteur carte SD*/
-#define USE_FAT_FILE_FLAG_CONTIGUOUS 0
-#define USE_LONG_FILE_NAMES 0
-#define SDFAT_FILE_TYPE 1
-#define SD_FAT_TYPE 0
-#define USE_DEDICATED_SPI 0
-#include <SdFat.h>
-#include <SdFatConfig.h>
 
 /* Boutons */
 const int buttonCount = 10;                              //Nombre de boutons
@@ -164,40 +153,5 @@ void Ecran() {
 
 /* Lit le CSV depuis la carte SD et stocke les données pour chaque colonne/ligne */
 void readFromSd() {
-
-  SdFat SD;
-  File dir;
-  File file;
-  int SD_PIN = A0;
-
-#define SD_CONFIG SdSpiConfig(SD_PIN)
-#define error(s) SD.errorHalt(&Serial, F(s))
-
-  // Initialize the SD.
-  if (!SD.begin(SD_CONFIG)) {
-    Serial.println("BAD");
-
-    SD.initErrorHalt(&Serial);
-  }
-  // Create the file.
-  if (!file.open("liste.csv", FILE_READ)) {
-    error("open failed");
-  }
-
-  // Rewind file for read.
-  file.rewind();
-  CSV_Parser cp(/*format*/ "ss", /*has_header*/ true, /*delimiter*/ ';');
-
-  while (file.available()) {
-    char ltr = file.read();
-    cp << ltr;
-  }
-
-  file.close();
-  Serial.println(F("Done"));
-  cp.parseLeftover();
-
-  MP3Authors = (char**)cp["auteur"];
-  MP3Titles = (char**)cp["titre"];
   hasReadCSV = true;
 }
