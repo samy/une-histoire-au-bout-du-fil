@@ -1,4 +1,5 @@
 /* Gestion CSV */
+
 char** MP3Authors;
 char** MP3Titles;
 bool hasReadCSV = false;
