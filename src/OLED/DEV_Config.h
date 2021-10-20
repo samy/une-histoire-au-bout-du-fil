@@ -22,19 +22,27 @@
 *****************************************************************************************/
 //GPIO config
 //OLED
+#ifndef OLED_CS
 #define OLED_CS 10
+#endif
 #define OLED_CS_0	    digitalWrite(OLED_CS, LOW)
 #define OLED_CS_1		digitalWrite(OLED_CS, HIGH)
 
+#ifndef OLED_RST
 #define OLED_RST 8
+#endif
 #define OLED_RST_0		digitalWrite(OLED_RST, LOW)
 #define OLED_RST_1		digitalWrite(OLED_RST, HIGH)
 
+#ifndef OLED_DC
 #define OLED_DC 7
+#endif
 #define OLED_DC_0		digitalWrite(OLED_DC, LOW)
 #define OLED_DC_1	  	digitalWrite(OLED_DC, HIGH)
 
+#ifndef SPIRAM_CS
 #define SPIRAM_CS 5
+#endif
 #define SPIRAM_CS_0     digitalWrite(SPIRAM_CS, LOW)
 #define SPIRAM_CS_1     digitalWrite(SPIRAM_CS, HIGH)
 
