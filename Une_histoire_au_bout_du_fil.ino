@@ -9,15 +9,15 @@ const char *const titles[] PROGMEM = {string_0, string_1, string_2, string_3, st
 
 /* Lecteur MP3 */
 #include <SoftwareSerial.h>
-#include <DFRobotDFPlayerMini.h>
+#include "src/DFRobotDFPlayerMini/DFRobotDFPlayerMini.h"
 
 /* Ecran OLED */
 #define OLED_CS A3
 #define OLED_DC A2
-#include "OLED_Driver.h"
-#include "OLED_GUI.h"
-#include "DEV_Config.h"
-#include "Show_Lib.h"
+#include "src/OLED/OLED_Driver.h"
+#include "src/OLED/OLED_GUI.h"
+#include "src/OLED/DEV_Config.h"
+#include "src/OLED/Show_Lib.h"
 bool isScreenInitialized = false;
 
 /* Boutons */
