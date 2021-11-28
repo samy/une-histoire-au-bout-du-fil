@@ -1,11 +1,5 @@
-const char string_0[] PROGMEM = "Le petit princeLe petit princeLe petit princeLe petit prince"; // "String 0" etc are strings to store - change to suit.
-const char string_1[] PROGMEM = "Le petit princeLe petit princeLe petit princeLe petit prince";
-const char string_2[] PROGMEM = "Le petit princeLe petit princeLe petit princeLe petit prince";
-const char string_3[] PROGMEM = "Le petit princeLe petit princeLe petit princeLe petit prince";
-const char string_4[] PROGMEM = "Le petit princeLe petit princeLe petit princeLe petit prince";
-const char string_5[] PROGMEM = "Le petit princeLe petit princeLe petit princeLe petit prince";
-const char *const titles[] PROGMEM = {string_0, string_1, string_2, string_3, string_4, string_5};
-
+/* Liste des textes */
+#include "ListeHistoires.h"
 
 /* Lecteur MP3 */
 #include <SoftwareSerial.h>
@@ -21,16 +15,16 @@ const char *const titles[] PROGMEM = {string_0, string_1, string_2, string_3, st
 bool isScreenInitialized = false;
 
 /* Boutons */
-const int buttonCount PROGMEM = 10;                              //Nombre de boutons
+const int buttonCount  = 10;                              //Nombre de boutons
 int buttonStates[buttonCount];                           //Etat des boutons
 int lastButtonPressedIndex = -1;                         //Numéro du dernier bouton pressé
-const int buttonsPins[] PROGMEM = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };  //Liste des ports sur lesquels sont branchés les boutons
-const int powerPin PROGMEM = 12;
+const int buttonsPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };  //Liste des ports sur lesquels sont branchés les boutons
+const int powerPin = 12;
 bool isAButtonPressed = false;
 bool isADifferentButtonPressed = false;
 bool areButtonsInitialized = false;
-const int MP3_PIN1 PROGMEM = A6;  //Le port de l'Ardunino branché sur le TX du DFPlayer
-const int MP3_PIN2 PROGMEM = A5;  //Le port de l'Ardunino branché sur le RX du DFPlayer
+const int MP3_PIN1  = A6;  //Le port de l'Ardunino branché sur le TX du DFPlayer
+const int MP3_PIN2  = A5;  //Le port de l'Ardunino branché sur le RX du DFPlayer
 SoftwareSerial MP3Serial(MP3_PIN1, MP3_PIN2);
 DFRobotDFPlayerMini mp3Player;
 
@@ -42,13 +36,16 @@ void setup() {
   mp3Player.volume(25);
   char valeur[64]; // Attention : La variable doit être suffisamment grande pour stocker le message
   strcpy_P(valeur, (char*) pgm_read_word(&(titles[2])));
+
 }
 
 void loop() {
-  if (!isScreenInitialized) {
+
+  if (isScreenInitialized == false) {
     initScreen();
   }
   if (!checkPower()) {
+    Serial.println("power off");
     return;
   }
   if (!areButtonsInitialized) {
@@ -91,10 +88,15 @@ bool checkPower() {
   Fonction principale de gestion des boutons/lecture
 */
 void handleButtons() {
+
+  Serial.println("handleButtons");
   isAButtonPressed = false;
   isADifferentButtonPressed = false;
   for (int i = 0; i < buttonCount; i++) {
     if (digitalRead(buttonsPins[i]) == LOW) {  //Dans le cas de INPUT_PULLUP, c'est la valeur LOW qui indique que le port est alimenté
+      char message[32];  // max length you’ll need +1
+      sprintf(message, "Bouton appuye : %d" , i);
+      Serial.println(message);
       isAButtonPressed = true;
       //Inutile de retester 60 fois / seconde si un bouton est enfoncé :)
       if (lastButtonPressedIndex != i || lastButtonPressedIndex == -1) {
@@ -106,6 +108,7 @@ void handleButtons() {
 
       break;
     }
+
   }
 
   //Si un bouton a été pressé
@@ -127,21 +130,51 @@ void handleButtons() {
     mp3Player.pause();
   }
 }
+extern OLED_DIS sOLED_DIS;
 
 void initScreen() {
+  Serial.println("ecran");
   System_Init();
-
   OLED_SCAN_DIR OLED_ScanDir = SCAN_DIR_DFT;
   OLED_Init( OLED_ScanDir );
 
+  displayHeader();
+  displayHomePage();
+
+  isScreenInitialized = true;
+
+}
+
+void displayHeader()
+{
   //GUI_Show();
   OLED_ClearBuf();
   OLED_ClearScreen(OLED_BACKGROUND);
 
-  GUI_DisString_EN(0 , 2, "Boite a histoires", &Font16, FONT_BACKGROUND, WHITE);
-
-  OLED_Display(0, 65, 128, 65 + 32);
+  GUI_DrawLine(0, 8, sOLED_DIS.OLED_Dis_Column - 1, 8, WHITE, LINE_SOLID , DOT_PIXEL_DFT);
+  OLED_DisPage(0, 0);
+  OLED_DisPage(0, 7);
   OLED_ClearBuf();
-  isScreenInitialized = true;
 
+  GUI_DisString_EN(6, 0, "BOITE A HISTOIRES", &Font12, FONT_BACKGROUND, WHITE);
+  GUI_DrawLine(0, 15, sOLED_DIS.OLED_Dis_Column - 1, 15, WHITE, LINE_SOLID , DOT_PIXEL_DFT);
+
+  OLED_DisPage(0, 1);
+  OLED_ClearBuf();
+
+  OLED_DisPage(0, 2);
+  OLED_ClearBuf();
+}
+
+void displayHomePage()
+{
+  GUI_DisString_EN(12, 2, "DECROCHE ET", &Font12, FONT_BACKGROUND, WHITE);
+  OLED_DisPage(0, 3);
+  OLED_ClearBuf();
+  GUI_DisString_EN(12, 2, "APPUIE SUR UN", &Font12, FONT_BACKGROUND, WHITE);
+  OLED_DisPage(0, 4);
+  OLED_ClearBuf();
+  GUI_DisString_EN(12, 2, "DES BOUTONS =>", &Font12, FONT_BACKGROUND, WHITE);
+  OLED_DisPage(0, 5);
+  OLED_ClearBuf();
 }
