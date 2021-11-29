@@ -29,6 +29,7 @@ void setup() {
     Serial.println(F("2.Please insert the SD card!"));
     while (true);
   }
+  myDFPlayer.volume(10); 
 }
 
 void loop() {
