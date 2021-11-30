@@ -12,30 +12,37 @@ DFRobotDFPlayerMini myDFPlayer;
 
 #define PIN_READY  A2
 #define PIN_PULSE 2
+#define PIN_HANG A3
 int numberSpecified = -1;
+int hangCounter = 0;
 
 RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
 
 void setup() {
-  pinMode(A3, INPUT_PULLUP);
-
-
   Serial.begin(9600);
+
   mySoftwareSerial.begin(9600);
   dialer.setup();
-  if (!myDFPlayer.begin(mySoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
+  if (!myDFPlayer.begin(mySoftwareSerial, true, false)) {  //Use softwareSerial to communicate with mp3.
     Serial.println(F("Unable to begin:"));
     Serial.println(F("1.Please recheck the connection!"));
     Serial.println(F("2.Please insert the SD card!"));
     while (true);
   }
-  myDFPlayer.volume(10); 
+  myDFPlayer.pause();
+  myDFPlayer.volume(10);
+  pinMode(PIN_HANG, INPUT_PULLUP);
 }
 
 void loop() {
   if (isHangedUp()) {
-    myDFPlayer.pause();
-    return;
+    hangCounter++;
+    if (hangCounter > 20) {
+      myDFPlayer.pause();
+      return;
+    }
+  } else {
+    hangCounter = 0;
   }
   if (dialer.update()) {
     numberSpecified = getDialedNumber(dialer);
@@ -51,6 +58,6 @@ int getDialedNumber(RotaryDialer dialerObject) {
   return number == 0 ? 10 : number;
 }
 bool isHangedUp() {
-  int sensorValue = digitalRead(A3);
-  return sensorValue == 1;
+  int sensorValue = analogRead(PIN_HANG);
+  return sensorValue > 1000;
 }
