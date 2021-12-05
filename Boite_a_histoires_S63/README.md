@@ -4,6 +4,13 @@
 
 (source : [x0r.fr](https://x0r.fr/blog/53) )
 
+# Schema du circuit
+
+![This is an image](./Breadboard.png)
+
+La masse de l'interrupteur de décrochage est partagée avec celle du cadran rotatif, un seul fil est donc nécessaire pour indiquer l'état (la masse est représentée sur le schéma mais on utilise ici les connexions déja présentes sur le circuit du téléphone).
+
+
 # Etiquette du cadran
 
 Celle-ci est constituée d'un disque de 51mm de diamètre, et la police utilisée semble être du Univers Condensed Medium avec en 7.5pt un crénage de 46 (merci à [Jean-François Porchez](https://typofonderie.com) pour la suggestion de la police Univers)
