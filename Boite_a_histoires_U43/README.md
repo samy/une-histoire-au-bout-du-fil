@@ -4,6 +4,8 @@ Ce modèle date de 1943 (d'où son nom).
 
 ![WhatsApp Image 2022-01-11 at 14 30 25 (1)](https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg)
 
+*Photo par [Lulu La Lucette](https://lululalucette.com)*
+
 # Principe de fonctionnement
 On reprend ici la logique du modèle S63 https://github.com/samy/une-histoire-au-bout-du-fil/blob/main/Boite_a_histoires_S63/README.md
 
