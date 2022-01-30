@@ -52,7 +52,8 @@ void loop() {
 
   /* Si un numéro a été composé, alors on joue le MP3 correspondant */
   if (numberSpecified != -1) {
-    myDFPlayer.play(numberSpecified);
+    // les mp3 doivent se trouver un dossier /MP3 et numérotés 0001.mp3, 0002.mp3, 0003.mp3 ...
+    myDFPlayer.playMp3Folder(numberSpecified);
     numberSpecified = -1;
   }
 }
