@@ -6,7 +6,7 @@
 
 # Schema du circuit
 
-![This is an image](./Breadboard.png)
+![This is an image](./Breadboard_S63.png)
 
 La masse de l'interrupteur de décrochage est partagée avec celle du cadran rotatif, un seul fil est donc nécessaire pour indiquer l'état (la masse est représentée sur le schéma mais on utilise ici les connexions déja présentes sur le circuit du téléphone).
 
