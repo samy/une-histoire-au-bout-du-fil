@@ -8,7 +8,7 @@ Ce modèle date de 1943 (d'où son nom).
 
 # Pré-requis
 Sur la carte micro-SD, créez un dossier nommé *MP3* et stockez-y vos fichiers à faire jouer par le téléphone.
-Ils doivent être prefixés par un numéro à 4 chiffres, qui les fera correspondre au chiffre composé sur le cadran (0001.mp3 ou 0001 - blablabla.mp3 pour le morceau 1, etc)
+Ils doivent être prefixés par un numéro à 4 chiffres, qui les fera correspondre au chiffre composé sur le cadran : 0001.mp3 ou 0001 - cequevousvoulez.mp3 pour le morceau 1, etc)
 
 # Utilisation
 Il vous suffit de décrocher le combiné, de composer un (seul) chiffre et d'écouter l'histoire qui vous est racontée.
