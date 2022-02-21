@@ -35,6 +35,28 @@ Comme mon précédent modèle de téléphone, on utilise ici un DFPlayer, mais c
 
 La seule particularité ici est que le décrochage n'a pu être géré directement par les bornes situées sous l'appareil : en effet, comme pour le cadran, les parasites liés au circuit sont trop importants. J'ai donc du directement me brancher sur les contacts du système électromécanique qui s'enclenche quand on raccroche.
 
+# Cablage
+Les positions de A1 à J17 correspondent à celles d'une [uPesy Solderable Breadboard Mini](https://www.upesy.com/products/upesy-protoboard-breadboard-mini).
+Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus.
+
+| Source    | Destination |
+| ------------- | ------------- |
+| J3  | Port A  |
+| B2  | Port B  |
+| J7  | Port C  |
+| C2  | Port D  |
+| J4  | Port E  |
+| J15  | Port F  |
+| J17  | Port G  |
+| I16  | Port H  |
+| A4 | A9 |
+| E9 | F9 (R 1kΩ) |
+| J9 | J11 |
+| B5 | J12 |
+| I10 | C1 (+) |
+| H16 | C2 (-) |
+
+
 # TODO
 - Gérer des numéros à plusieurs chiffres (il faut cependant bien doser le timing pour déterminer s'il s'agit d'une pause entre deux chiffres ou si l'utilisateur a fini le numéro)
 - Améliorer le filtrage du circuit pour pouvoir dans tous les cas utiliser les contacts de décrochage classiques
