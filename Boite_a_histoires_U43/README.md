@@ -62,6 +62,8 @@ Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus.
 | Xiao  | D1-D7 & H1-H7 |
 | DFPlayer  | B10-B17 & G10-G17 |
 
+Sun un modèle standard de boitier les câbles reliant la breadboard aux contacts extérieurs doivent faire au moins 65mm de long.
+
 # TODO
 - Gérer des numéros à plusieurs chiffres (il faut cependant bien doser le timing pour déterminer s'il s'agit d'une pause entre deux chiffres ou si l'utilisateur a fini le numéro)
 - Améliorer le filtrage du circuit pour pouvoir dans tous les cas utiliser les contacts de décrochage classiques
