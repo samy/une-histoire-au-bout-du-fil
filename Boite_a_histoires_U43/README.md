@@ -56,10 +56,11 @@ Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus.
 | I10 | C1 (+) |
 | H16 | C2 (-) |
 
-# Position des cartes
-
+## Emplacement des cartes
+| Carte    | Position |
+| ------------- | ------------- |
 | Xiao  | D1-D7 & H1-H7 |
-| DFPlayer  | B10-B17 & G10-G47 |
+| DFPlayer  | B10-B17 & G10-G17 |
 
 # TODO
 - Gérer des numéros à plusieurs chiffres (il faut cependant bien doser le timing pour déterminer s'il s'agit d'une pause entre deux chiffres ou si l'utilisateur a fini le numéro)
