@@ -1,8 +1,6 @@
 # Une histoire au bout du fil
 
 Ce projet a pour objectif principal de convertir de vieux téléphones en boîte à histoires!
-
-Cliquez sur chaque modèle pour voir les différentes versions.
 <table width="100%">
     <tr>
       <td width="33%" valign="top" align="center"><a href="Boite_a_histoires_AOIP/README.md"><strong>AOIP 1940-1950</strong><br /><img src="https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg" width="100%" /></a></td>
