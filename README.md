@@ -2,8 +2,6 @@
 
 Ce projet a pour objectif principal de convertir de vieux téléphones en boîte à histoires!
 
-Tous les modèles utilisent un Arduino + DFPlayer Mini branché sur le circuit existant de chaque appareil.
-
 Cliquez sur chaque modèle pour voir les différentes versions.
 <table width="100%">
     <tr>
