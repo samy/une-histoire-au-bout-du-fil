@@ -37,30 +37,30 @@ La seule particularité ici est que le décrochage n'a pu être géré directeme
 
 # Cablage
 Les positions de A1 à J17 correspondent à celles d'une [uPesy Solderable Breadboard Mini](https://www.upesy.com/products/upesy-protoboard-breadboard-mini).
-Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus.
+Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus. Les positions s'entendent avec __le A à gauche et le J à droite__.
 
 | Source    | Destination |
 | ------------- | ------------- |
-| J3  | Port A  |
-| B2  | Port B  |
-| J7  | Port C  |
-| C2  | Port D  |
-| J4  | Port E  |
-| J15  | Port F  |
-| J17  | Port G  |
-| I16  | Port H  |
-| A4 | A9 |
+| A3  | Port A  |
+| I2  | Port B  |
+| A7  | Port C  |
+| H2  | Port D  |
+| A4  | Port E  |
+| A15  | Port F  |
+| A17  | Port G  |
+| B16  | Port H  |
+| J4 | J9 |
 | E9 | F9 (R 1kΩ) |
-| J9 | J11 |
-| B5 | J12 |
-| I10 | C1 (+) |
-| H16 | C2 (-) |
+| A9 | A11 |
+| I5 | A12 |
+| B10 | H1 (+) |
+| C16 | H2 (-) |
 
 ## Emplacement des cartes
 | Carte    | Position |
 | ------------- | ------------- |
-| Xiao  | D1-D7 & H1-H7 |
-| DFPlayer  | B10-B17 & G10-G17 |
+| Xiao  | C1-C7 & G1-G7 |
+| DFPlayer  | D10-D17 & I10-I17 |
 
 Sun un modèle standard de boitier les câbles reliant la breadboard aux contacts extérieurs doivent faire au moins 65mm de long.
 
