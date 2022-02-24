@@ -60,8 +60,8 @@ Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus. Le
 ## Emplacement des cartes
 | Carte    | Position |
 | ------------- | ------------- |
-| Xiao  | C1-C7 & G1-G7 |
-| DFPlayer  | D10-D17 & I10-I17 |
+| Seeeduino Xiao  | C1-C7 & G1-G7 |
+| DFPlayer Mini  | D10-D17 & I10-I17 |
 
 Sun un modèle standard de boitier les câbles reliant la breadboard aux contacts extérieurs doivent faire au moins 65mm de long.
 
