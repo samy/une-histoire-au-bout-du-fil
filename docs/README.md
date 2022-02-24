@@ -1,22 +1,14 @@
 # Une histoire au bout du fil
 
-Ce projet a pour objectif principal de convertir ce vieux téléphone (de la marque AOIP) en boîte à histoires!
-![telephone](https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg)
+Ce projet a pour objectif principal de convertir de vieux téléphones en boîte à histoires!
+<table width="100%" align="center">
+    <tr>
+      <td width="33%" valign="top" align="center"><a href="Boite_a_histoires_AOIP/README.md"><strong>AOIP 1940-1950</strong><br /><img src="https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg" height="225" /></a></td>
+      <td width="33%" valign="top" align="center"><a href="Boite_a_histoires_S63/README.md"><strong>Socotel S63</strong><br />
+        <img src="https://user-images.githubusercontent.com/1282106/144014466-de22c6db-30d0-470b-b444-1885433b99f5.png"  height="225" /></a>
+      </td>
+      <td width="33%" valign="top" align="center"><a href="Boite_a_histoires_U43/README.md"><strong>Ericsson U43</strong><br /><img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  height="225" /></a></td>
+  </tr>
+</table>
 
-# Technologie
-
-L'idée principale qui sous-tend ce projet est de ne pas dénaturer le téléphone d'origine : on réutilisera donc la circuiterie d'origine, qui est en bon état.
-
-Comme beaucoup de projets embarqués c'est ici un Arduino (Nano) qui sera employé.
-
-Qui dit histoires dit "son" : en effet, on va devoir jouer des fichiers audio à travers le combiné (d'origine).
-
-Cette tâche va être confiée à un lecteur [DFPlayer Mini](https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299) (de la marque DFRobot)
-
-En résumé vous aurez besoin de:
-- Arduino Nano (officiel ou non)
-- un DFPlayer Mini (autour de 5€)
-- une carte micro-SD
-- câbles Dupont ou de fils électriques classiques
-- une [breadboard](https://www.robot-maker.com/ouvrages/2-1-utiliser-breadboard/) (carte de prototypage) pour pouvoir brancher les composants et les fils et facilement les replacer
-- *ou* une [version à souder](https://www.amazon.fr/prototypage-Breadboard-Protoboard-Prototype-%C3%A9lectroniques/dp/B08F2TB5Y5/)
+Pour me contacter : samy@rabih.fr
