@@ -39,22 +39,22 @@ La seule particularité ici est que le décrochage n'a pu être géré directeme
 Les positions de A1 à J17 correspondent à celles d'une [uPesy Solderable Breadboard Mini](https://www.upesy.com/products/upesy-protoboard-breadboard-mini).
 Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus. Les positions s'entendent avec __le A à gauche et le J à droite__.
 
-| Source    | Destination |
-| ------------- | ------------- |
-| A3  | Port A  |
-| I2  | Port B  |
-| A7  | Port C  |
-| H2  | Port D  |
-| A4  | Port E  |
-| A15  | Port F  |
-| A17  | Port G  |
-| B16  | Port H  |
-| J4 | J9 |
-| E9 | F9 (R 1kΩ) |
-| A9 | A11 |
-| I5 | A12 |
-| B10 | H1 (+) |
-| C16 | H2 (-) |
+| Source    | Destination | Taille fil |
+| ------------- | ------------- | ------------- |
+| A3  | Port A  | >= 65mm |
+| I2  | Port B  | >= 65mm |
+| A7  | Port C  | >= 65mm |
+| H2  | Port D  | >= 65mm |
+| A4  | Port E  | >= 65mm |
+| A15  | Port F  | >= 65mm |
+| A17  | Port G  | >= 65mm |
+| B16  | Port H  | >= 65mm |
+| J4 | J9 | 22mm
+| E9 | F9 (R 1kΩ) | - |
+| A9 | A11 | 13mm |
+| I5 | A12 | 42mm |
+| B10 | H1 (+) | 50mm |
+| C16 | H2 (-) | 63mm |
 
 ## Emplacement des cartes
 | Carte    | Position |
