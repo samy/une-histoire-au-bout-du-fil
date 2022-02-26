@@ -45,7 +45,7 @@ Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus. Le
 | A3  | Port A  | >= 65mm |
 | I2  | Port B  | >= 65mm |
 | A7  | Port C  | >= 65mm |
-| H2  | Port D  | >= 65mm |
+| J2  | Port D  | >= 65mm |
 | A4  | Port E  | >= 65mm |
 | A15  | Port F  | >= 65mm |
 | A17  | Port G  | >= 65mm |
