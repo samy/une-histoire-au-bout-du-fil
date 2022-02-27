@@ -1,3 +1,1 @@
 Tout a commencé par un vieux téléphone trouvé aux puces et l'envie de lui donner une seconde vie...
-
-Il n'a pas fallu longtemps pour que germe l'idée d'en faire une boîte à histoires !
