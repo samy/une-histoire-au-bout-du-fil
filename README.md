@@ -15,4 +15,4 @@ Les projets auxquels j'ai pu participer via [Museomix](https://www.museomix.org)
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire "électroniser" un téléphone que vous possédez déja, n'hésitez pas à me [contacter ✉️](/contact).
 
-Il est même possible de vous proposer des contenus, en plus de l'appareil !
+Il est même possible de vous proposer des contenus, en plus de l'appareil : [reportages, documentaires](https://www.jessicabordeau.com/), [captation de mémoire et de souvenirs](https://30mai.fr), etc !
