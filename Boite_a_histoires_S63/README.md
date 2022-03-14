@@ -37,3 +37,5 @@ Celle-ci est constituée d'un disque de 51mm de diamètre, et la police utilisé
 
 ![image](https://user-images.githubusercontent.com/1282106/144504833-abf780c6-383c-48c3-8791-4e733949bcb3.png)
 
+# Licence
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Ce projet est partagé sous la licence <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>.
