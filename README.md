@@ -12,3 +12,6 @@ Ce projet a pour objectif principal de convertir de vieux téléphones en boîte
 </table>
 
 Pour me contacter : samy@rabih.fr
+
+# Licence
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Ce projet est partagé sous la licence <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>.
