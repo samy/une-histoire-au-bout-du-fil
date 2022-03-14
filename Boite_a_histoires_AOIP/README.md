@@ -20,3 +20,6 @@ En résumé vous aurez besoin de:
 - câbles Dupont ou de fils électriques classiques
 - une [breadboard](https://www.robot-maker.com/ouvrages/2-1-utiliser-breadboard/) (carte de prototypage) pour pouvoir brancher les composants et les fils et facilement les replacer
 - *ou* une [version à souder](https://www.amazon.fr/prototypage-Breadboard-Protoboard-Prototype-%C3%A9lectroniques/dp/B08F2TB5Y5/)
+
+# Licence
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Ce projet est partagé sous la licence <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>.
