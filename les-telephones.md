@@ -1,4 +1,4 @@
-A ce jour, plusieurs modèles ont été réalisés:
+A ce jour, plusieurs modèles ont été réalisés. Les documentations de chaque appareil sont disponibles ci-dessous:
 
 <div id="phone_gallery">
     <div class="phone">
