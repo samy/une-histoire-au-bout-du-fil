@@ -7,7 +7,6 @@ Pourquoi ne pas permettre de diffuser du contenu via un objet que tout le monde 
 
 Les usages possibles sont infinis :
 - mettre à disposition des témoignages d'anciens du quartier
-- audioguide
 - diffuser du contenu aidant à patienter dans une salle d'attente
 - composer une date sur le cadran et écouter un son de l'époque
 - etc
