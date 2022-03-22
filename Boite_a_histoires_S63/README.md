@@ -10,10 +10,6 @@
 
 La masse de l'interrupteur de décrochage est partagée avec celle du cadran rotatif, un seul fil est donc nécessaire pour indiquer l'état (la masse est représentée sur le schéma mais on utilise ici les connexions déja présentes sur le circuit du téléphone).
 
-⚠️ Une soudure est à à réaliser sur la carte électronique du téléphone, à l'endroit indiqué sur cette image:
-
-![image](https://user-images.githubusercontent.com/1282106/158116993-9024d001-5677-4283-a7d8-50aed1ea8403.png)
-
 # Matériel à rassembler
 - Un [Arduino Nano](https://www.gotronic.fr/art-carte-arduino-nano-12422.htm) (mais vous pouvez utiliser d'autres modèles sans problème, selon votre boitier)
 - Un [DFPlayer Mini](https://www.gotronic.fr/art-module-mp3-dfr0299-22404.htm)
