@@ -12,7 +12,7 @@
 
 <img src="https://user-images.githubusercontent.com/1282106/159546687-9603c016-0289-4233-be95-e127fce51251.png" width="40%" align="right">
 
-## Câblage du cadran
+## Liaison cadran - Arduino
 
 | Couleur       | Destination |
 | ------------- | ----------- |
