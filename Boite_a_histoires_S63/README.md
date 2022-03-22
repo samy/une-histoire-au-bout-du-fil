@@ -5,6 +5,8 @@
 (source : [x0r.fr](https://x0r.fr/blog/53) )
 
 # Schema du circuit
+<img src="https://user-images.githubusercontent.com/1282106/159449549-88aea507-3547-4f7f-97e7-b094df9191a9.png" align="right" width="30%" />
+
 
 ![This is an image](./Breadboard_S63.png)
 
