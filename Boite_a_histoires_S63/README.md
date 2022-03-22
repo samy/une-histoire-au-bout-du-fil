@@ -5,7 +5,7 @@
 (source : [x0r.fr](https://x0r.fr/blog/53) )
 
 ## Schema du circuit
-<img src="https://user-images.githubusercontent.com/1282106/159548942-32a8815e-a806-44c8-9c70-b7921f66f825.png" align="right" />
+<img src="https://user-images.githubusercontent.com/1282106/159553098-f76d16e0-87f6-4340-8629-fd2b48387afb.png" align="right" />
 
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
