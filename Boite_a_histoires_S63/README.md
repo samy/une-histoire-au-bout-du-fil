@@ -10,6 +10,18 @@
 
 ![This is an image](./Breadboard_S63.png)
 
+<img src="https://user-images.githubusercontent.com/1282106/159546687-9603c016-0289-4233-be95-e127fce51251.png" width="40%" align="right">
+
+## Câblage du cadran
+
+| Couleur       | Destination |
+| ------------- | ----------- |
+| Blanc-bleu    | Port A      |
+| Blanc-rouge   | Port B      |
+| Rouge         | Port C      |
+| Bleu          | Port D      |
+
+
 La masse de l'interrupteur de décrochage est partagée avec celle du cadran rotatif, un seul fil est donc nécessaire pour indiquer l'état (la masse est représentée sur le schéma mais on utilise ici les connexions déja présentes sur le circuit du téléphone).
 
 # Matériel à rassembler
