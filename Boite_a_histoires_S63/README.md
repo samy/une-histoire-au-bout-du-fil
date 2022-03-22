@@ -9,7 +9,7 @@
 
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td width="60%"><img src="https://user-images.githubusercontent.com/1282106/159449549-88aea507-3547-4f7f-97e7-b094df9191a9.png" align="right" /></td>
+    <td width="50%"><img src="https://user-images.githubusercontent.com/1282106/159449549-88aea507-3547-4f7f-97e7-b094df9191a9.png" align="right" /></td>
     <td><img src="https://user-images.githubusercontent.com/1282106/159546687-9603c016-0289-4233-be95-e127fce51251.png"></td>
   </tr>
 </table>
