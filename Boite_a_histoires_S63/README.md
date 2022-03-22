@@ -4,15 +4,19 @@
 
 (source : [x0r.fr](https://x0r.fr/blog/53) )
 
-# Schema du circuit
-<img src="https://user-images.githubusercontent.com/1282106/159449549-88aea507-3547-4f7f-97e7-b094df9191a9.png" align="right" width="30%" />
+## Schema du circuit
+<img src="https://user-images.githubusercontent.com/1282106/159548942-32a8815e-a806-44c8-9c70-b7921f66f825.png" align="right" />
 
-
-![This is an image](./Breadboard_S63.png)
-
-<img src="https://user-images.githubusercontent.com/1282106/159546687-9603c016-0289-4233-be95-e127fce51251.png" width="40%" align="right">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="60%"><img src="https://user-images.githubusercontent.com/1282106/159449549-88aea507-3547-4f7f-97e7-b094df9191a9.png" align="right" /></td>
+    <td><img src="https://user-images.githubusercontent.com/1282106/159546687-9603c016-0289-4233-be95-e127fce51251.png"></td>
+  </tr>
+</table>
 
 ## Liaison cadran - Arduino
+
+
 
 | Couleur       | Destination |
 | ------------- | ----------- |
@@ -20,6 +24,7 @@
 | Blanc-rouge   | Port B      |
 | Rouge         | Port C      |
 | Bleu          | Port D      |
+
 
 
 La masse de l'interrupteur de décrochage est partagée avec celle du cadran rotatif, un seul fil est donc nécessaire pour indiquer l'état (la masse est représentée sur le schéma mais on utilise ici les connexions déja présentes sur le circuit du téléphone).
