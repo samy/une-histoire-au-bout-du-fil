@@ -1,4 +1,7 @@
-L'offre commerciale est en préparation, mais n'hésitez pas à me [contacter](/contact) si vous êtes déja intéressé(e) :)
+Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un modèle S63)
+
+<p align="center">
+<a href="/contact" class="btn">Commander</a></p>
 
 Le package comprend:
 - un téléphone d'époque, avec le boitier électronique "Une histoire au bout du fil", testé
@@ -15,6 +18,6 @@ Plusieurs modèles sont disponibles :
   </div>
   </div>
 
-Si vous possèdez déja un téléphone à cadran ou à touches que vous souhaitez adapter en boîte à histoires, c'est également possible!
+Si vous possèdez déja un téléphone à cadran ou à touches, une adaptation en boîte à histoires est possible.
 
 Plusieurs partenaires sont à même de vous fournir du contenu si vous n'en possèdez pas ou souhaitez en réaliser à l'occasion.
