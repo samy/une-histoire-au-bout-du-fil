@@ -1,7 +1,7 @@
 Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un modèle S63)
 
 <p align="center">
-<a href="/contact" class="btn">Commander</a></p>
+<a href="mailto:samy.rabih.fr" class="btn">Commander</a></p>
 
 Le package comprend:
 - un téléphone d'époque, avec le boitier électronique "Une histoire au bout du fil", testé
