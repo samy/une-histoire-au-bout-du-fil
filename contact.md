@@ -4,7 +4,9 @@ Pour me contacter ou commander un appareil : [samy@rabih.fr](mailto:samy.rabih.f
 
 ## Samy Rabih
 
-Développeur au quotidien, mais bidouilleur 100% du temps, j'adore réparer des vieux objets. L'impression 3D et l'électronique sont parmi mes activités principales.
+Développeur au quotidien, mais bidouilleur 100% du temps, j'adore réparer des vieux objets.
+
+L'impression 3D et l'électronique sont parmi mes activités principales.
 
 Vous pouvez me retrouver également chez [Museomix](https://www.museomix.org) et [Fréquence Ecoles](https://www.frequence-ecoles.org/).
 
