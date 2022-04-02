@@ -13,7 +13,7 @@ Les usages possibles sont infinis :
 
 Une version avec enregistreur est à l'étude
 
-Le projet est également accessible au plus grand nombre : vous trouverez des plans de cablage, le code nécessaire et des explications techniques sur la page [Téléphones](/les-telephones).
+Le projet est également accessible au plus grand nombre : vous trouverez des plans de cablage, le code nécessaire et des explications techniques sur la page [Téléphones](/realisations).
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire "électroniser" un téléphone que vous possédez déja:
 
