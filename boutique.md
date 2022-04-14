@@ -3,7 +3,7 @@ Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un 
 <p align="center">
 <a href="mailto:samy@rabih.fr" class="btn">Commander</a></p>
 
-Quelques exemples de modèles (mais contactez-moi si vous cherchez un modèle ou une couleur en particulier):
+Quelques exemples de modèles:
 <div id="phone_gallery">
     <div class="phone">Le Socotel S63<br />
       <img src="https://user-images.githubusercontent.com/1282106/144014466-de22c6db-30d0-470b-b444-1885433b99f5.png" width="300" />
@@ -12,9 +12,11 @@ Quelques exemples de modèles (mais contactez-moi si vous cherchez un modèle ou
   </div>
 </div>
 
+(contactez-moi si vous cherchez un modèle ou une couleur en particulier)
+
 Le package comprend:
 - un téléphone d'époque, avec le boitier électronique "Une histoire au bout du fil", testé
-- une carte microSD préparée avec des contenus d'exemple
+- une carte mémoire avec des contenus d'exemple
 - un mode d'emploi
 - le support par mail en cas de problème pendant 1 an
 
