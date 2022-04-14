@@ -3,7 +3,7 @@ Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envi
   <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" width="300" />
 </p>
 
-Pourquoi ne pas permettre de diffuser du contenu via un objet que tout le monde (ou presque) sait utiliser ?
+Comment l'utiliser pour diffuser du son, en sachant que tout le monde ou presque sait s'en servir ?
 
 Les usages possibles sont infinis :
 - mettre à disposition des témoignages d'anciens du quartier
@@ -11,7 +11,7 @@ Les usages possibles sont infinis :
 - composer une date sur le cadran et écouter un son de l'époque
 - etc
 
-Une version avec enregistreur est à l'étude
+Une version avec enregistreur est à l'étude.
 
 Le projet est également accessible au plus grand nombre : vous trouverez des plans de cablage, le code nécessaire et des explications techniques sur la page [Téléphones](/realisations).
 
