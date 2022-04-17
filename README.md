@@ -18,6 +18,6 @@ Le projet est également accessible au plus grand nombre : vous trouverez des pl
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire "électroniser" un téléphone que vous possédez déja:
 
 <p align="center">
-<a href="mailto:samy.rabih.fr" class="btn">contactez-moi ✉️</a></p>
+<a href="mailto:samy@rabih.fr" class="btn">contactez-moi ✉️</a></p>
 
 Il est même possible de vous proposer des contenus, en plus de l'appareil : [reportages, documentaires](https://www.jessicabordeau.com/), [captation de mémoire et de souvenirs](https://30mai.fr), etc !
