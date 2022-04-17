@@ -2,7 +2,7 @@
 
 ## Pour me joindre
 
-Pour me contacter ou commander un appareil : [samy@rabih.fr](mailto:samy.rabih.fr) ou [0626820855](tel:+33626820855)
+Pour me contacter ou commander un appareil : [samy@rabih.fr](mailto:samy@rabih.fr) ou [0626820855](tel:+33626820855)
 
 ## A propos
 
