@@ -1,4 +1,4 @@
-Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un modèle S63)
+Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un modèle S63, hors frais de port)
 
 <p align="center">
 <a href="mailto:samy@rabih.fr" class="btn">Commander</a></p>
