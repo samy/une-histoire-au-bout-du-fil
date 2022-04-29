@@ -16,8 +16,14 @@ Quelques exemples de modèles:
     <div class="phone">Le U43 à magneto<br />
       <img src="https://user-images.githubusercontent.com/1282106/165939815-cf43b5c2-00b4-456e-b178-a8a9e2db6191.png" width="300" />
   </div>
-    <div class="phone">Le Intercom<br />
+    <div class="phone">Le Intercom 2+3<br />
       <img src="https://user-images.githubusercontent.com/1282106/165940018-7eeb5369-0a61-4a8a-95c7-230af5459409.png" width="300" />
+  </div>
+    <div class="phone">Le CIT Mural<br />
+      <img src="https://user-images.githubusercontent.com/1282106/165940157-782589b2-68e0-4a4f-8996-a91e1adc6a58.png" width="300" />
+  </div>
+     <div class="phone">Le U43 à manivelle<br />
+      <img src="https://user-images.githubusercontent.com/1282106/165940242-53018c0c-b4ff-4d8c-876f-446e983aecf6.png" width="300" />
   </div>
 </div>
 
