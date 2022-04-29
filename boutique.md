@@ -7,22 +7,16 @@ Quelques exemples de modèles:
 <div id="phone_gallery">
     <div class="phone">Le S63<br />
       <img src="https://user-images.githubusercontent.com/1282106/144014466-de22c6db-30d0-470b-b444-1885433b99f5.png" width="300" />
-  </div>
-  <div class="phone">Le U43<img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  width="300" />
-  </div>
-    <div class="phone">Le S63 blanc<br />
+  </div><div class="phone">Le U43<img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  width="300" />
+  </div><div class="phone">Le S63 blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/165939687-dd2beda4-e429-4abd-8f4c-6ff55978ad4a.png" width="300" />
-  </div>
-    <div class="phone">Le U43 à magneto<br />
+  </div><div class="phone">Le U43 à magneto<br />
       <img src="https://user-images.githubusercontent.com/1282106/165939815-cf43b5c2-00b4-456e-b178-a8a9e2db6191.png" width="300" />
-  </div>
-    <div class="phone">Le Intercom 2+3<br />
+  </div><div class="phone">Le Intercom 2+3<br />
       <img src="https://user-images.githubusercontent.com/1282106/165940018-7eeb5369-0a61-4a8a-95c7-230af5459409.png" width="300" />
-  </div>
-    <div class="phone">Le CIT Mural<br />
+  </div><div class="phone">Le CIT Mural<br />
       <img src="https://user-images.githubusercontent.com/1282106/165940157-782589b2-68e0-4a4f-8996-a91e1adc6a58.png" width="300" />
-  </div>
-     <div class="phone">Le U43 à manivelle<br />
+  </div><div class="phone">Le U43 à manivelle<br />
       <img src="https://user-images.githubusercontent.com/1282106/165940242-53018c0c-b4ff-4d8c-876f-446e983aecf6.png" width="300" />
   </div>
 </div>
