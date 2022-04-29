@@ -10,6 +10,9 @@ Quelques exemples de modèles:
   </div>
   <div class="phone">Le Ericsson U43<img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  width="300" />
   </div>
+    <div class="phone">Le Socotel S63 blanc<br />
+      <img src="https://user-images.githubusercontent.com/1282106/165939687-dd2beda4-e429-4abd-8f4c-6ff55978ad4a.png" width="300" />
+  </div>
 </div>
 
 (contactez-moi si vous cherchez un modèle ou une couleur en particulier)
