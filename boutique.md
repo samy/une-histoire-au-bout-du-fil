@@ -25,7 +25,7 @@ Quelques exemples de modèles:
 
 Le package comprend:
 - un téléphone d'époque, avec le boitier électronique "Une histoire au bout du fil", testé
-- une carte mémoire avec des contenus d'exemple
+- une carte mémoire (microSD+adaptateur ou SD) avec des contenus d'exemple
 - un mode d'emploi
 - le support par mail en cas de problème pendant 1 an
 
