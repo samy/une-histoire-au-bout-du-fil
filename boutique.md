@@ -2,8 +2,6 @@ Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un 
 
 <p align="center">
 <a href="mailto:samy@rabih.fr" class="btn">Commander</a></p>
-![U43_sans_cadran_blanc]()
-![U43_avec_cadran_blanc]()
 
 Quelques exemples de modèles disponibles:
 <div id="phone_gallery">
