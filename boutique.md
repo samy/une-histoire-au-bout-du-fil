@@ -2,6 +2,8 @@ Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un 
 
 <p align="center">
 <a href="mailto:samy@rabih.fr" class="btn">Commander</a></p>
+![U43_sans_cadran_blanc]()
+![U43_avec_cadran_blanc]()
 
 Quelques exemples de modèles disponibles:
 <div id="phone_gallery">
@@ -10,6 +12,10 @@ Quelques exemples de modèles disponibles:
   </div><div class="phone">Le U43<img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  width="300" />
   </div><div class="phone">Le S63 blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/165939687-dd2beda4-e429-4abd-8f4c-6ff55978ad4a.png" width="300" />
+  </div><div class="phone">Le U43 blanc sans cadran<br />
+      <img src="https://user-images.githubusercontent.com/1282106/165940242-53018c0c-b4ff-4d8c-876f-446e983aecf6.png" width="300" />
+  </div><div class="phone">Le U43 blanc avec cadran<br />
+      <img src="https://user-images.githubusercontent.com/1282106/170707804-69361a44-f450-4e82-a3f3-7070ed9bf1dd.png" width="300" />
   </div><div class="phone">Le U43 à magneto<br />
       <img src="https://user-images.githubusercontent.com/1282106/165939815-cf43b5c2-00b4-456e-b178-a8a9e2db6191.png" width="300" />
   </div><div class="phone">Le CIT Mural<br />
