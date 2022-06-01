@@ -1,6 +1,6 @@
 Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envie de lui donner une seconde vie...
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" width="300" />
+  <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" width="500" />
 </p>
 
 Comment l'utiliser pour diffuser du son, en sachant que tout le monde ou presque sait s'en servir ?
