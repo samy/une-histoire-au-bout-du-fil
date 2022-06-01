@@ -31,5 +31,41 @@
          padding: 5rem 6rem 0;
     }
 }
+     
+.lightbox {
+  /* Default to hidden */
+  display: none;
+
+  /* Overlay entire screen */
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* A bit of padding around image */
+  padding: 1em;
+
+  /* Translucent background */
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Unhide the lightbox when it's the target */
+.lightbox:target {
+  display: block;
+}
+
+.lightbox span {
+  /* Full width and height */
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  /* Size and position background image */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 </style>
 <meta property="og:image" content="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" />
