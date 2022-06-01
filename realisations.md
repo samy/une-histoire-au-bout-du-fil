@@ -12,18 +12,8 @@ A ce jour, plusieurs modèles ont été réalisés.
     </a>
     <br />
     <small>Installé au <br />
-      <a href="https://museepompiers.com/">musée des Pompiers de Lyon</a>
+      <a href="https://museepompiers.com/">musée des Pompiers de Lyon</a>, avec des messages de leur standard
     </small>
-  </div>
-  <div class="phone">
-    <strong>Ericsson U43</strong>
-    <br />
-    <a href="#img3">
-        <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" />
-    </a>
-      <a href="#" class="lightbox" id="img3">
-      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg')"></span>
-    </a>
   </div>
   <div class="phone">
     <strong>AOIP (1940-1950)</strong>
@@ -38,6 +28,17 @@ A ce jour, plusieurs modèles ont été réalisés.
     <small>Réalisé par l'équipe Sis'mots de <a href="https://www.museomix.org">Museomix</a> et installé au <a href="https://musee-sismologie.unistra.fr/">musée de Sismologie de Strasbourg</a>
     </small>
   </div>
+  <div class="phone">
+    <strong>Ericsson U43</strong>
+    <br />
+    <a href="#img3">
+        <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" />
+    </a>
+      <a href="#" class="lightbox" id="img3">
+      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg')"></span>
+    </a>
+  </div>
+  
   <div class="phone">
     <strong>Socotel S63</strong>
     <br />
