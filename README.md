@@ -21,3 +21,5 @@ Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire "él
 <a href="mailto:samy@rabih.fr" class="btn">contactez-moi ✉️</a></p>
 
 Il est même possible de vous proposer des contenus, en plus de l'appareil : [reportages, documentaires](https://www.jessicabordeau.com/), [captation de mémoire et de souvenirs](https://30mai.fr), etc !
+
+Retrouvez-moi également sur Instagram : [@unehistoireauboutdufil](https://www.instagram.com/unehistoireauboutdufil/)
