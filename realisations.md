@@ -42,10 +42,10 @@ A ce jour, plusieurs modèles ont été réalisés.
     <strong>Socotel S63</strong>
     <br />
       <a href="#img1">
-            <img src="https://user-images.githubusercontent.com/1282106/144014466-de22c6db-30d0-470b-b444-1885433b99f5.png" />
+            <img src="https://user-images.githubusercontent.com/1282106/171498593-54b66068-4692-4513-837f-f1191890a560.jpg" />
       </a>
       <a href="#" class="lightbox" id="img1">
-      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/144014466-de22c6db-30d0-470b-b444-1885433b99f5.png')"></span>
+      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/171498593-54b66068-4692-4513-837f-f1191890a560.jpg')"></span>
     </a>
   </div>
 </div>
