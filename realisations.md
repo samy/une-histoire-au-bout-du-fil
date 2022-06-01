@@ -4,7 +4,7 @@ A ce jour, plusieurs modèles ont été réalisés.
     <div class="phone">
         <strong>"Téléphones et signaux"</strong><br /><a href="#img4"><img src="https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg" /></a>
 <a href="#" class="lightbox" id="img4">
-  <span style="background-image: url('[https://picsum.photos/seed/9/900/450](https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg)')"></span>
+  <span style="background-image: url('https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg')"></span>
 </a><br /><small>Installé au <br /><a href="https://museepompiers.com/">musée des Pompiers de Lyon</a></small></div>
     <div class="phone"><strong>Ericsson U43</strong><br /><img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" /></div>
     <div class="phone">
