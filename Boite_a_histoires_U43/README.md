@@ -38,7 +38,7 @@ La seule particularité ici est que le décrochage n'a pu être géré directeme
 # Cablage
 Les positions de A1 à J17 correspondent à celles d'une [uPesy Solderable Breadboard Mini](https://www.upesy.com/products/upesy-protoboard-breadboard-mini).
 Les ports de A à H correspondent à ceux indiqués sur le schéma ci-dessus. Les positions s'entendent avec __le A à gauche et le J à droite__.
-<img align="right"  src="https://user-images.githubusercontent.com/1282106/155591042-66556872-096d-4949-834d-dfcb9558b7a0.png">
+<img align="right"  src="https://user-images.githubusercontent.com/1282106/173184413-7bb966cb-3e75-4594-9ac2-a5d48cf3b340.png">
 
 | Source    | Destination | Taille fil |
 | ------------- | ------------- | ------------- |
