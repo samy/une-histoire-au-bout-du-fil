@@ -4,8 +4,6 @@
 #include <DFRobotDFPlayerMini.h> /* Lecteur MP3 */
 
 /* Définition des constantes */
-#define PIN_READY  A2
-#define PIN_PULSE 6
 #define PIN_HANG A3
 
 /* Déclaration des variables */
