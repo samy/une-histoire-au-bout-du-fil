@@ -1,4 +1,6 @@
+---
 is_home: true
+---
 
 Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envie de lui donner une seconde vie...
 <p align="center">
