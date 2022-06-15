@@ -17,3 +17,13 @@ Suite à ma prise de contact, le musée a décidé de remplacer ces appareils (p
   <div class="phone"><img src="https://user-images.githubusercontent.com/1282106/173746780-c85c20d9-cc0d-4eaf-a1f1-cd213c6cd789.jpg" /><br />Modèle S63 de la marque Socotel</div>
   <div class="phone"><img src="https://user-images.githubusercontent.com/1282106/173746882-4a2418f9-85e6-474d-b92d-6898fe75241f.jpg" /><br />Modèle de la marque "Téléphones et signaux"</div>
 </div>
+
+Ils fonctionnent tous les deux de la même manière : à chaque numéro du cadran correspond un audio joué via le combiné.
+
+Le téléphone en bois de la marque "Téléphones et signaux" a fait l'objet d'une restauration : traitement du bois, nettoyage complet des parties métalliques et du cadran.
+<div id="phone_gallery">
+  <div class="phone"><img src="https://user-images.githubusercontent.com/1282106/173748746-12805c69-549e-473f-a49d-77556b740bb6.jpg" /><br />Facade avant</div>
+  <div class="phone"><img src="https://user-images.githubusercontent.com/1282106/173748755-8effbab7-f1cc-4f9c-a978-d2f38af8aafc.jpg" /><br />Ecouteur secondaire en acier</div>
+</div>
+
+Crédits photo : [Lulu la Lucette](https://lululalucette.com/)
