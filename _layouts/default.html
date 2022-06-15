@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+<html lang="{{ site.lang | default: "fr-FR" }}">
   <head>
     <meta charset="UTF-8">
 
@@ -12,7 +12,12 @@
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     {% include head-custom.html %}
   </head>
-  <body>
+  <body class="{% if page.id == 'README' %}
+  homepage
+               {% else %}
+not_homepage
+{% endif %}">
+    {% page.id %}
     <nav class="fixed-nav-bar">
   <a href="/realisations">Dernière réalisation en date : un superbe téléphone en bois pour le musée des Pompiers de Lyon !</a>
 </nav>
