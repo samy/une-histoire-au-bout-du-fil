@@ -4,8 +4,9 @@ is_home: true
 
 
 Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envie de lui donner une seconde vie...
+<img src="https://user-images.githubusercontent.com/1282106/174430117-539465cf-6ffe-4083-aa14-89f6a7a1e8dc.JPG" align="left" style="width:50%;padding-right:30px" />
+
 <p style="overflow:auto">
-<img src="https://user-images.githubusercontent.com/1282106/174430117-539465cf-6ffe-4083-aa14-89f6a7a1e8dc.JPG" width="500" align="left" style="padding-right:30px" />
 
 Les usages possibles sont infinis :<ul>
     <li>mettre à disposition des témoignages d'anciens du quartier</li>
