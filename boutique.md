@@ -6,7 +6,7 @@ Ces téléphones sont disponibles à partir de <strong>250€</strong> (pour un 
 Quelques exemples de modèles disponibles:
 <div id="phone_gallery">
     <div class="phone">Le S63<br />
-      <img src="https://user-images.githubusercontent.com/1282106/165943528-fa150dd9-5b34-4b77-8914-05accda8f298.png" width="300" />
+      <img src="https://user-images.githubusercontent.com/1282106/174444933-6d6e1803-e564-41ef-b37a-fcb5ec07e18c.png" width="300" />
   </div><div class="phone">Le U43<img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  width="300" />
   </div><div class="phone">Le S63 blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/170708647-03d515b4-4489-48a9-aa3c-ff2638fa21d6.png" width="300" />
