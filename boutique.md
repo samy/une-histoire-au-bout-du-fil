@@ -11,9 +11,9 @@ Quelques exemples de modèles disponibles:
   </div><div class="phone">Le S63 blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/170708647-03d515b4-4489-48a9-aa3c-ff2638fa21d6.png" width="300" />
   </div><div class="phone">Le U43 avec manivelle<br />
-      <img src="https://user-images.githubusercontent.com/1282106/165940242-53018c0c-b4ff-4d8c-876f-446e983aecf6.png" width="300" />
+      <img src="https://user-images.githubusercontent.com/1282106/174445258-b89b1a5e-b213-444e-ba80-98a0ef0bf0a0.png" width="300" />
   </div><div class="phone">Le U43 blanc avec cadran<br />
-      <img src="https://user-images.githubusercontent.com/1282106/170707804-69361a44-f450-4e82-a3f3-7070ed9bf1dd.png" width="300" />
+      <img src="https://user-images.githubusercontent.com/1282106/174445298-3f302821-0161-4153-ac3a-c622bea6a747.png" width="300" />
   </div><div class="phone">Le U43 à magneto<br />
       <img src="https://user-images.githubusercontent.com/1282106/165939815-cf43b5c2-00b4-456e-b178-a8a9e2db6191.png" width="300" />
   </div><div class="phone">Le CIT Mural<br />
