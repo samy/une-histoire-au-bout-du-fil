@@ -16,6 +16,8 @@ Quelques exemples de modèles disponibles:
       <img src="https://user-images.githubusercontent.com/1282106/174445367-04d2e1fb-8178-4fe7-bac2-f1a6665ab0bf.png" width="300" />
   </div><div class="phone">Le U43 à magneto<br />
       <img src="https://user-images.githubusercontent.com/1282106/174446970-9f29ee3d-3fac-4105-b47b-ece0980e7116.png" width="300" />
+  </div><div class="phone">Téléphones et Signaux<br />
+      <img src="https://user-images.githubusercontent.com/1282106/174447303-a6b3d70e-e4e0-453d-a740-284f51658f75.png" width="300" />
   </div><div class="phone">Le CIT Mural<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447069-a7a5ba9c-f3b4-4360-905b-3e744dc8bcee.png" width="300" />
   </div><div class="phone">Le U43 blanc sans cadran<br />
