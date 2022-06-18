@@ -8,11 +8,12 @@ Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envi
 
 <p style="overflow:auto">
 
-Les usages possibles sont infinis :<br>
+Les usages possibles sont infinis :
 - mettre à disposition des témoignages d'anciens du quartier
 - diffuser du contenu aidant à patienter dans une salle d'attente
 - composer une date sur le cadran et écouter un son de l'époque
 - etc
+
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire équiper un téléphone que vous possédez déja:
 
 <a href="mailto:samy@rabih.fr" class="btn">contactez-moi ✉️</a></p>
