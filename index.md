@@ -18,10 +18,9 @@ Les usages possibles sont infinis :
 
 Ces appareils existent pour l'instant en deux versions:
 <div class="blocks">
-  <div class="block"><strong>Avec cadran</strong><br />Vous pouvez via le cadran choisir le son à écouter</div>
-  <div class="block"><strong>Sans cadran</strong><br />Un son aléatoire est joué à chaque fois qu'on décroche (<small>adaptable aussi sur un modèle à cadran si besoin</small>)</div>
+  <div class="block"><strong>Avec cadran</strong><br />Vous pouvez via le cadran choisir le son à écouter<br />(<small>10 audios maxi</small>)</div>
+  <div class="block"><strong>Sans cadran</strong><br />Un son aléatoire est joué à chaque fois qu'on décroche (<small>1000 audios maxi</small>)</div>
 </div>
-
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire "électroniser" un téléphone que vous possédez déja:
 
