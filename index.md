@@ -5,7 +5,7 @@ is_home: true
 
 Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envie de lui donner une seconde vie...
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" width="500" />
+  <img src="https://user-images.githubusercontent.com/1282106/174430117-539465cf-6ffe-4083-aa14-89f6a7a1e8dc.JPG" width="500" />
 </p>
 
 Les usages possibles sont infinis :
@@ -20,7 +20,7 @@ Ces appareils existent pour l'instant en deux versions:
   <div class="block"><strong>Sans cadran</strong><br />Un son aléatoire est joué à chaque fois qu'on décroche<br />(<small>1000 audios maxi</small>)</div>
 </div>
 
-Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire "électroniser" un téléphone que vous possédez déja:
+Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire équiper un téléphone que vous possédez déja:
 
 <p align="center">
 <a href="mailto:samy@rabih.fr" class="btn">contactez-moi ✉️</a></p>
