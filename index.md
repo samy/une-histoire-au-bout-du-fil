@@ -16,9 +16,12 @@ Les usages possibles sont infinis :
 - composer une date sur le cadran et écouter un son de l'époque
 - etc
 
-Une version avec enregistreur est à l'étude.
+Ces appareils existent pour l'instant en deux versions:
+<div class="blocks">
+  <div class="block"><strong>Avec cadran</strong><br />Vous pouvez via le cadran choisir le son à écouter</div>
+  <div class="block"><strong>Sans cadran</strong><br />Un son aléatoire est joué à chaque fois qu'on décroche (<small>adaptable aussi sur un modèle à cadran si besoin</small>)</div>
+</div>
 
-Le projet est également accessible au plus grand nombre : vous trouverez des plans de cablage, le code nécessaire et des explications techniques sur la page [Téléphones](/realisations).
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire "électroniser" un téléphone que vous possédez déja:
 
