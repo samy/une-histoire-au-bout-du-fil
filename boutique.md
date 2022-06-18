@@ -12,10 +12,10 @@ Quelques exemples de modèles disponibles:
       <img src="https://user-images.githubusercontent.com/1282106/170708647-03d515b4-4489-48a9-aa3c-ff2638fa21d6.png" width="300" />
   </div><div class="phone">Le U43 avec manivelle<br />
       <img src="https://user-images.githubusercontent.com/1282106/174445258-b89b1a5e-b213-444e-ba80-98a0ef0bf0a0.png" width="300" />
-  </div><div class="phone">Le U43 blanc avec cadran<br />
-      <img src="https://user-images.githubusercontent.com/1282106/174445298-3f302821-0161-4153-ac3a-c622bea6a747.png" width="300" />
-  </div><div class="phone">Le U43 à magneto<br />
-      <img src="https://user-images.githubusercontent.com/1282106/165939815-cf43b5c2-00b4-456e-b178-a8a9e2db6191.png" width="300" />
+  </div><div class="phone">Le U43 blanc avec cadran<br />    
+      <img src="https://user-images.githubusercontent.com/1282106/174445367-04d2e1fb-8178-4fe7-bac2-f1a6665ab0bf.png" width="300" />
+  </div><div class="phone">Le U43 à magneto<br />    
+      <img src="https://user-images.githubusercontent.com/1282106/174445398-d618a123-ea42-4ce8-af89-c18fffdc8c8c.png" width="300" />
   </div><div class="phone">Le CIT Mural<br />
       <img src="https://user-images.githubusercontent.com/1282106/165940157-782589b2-68e0-4a4f-8996-a91e1adc6a58.png" width="300" />
   </div><div class="phone">Le U43 blanc sans cadran<br />
