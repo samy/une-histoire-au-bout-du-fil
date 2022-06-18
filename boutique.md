@@ -6,6 +6,8 @@ Ces téléphones sont disponibles à partir de <strong>300€</strong> (pour un 
 Modèles disponibles:
 <div id="phone_gallery">div class="phone">Le S63 rouge<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447483-8f8beee1-2ca2-4c1f-8988-c51805bc7de0.png" />
+  </div><div class="phone">Téléphones et Signaux<br />
+      <img src="https://user-images.githubusercontent.com/1282106/174447303-a6b3d70e-e4e0-453d-a740-284f51658f75.png" />
   </div><div class="phone">Le S63<br />
       <img src="https://user-images.githubusercontent.com/1282106/174444933-6d6e1803-e564-41ef-b37a-fcb5ec07e18c.png" />
   </div><div class="phone">Le U43<img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  width="300" />
@@ -17,8 +19,6 @@ Modèles disponibles:
       <img src="https://user-images.githubusercontent.com/1282106/174445367-04d2e1fb-8178-4fe7-bac2-f1a6665ab0bf.png" />
   </div><div class="phone">Le U43 à magneto<br />
       <img src="https://user-images.githubusercontent.com/1282106/174446970-9f29ee3d-3fac-4105-b47b-ece0980e7116.png" />
-  </div><div class="phone">Téléphones et Signaux<br />
-      <img src="https://user-images.githubusercontent.com/1282106/174447303-a6b3d70e-e4e0-453d-a740-284f51658f75.png" />
   </div><div class="phone">Le CIT Mural<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447069-a7a5ba9c-f3b4-4360-905b-3e744dc8bcee.png" />
   </div><div class="phone">Le U43 blanc sans cadran<br />
