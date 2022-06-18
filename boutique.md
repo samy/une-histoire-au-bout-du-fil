@@ -22,12 +22,14 @@ Modèles disponibles:
       <img src="https://user-images.githubusercontent.com/1282106/174447069-a7a5ba9c-f3b4-4360-905b-3e744dc8bcee.png" width="300" />
   </div><div class="phone">Le U43 blanc sans cadran<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447018-7d380ecf-cb11-4a1f-87b0-fc07b8133680.png" width="300" />
-    <div class="phone">Le mural blanc<br />
+  </div><div class="phone">Le mural blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447441-105df094-d42c-4832-bf59-77d1c16a2608.png" width="300" />
   </div><div class="phone">Le S63 rouge<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447483-8f8beee1-2ca2-4c1f-8988-c51805bc7de0.png" width="300" />
   </div><div class="phone">Le Tesla orange<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447537-41650c12-30d5-4e8a-b871-f0211648ee87.png" width="300" />
+  </div>><div class="phone">Le métal blanc<br />
+      <img src="https://user-images.githubusercontent.com/1282106/174447683-8bddd1a6-00ed-477f-9a97-da23126c355c.png" width="300" />
   </div>
 </div>
 
