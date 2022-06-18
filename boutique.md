@@ -3,7 +3,7 @@ Ces téléphones sont disponibles à partir de <strong>300€</strong> (pour un 
 <p align="center">
 <a href="mailto:samy@rabih.fr" class="btn">Commander</a></p>
 
-Quelques exemples de modèles disponibles:
+Modèles disponibles:
 <div id="phone_gallery">
     <div class="phone">Le S63<br />
       <img src="https://user-images.githubusercontent.com/1282106/174444933-6d6e1803-e564-41ef-b37a-fcb5ec07e18c.png" width="300" />
