@@ -4,14 +4,16 @@ is_home: true
 
 
 Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envie de lui donner une seconde vie...
-<p>
+<p style="overflow:auto">
 <img src="https://user-images.githubusercontent.com/1282106/174430117-539465cf-6ffe-4083-aa14-89f6a7a1e8dc.JPG" width="500" align="left" style="padding-right:30px" />
 
 Les usages possibles sont infinis :
-- mettre à disposition des témoignages d'anciens du quartier
-- diffuser du contenu aidant à patienter dans une salle d'attente
-- composer une date sur le cadran et écouter un son de l'époque
-- etc
+  <ul>
+    <li>mettre à disposition des témoignages d'anciens du quartier</li>
+    <li>diffuser du contenu aidant à patienter dans une salle d'attente</li>
+    <li>composer une date sur le cadran et écouter un son de l'époque</li>
+    </li>etc
+  </ul>
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire équiper un téléphone que vous possédez déja:
 
 <a href="mailto:samy@rabih.fr" class="btn">contactez-moi ✉️</a></p>
