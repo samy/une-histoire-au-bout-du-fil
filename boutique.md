@@ -14,12 +14,12 @@ Quelques exemples de modèles disponibles:
       <img src="https://user-images.githubusercontent.com/1282106/174445258-b89b1a5e-b213-444e-ba80-98a0ef0bf0a0.png" width="300" />
   </div><div class="phone">Le U43 blanc avec cadran<br />    
       <img src="https://user-images.githubusercontent.com/1282106/174445367-04d2e1fb-8178-4fe7-bac2-f1a6665ab0bf.png" width="300" />
-  </div><div class="phone">Le U43 à magneto<br />    
-      <img src="https://user-images.githubusercontent.com/1282106/174445398-d618a123-ea42-4ce8-af89-c18fffdc8c8c.png" width="300" />
+  </div><div class="phone">Le U43 à magneto<br />
+      <img src="https://user-images.githubusercontent.com/1282106/174446970-9f29ee3d-3fac-4105-b47b-ece0980e7116.png" width="300" />
   </div><div class="phone">Le CIT Mural<br />
-      <img src="https://user-images.githubusercontent.com/1282106/165940157-782589b2-68e0-4a4f-8996-a91e1adc6a58.png" width="300" />
+      <img src="https://user-images.githubusercontent.com/1282106/174447069-a7a5ba9c-f3b4-4360-905b-3e744dc8bcee.png" width="300" />
   </div><div class="phone">Le U43 blanc sans cadran<br />
-      <img src="https://user-images.githubusercontent.com/1282106/170708861-3ecbec08-0d98-4635-9778-ff2c68540ebd.png" width="300" />
+      <img src="https://user-images.githubusercontent.com/1282106/174447018-7d380ecf-cb11-4a1f-87b0-fc07b8133680.png" width="300" />
   </div>
 </div>
 
