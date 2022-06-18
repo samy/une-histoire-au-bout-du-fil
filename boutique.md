@@ -4,8 +4,9 @@ Ces téléphones sont disponibles à partir de <strong>300€</strong> (pour un 
 <a href="mailto:samy@rabih.fr" class="btn">Commander</a></p>
 
 Modèles disponibles:
-<div id="phone_gallery">
-    <div class="phone">Le S63<br />
+<div id="phone_gallery">div class="phone">Le S63 rouge<br />
+      <img src="https://user-images.githubusercontent.com/1282106/174447483-8f8beee1-2ca2-4c1f-8988-c51805bc7de0.png" />
+  </div><div class="phone">Le S63<br />
       <img src="https://user-images.githubusercontent.com/1282106/174444933-6d6e1803-e564-41ef-b37a-fcb5ec07e18c.png" />
   </div><div class="phone">Le U43<img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg"  width="300" />
   </div><div class="phone">Le S63 blanc<br />
@@ -24,9 +25,7 @@ Modèles disponibles:
       <img src="https://user-images.githubusercontent.com/1282106/174447018-7d380ecf-cb11-4a1f-87b0-fc07b8133680.png" />
   </div><div class="phone">Le mural blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447441-105df094-d42c-4832-bf59-77d1c16a2608.png" />
-  </div><div class="phone">Le S63 rouge<br />
-      <img src="https://user-images.githubusercontent.com/1282106/174447483-8f8beee1-2ca2-4c1f-8988-c51805bc7de0.png" />
-  </div><div class="phone">Le Tesla orange<br />
+  </div><<div class="phone">Le Tesla orange<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447537-41650c12-30d5-4e8a-b871-f0211648ee87.png" />
   </div><div class="phone">Le métal blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447683-8bddd1a6-00ed-477f-9a97-da23126c355c.png" />
