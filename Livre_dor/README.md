@@ -12,3 +12,9 @@
 | DREQ | D3  |
 
 Seul l'emplacement des MISO, MOSI et SCK est réellement important (pour les autres il vous suffit de changer les valeurs dans le code).
+Correction dans la bibliothèque Adafruit VS1053
+
+#define VS1053_CONTROL_SPI_SETTING                                             \
+  SPISettings(2000000, MSBFIRST, SPI_MODE0) //!< VS1053 SPI control settings
+#define VS1053_DATA_SPI_SETTING                                                \
+  SPISettings(12000000, MSBFIRST, SPI_MODE0) //!< VS1053 SPI data settings
