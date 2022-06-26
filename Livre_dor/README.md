@@ -18,3 +18,8 @@ Correction dans la bibliothèque Adafruit VS1053
   SPISettings(2000000, MSBFIRST, SPI_MODE0) //!< VS1053 SPI control settings
 #define VS1053_DATA_SPI_SETTING                                                \
   SPISettings(12000000, MSBFIRST, SPI_MODE0) //!< VS1053 SPI data settings
+  
+A rajouter dans le code Arduino:
+
+#define SPI_HAS_TRANSACTION 1
+
