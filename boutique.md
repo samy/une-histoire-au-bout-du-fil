@@ -6,7 +6,7 @@ Ces téléphones sont disponibles à partir de <strong>300€</strong> (pour un 
 Modèles disponibles:
 <div id="phone_gallery"><div class="phone">Le S63 rouge<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447483-8f8beee1-2ca2-4c1f-8988-c51805bc7de0.png" />
-  </div><div class="phone">Téléphones et Signaux<br />
+  </div><div class="phone">T & S<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447303-a6b3d70e-e4e0-453d-a740-284f51658f75.png" />
   </div><div class="phone">Le métal blanc<br />
       <img src="https://user-images.githubusercontent.com/1282106/174447683-8bddd1a6-00ed-477f-9a97-da23126c355c.png" />
