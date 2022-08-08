@@ -3,7 +3,7 @@ is_home: true
 ---
 
 
-Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envie de lui donner une seconde vie...
+Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envie de lui donner une seconde vie...le projet "Une histoire au bout du fil" est ainsi né.
 <p align="center">
   <img src="https://user-images.githubusercontent.com/1282106/174430930-4d068449-e63c-43ff-a97e-a942af0a418f.JPG" width="500" />
 </p>
