@@ -9,6 +9,7 @@
 /* Déclaration des variables */
 SoftwareSerial mySoftwareSerial(9, 10); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
+bool currentState = 0;
 
 void setup() {
   /* Connexion série pour la remontée d'informations au PC */
@@ -24,20 +25,27 @@ void setup() {
   }
 
   /* Etat initial du DFPlayer */
-  myDFPlayer.pause();
-  myDFPlayer.volume(15);
+  myDFPlayer.volume(12);
+  myDFPlayer.enableLoopAll(); //loop all mp3 files.
+  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
+  myDFPlayer.EQ(DFPLAYER_EQ_NORMAL);
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
+
 }
 
 void loop() {
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp()) {
     myDFPlayer.pause();
-    return;
+    currentState = 0;
+
   } else {
-    myDFPlayer.randomAll();
+    if (0 == currentState) {
+      myDFPlayer.next();
+      currentState = 1;
+    }
   }
 }
 

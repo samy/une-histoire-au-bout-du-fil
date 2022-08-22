@@ -1,7 +1,7 @@
 /* Bibliothèques requises */
 #include <SoftwareSerial.h> /* Connexion série */
 #include <DFRobotDFPlayerMini.h> /* Lecteur MP3 */
-#include <RotaryDialer.h> /* Gestion du cadran rotatif */
+#include "RotaryDialer.h" /* Gestion du cadran rotatif */
 
 /* Définition des constantes */
 #define PIN_READY  A2
@@ -48,6 +48,8 @@ void loop() {
   /* Si un numéro a été composé sur le téléphone, on le stocke */
   if (dialer.update()) {
     numberSpecified = getDialedNumber(dialer);
+        Serial.println(numberSpecified);
+
   }
 
   /* Si un numéro a été composé, alors on joue le MP3 correspondant */
