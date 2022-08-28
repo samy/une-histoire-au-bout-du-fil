@@ -10,9 +10,6 @@ A ce jour, plusieurs modèles ont été réalisés.
     <a href="#" class="lightbox" id="img4">
       <span style="background-image: url('https://user-images.githubusercontent.com/1282106/187080218-7af73e71-9377-4256-b803-4c3b35fe0cd4.JPG')"></span>
     </a>
-    <br />
-    <small>Diffuse des enregistrements en alsacien évoquant l'histoire locale
-    </small>
   </div>
   <div class="phone">
     <strong>Musée des Pompiers de Lyon</strong>
@@ -23,10 +20,6 @@ A ce jour, plusieurs modèles ont été réalisés.
     <a href="#" class="lightbox" id="img4">
       <span style="background-image: url('https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg')"></span>
     </a>
-    <br />
-    <small>Installé au <br />
-      <a href="https://museepompiers.com/">musée des Pompiers de Lyon</a>, avec des messages de leur standard
-    </small>
   </div>
   <div class="phone">
     <strong>AOIP (1940-1950)</strong>
