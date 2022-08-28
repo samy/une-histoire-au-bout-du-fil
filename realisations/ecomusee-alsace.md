@@ -16,7 +16,7 @@ Ce modèle n'étant pas équipé d'un cadran, c'est le décrochage qui déclench
 A la demande de l'écomusée d'Alsace, l'apparence extérieure de l'appareil n'a pas été modifiée (un simple nettoyage de la Bakélite a été effectué).
 
 ## Identification du modèle
-Un [article du site Matilo](http://www.matilo.eu/3-the-phones/1926-1945-bakeliet-ww2/siemens-halske-vsa-tist-66-c4/?lang=en) et de nombreuses recherches ont permis de déterminer qu'il s'agit d'un Modell 27 de la marque Siemens & Halske, fabriqué à Berlin en mai 1931. Le code indiqué dans le combiné au niveau de l'écouteur indique BM5, B pour Berlin, M étant un code annuel et 5 le chiffre du mois.
+Un [article du site Matilo](http://www.matilo.eu/3-the-phones/1926-1945-bakeliet-ww2/siemens-halske-vsa-tist-66-c4/?lang=en) et de nombreuses recherches ont permis de déterminer qu'il s'agit d'un Modell 27 de la marque Siemens & Halske, fabriqué à Berlin en mai 1931. Le code indiqué dans le combiné au niveau de l'écouteur indique BM5, B pour Berlin, M étant un code annuel (L correspondant à 1930 et M à 1931) et 5 le chiffre du mois.
 
 ## Adaptations modernes
 Cet appareil a bien sur été équipé du boitier "Une histoire au bout du fil", et les fils ont été changés pour des modèles récents, tout en conservant le style tissé/torsadé d'origine. Un port USB a été monté sur ces mêmes fils.
