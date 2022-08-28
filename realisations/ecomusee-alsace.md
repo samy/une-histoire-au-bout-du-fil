@@ -11,6 +11,11 @@ Leur équipe m'a contacté en 2022 pour convertir un appareil issu de leurs rés
 
 ## Fonctionnement
 Ce modèle n'étant pas équipé d'un cadran, c'est le décrochage qui déclenche la lecture (au hasard) d'un des enregistrements présents sur la carte mémoire interne.
+L'alimentation se fait via un cable USB. La carte SD est accessible sous l'appareil via un extenseur.
+<figure class="center half">
+  <img alt="Téléphone Modell 27 de la marque Siemens & Halske avec boitier éléctronique" src="https://user-images.githubusercontent.com/1282106/187081853-841fcdd2-9834-4315-9132-6ab538ca2003.jpg">
+  <figcaption>Lecteur de carte microSD</figcaption>
+</figure>
 
 ## Restauration
 A la demande de l'écomusée d'Alsace, l'apparence extérieure de l'appareil n'a pas été modifiée (un simple nettoyage de la Bakélite a été effectué).
@@ -27,7 +32,7 @@ Cet appareil a bien sur été équipé du boitier "Une histoire au bout du fil",
 </figure>
 <figure class="center half">
   <img alt="Vue rapprochée du câble USB" src="https://user-images.githubusercontent.com/1282106/187081492-f504de80-3ed4-4655-9441-999b9b638806.JPG">
-  <figcaption>Câble USB sur le fil tissé</figcaption>
+  <figcaption>Connecteur USB monté sur le fil tissé</figcaption>
 </figure>
 
 L'exemple utilisé ici ne comportait pas de haut-parleur dans son combiné, il a fallu donc lui en rajouter un et construire un adaptateur pour pouvoir le fixer dans l'emplacement d'origine.
