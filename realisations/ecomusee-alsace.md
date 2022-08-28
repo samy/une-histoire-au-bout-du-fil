@@ -26,7 +26,7 @@ Cet appareil a bien sur été équipé du boitier "Une histoire au bout du fil",
   <figcaption>Vue intérieure</figcaption>
 </figure>
 <figure class="center half">
-  <img alt="Vue rapprochée du câble USB" src="[[https://user-images.githubusercontent.com/1282106/187081074-26b64bcd-c40d-4b47-b233-4fe9129ca530.jpg]()](https://user-images.githubusercontent.com/1282106/187081492-f504de80-3ed4-4655-9441-999b9b638806.JPG)">
+  <img alt="Vue rapprochée du câble USB" src="https://user-images.githubusercontent.com/1282106/187081492-f504de80-3ed4-4655-9441-999b9b638806.JPG">
   <figcaption>Câble USB sur le fil tissé</figcaption>
 </figure>
 
