@@ -9,6 +9,9 @@ Leur équipe m'a contacté en 2022 pour convertir un appareil issu de leurs rés
   <figcaption>Résultat final après restauration partielle</figcaption>
 </figure>
 
+## Contenu
+Ce téléphone-boîte à histoires va diffuser aux visiteurs de l'écomusée des enregistrements en alsacien évoquant l'histoire locale.
+
 ## Fonctionnement
 Ce modèle n'étant pas équipé d'un cadran, c'est le décrochage qui déclenche la lecture (au hasard) d'un des enregistrements présents sur la carte mémoire interne.
 L'alimentation se fait via un cable USB. La carte SD est accessible sous l'appareil via un extenseur.
@@ -35,7 +38,7 @@ Cet appareil a bien sur été équipé du boitier "Une histoire au bout du fil",
   <figcaption>Connecteur USB monté sur le fil tissé</figcaption>
 </figure>
 
-L'exemple utilisé ici ne comportait pas de haut-parleur dans son combiné, il a fallu donc lui en rajouter un et construire un adaptateur pour pouvoir le fixer dans l'emplacement d'origine.
+L'exemple utilisé ici ne comportait pas de haut-parleur dans son combiné, il a fallu donc lui en rajouter un et concevoir un adaptateur imprimé en 3D pour pouvoir le fixer dans l'emplacement d'origine.
 
 ![montage](https://user-images.githubusercontent.com/1282106/187081459-62cb4a89-08d1-4c11-86b8-980a5f6e7769.jpg)
 
