@@ -38,3 +38,6 @@ Cet appareil a bien sur été équipé du boitier "Une histoire au bout du fil",
 L'exemple utilisé ici ne comportait pas de haut-parleur dans son combiné, il a fallu donc lui en rajouter un et construire un adaptateur pour pouvoir le fixer dans l'emplacement d'origine.
 
 ![montage](https://user-images.githubusercontent.com/1282106/187081459-62cb4a89-08d1-4c11-86b8-980a5f6e7769.jpg)
+
+## Remerciements
+Je tiens à remercier l'équipe de l'écomusée d'Alsace et en particulier [Marion Wendling](https://www.linkedin.com/in/marion-wendling/), chargée de conservation des collections, d'avoir fait appel à moi pour ce projet. Et je remercie également [Lulu La Lucette](https://lululalucette.com) pour ses superbes photos et sa patience ;)
