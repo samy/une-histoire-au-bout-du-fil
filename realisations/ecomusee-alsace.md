@@ -39,5 +39,11 @@ L'exemple utilisé ici ne comportait pas de haut-parleur dans son combiné, il a
 
 ![montage](https://user-images.githubusercontent.com/1282106/187081459-62cb4a89-08d1-4c11-86b8-980a5f6e7769.jpg)
 
+## Quelques photos
+<figure class="center half">
+  <img alt="Vue rapprochée du câble USB" src="https://user-images.githubusercontent.com/1282106/187082123-cc4c01aa-78c0-4dba-b050-3647552b5ccc.JPG">
+  <img alt="Vue rapprochée du câble USB" src="https://user-images.githubusercontent.com/1282106/187082132-17bdb65b-06d0-4859-a3f6-dec2a24be72c.JPG">
+</figure>
+
 ## Remerciements
-Je tiens à remercier l'équipe de l'écomusée d'Alsace et en particulier [Marion Wendling](https://www.linkedin.com/in/marion-wendling/), chargée de conservation des collections, d'avoir fait appel à moi pour ce projet. Et je remercie également [Lulu La Lucette](https://lululalucette.com) pour ses superbes photos et sa patience ;)
+Je tiens à remercier l'équipe de l'écomusée d'Alsace et en particulier [Marion Wendling](https://www.linkedin.com/in/marion-wendling/), chargée de conservation des collections, d'avoir fait appel à moi pour ce projet. Et je remercie également [Lulu La Lucette](https://lululalucette.com) pour ces superbes photos et sa patience ;)
