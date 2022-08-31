@@ -10,6 +10,7 @@
 SoftwareSerial mySoftwareSerial(9, 10); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 bool currentState = 0;
+int audioFilesCount = 0;
 
 void setup() {
   /* Connexion série pour la remontée d'informations au PC */
@@ -25,14 +26,13 @@ void setup() {
   }
 
   /* Etat initial du DFPlayer */
-  myDFPlayer.volume(12);
-  myDFPlayer.enableLoopAll(); //loop all mp3 files.
+  myDFPlayer.volume(8);
   myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
   myDFPlayer.EQ(DFPLAYER_EQ_NORMAL);
-
+  myDFPlayer.disableLoop();
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
-
+  audioFilesCount = myDFPlayer.readFileCounts();
 }
 
 void loop() {
@@ -43,7 +43,7 @@ void loop() {
 
   } else {
     if (0 == currentState) {
-      myDFPlayer.next();
+      myDFPlayer.play(random(1, audioFilesCount));
       currentState = 1;
     }
   }
@@ -55,5 +55,5 @@ void loop() {
   on détecte ici des valeurs proches de 1023 qui correspondent à un vrai raccrochage)
 */
 bool isHangedUp() {
-  return 1 == digitalRead(PIN_HANG);
+  return 0 == digitalRead(PIN_HANG);
 }
