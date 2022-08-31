@@ -33,6 +33,8 @@ void setup() {
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
   audioFilesCount = myDFPlayer.readFileCounts();
+  randomSeed(analogRead(0));
+
 }
 
 void loop() {
