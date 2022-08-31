@@ -12,7 +12,7 @@ A ce jour, plusieurs modèles ont été réalisés.
     <strong>Musée des Pompiers de Lyon</strong>
     <br />
     <a href="/realisations/musee-des-pompiers">
-      <img src="https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg" />
+      <img src="https://user-images.githubusercontent.com/1282106/187677952-f411baea-322d-4a0d-b509-6b7f8b4063db.jpg" />     
     </a>
     <a href="#" class="lightbox" id="img4">
       <span style="background-image: url('https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg')"></span>
