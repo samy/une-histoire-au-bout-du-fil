@@ -5,7 +5,7 @@ Ce musée, situé à Ungersheim en Alsace, a notamment vocation à reconstituer 
 Leur équipe m'a contacté en 2022 pour convertir un appareil issu de leurs réserves en boîte à histoires.
 
 <figure class="center half">
-  <img alt="Téléphone Modell 27 de la marque Siemens & Halske" src="https://user-images.githubusercontent.com/1282106/187080218-7af73e71-9377-4256-b803-4c3b35fe0cd4.JPG">
+  <img alt="Téléphone Modell 27 de la marque Siemens & Halske" src="https://user-images.githubusercontent.com/1282106/187677757-ee553000-9ff1-4586-a910-51e2f617df83.jpg">
   <figcaption>Résultat final après restauration partielle</figcaption>
 </figure>
 
