@@ -5,10 +5,7 @@ A ce jour, plusieurs modèles ont été réalisés.
     <strong>Ecomusée d'Alsace</strong>
     <br />
     <a href="/realisations/ecomusee-alsace">
-      <img src="https://user-images.githubusercontent.com/1282106/187080218-7af73e71-9377-4256-b803-4c3b35fe0cd4.JPG" />
-    </a>
-    <a href="#" class="lightbox" id="img4">
-      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/187080218-7af73e71-9377-4256-b803-4c3b35fe0cd4.JPG')"></span>
+      <img src="https://user-images.githubusercontent.com/1282106/187677757-ee553000-9ff1-4586-a910-51e2f617df83.jpg" />
     </a>
   </div>
   <div class="phone">
