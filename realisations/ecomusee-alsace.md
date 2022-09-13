@@ -30,7 +30,7 @@ Un [article du site Matilo](http://www.matilo.eu/3-the-phones/1926-1945-bakeliet
 Cet appareil a bien sur été équipé du boitier "Une histoire au bout du fil", et les fils ont été changés pour des modèles récents, tout en conservant le style tissé/torsadé d'origine. Un port USB a été monté sur ces mêmes fils.
 
 <figure class="center half">
-  <img alt="Téléphone Modell 27 de la marque Siemens & Halske avec boitier éléctronique" src="https://user-images.githubusercontent.com/1282106/187081074-26b64bcd-c40d-4b47-b233-4fe9129ca530.jpg">
+  <img alt="Téléphone Modell 27 de la marque Siemens & Halske avec boitier éléctronique" src="https://user-images.githubusercontent.com/1282106/189817391-df44dbb9-5000-4cf4-9fb0-1395978df402.jpg">
   <figcaption>Vue intérieure</figcaption>
 </figure>
 <figure class="center half">
