@@ -44,7 +44,7 @@ L'exemple utilisé ici ne comportait pas de haut-parleur dans son combiné, il a
 
 ## Quelques photos
 <figure class="center half">
-  <img alt="Vue rapprochée du câble USB" src="https://user-images.githubusercontent.com/1282106/187082123-cc4c01aa-78c0-4dba-b050-3647552b5ccc.JPG">
+  <img alt="Vue rapprochée du câble USB" src="https://user-images.githubusercontent.com/1282106/189816493-2f6cd406-963d-4ddd-a1c0-96543e74e96d.jpg">
   <img alt="Vue rapprochée du câble USB" src="https://user-images.githubusercontent.com/1282106/187082132-17bdb65b-06d0-4859-a3f6-dec2a24be72c.JPG">
 </figure>
 
