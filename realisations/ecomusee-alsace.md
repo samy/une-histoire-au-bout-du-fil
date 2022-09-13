@@ -16,7 +16,7 @@ Ce téléphone-boîte à histoires va diffuser aux visiteurs de l'écomusée des
 Ce modèle n'étant pas équipé d'un cadran, c'est le décrochage qui déclenche la lecture (au hasard) d'un des enregistrements présents sur la carte mémoire interne.
 L'alimentation se fait via un cable USB. La carte SD est accessible sous l'appareil via un extenseur.
 <figure class="center half">
-  <img alt="Téléphone Modell 27 de la marque Siemens & Halske avec boitier éléctronique" src="https://user-images.githubusercontent.com/1282106/187081853-841fcdd2-9834-4315-9132-6ab538ca2003.jpg">
+  <img alt="Téléphone Modell 27 de la marque Siemens & Halske avec boitier éléctronique" src="https://user-images.githubusercontent.com/1282106/189817581-d26703e5-88fc-4bc7-b50d-1f199f8e75ef.jpg">
   <figcaption>Lecteur de carte microSD</figcaption>
 </figure>
 
