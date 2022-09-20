@@ -1,6 +1,6 @@
 # Musée des sapeurs-pompiers de Lyon
 
-Ce musée, situé dans le 9e arrondissement à Lyon, a été créé en 1966 (à l'origine en mémoire aux victimes de la catastrophe survenue cette même année).
+Ce musée, situé dans le 9e arrondissement à Lyon, a été créé en 1966, à l'origine en mémoire aux victimes de la catastrophe survenue cette même année ([plus d'informations sur leur site Web](https://museepompiers.com/)).
 
 Il présente plus de 3000 objets ayant attrait à ce métier, ainsi que 160 véhicules.
 
