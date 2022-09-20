@@ -9,4 +9,6 @@ Quelques réponses aux questions que vous vous posez sans doute :)
   <dd>Non, pour l'instant, ils ne sont proposés qu'à la vente</dd>
   <dt>Quel type de branchement électrique est nécessaire ?</dt>
   <dd>Au choix 220V (une prise électrique classique) ou 5V (un chargeur USB de téléphone)</dd>
+  <dt>Est-ce que vous fournissez également les histoires ?</dt>
+  <dd>Non, mais j'ai un réseau de partenaires qui peut vous aider dans la réalisation de contenus pour mes téléphones.</dd>
 </dl>
