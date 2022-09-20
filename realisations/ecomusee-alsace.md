@@ -1,6 +1,6 @@
 # Ecomusée d'Alsace
 
-Ce musée, situé à Ungersheim en Alsace, a notamment vocation à reconstituer un village alsacien typique, avec son architecture, et ses objets (plusieurs maisons ont été déconstruites pour être reconstruites sur le site).
+Ce musée, situé à Ungersheim en Alsace, a notamment vocation à reconstituer un village alsacien typique, avec son architecture, et ses objets. Plusieurs maisons ont été déconstruites pour être reconstruites sur le site ([plus d'informations sur leur site web](https://www.ecomusee.alsace/)).
 
 Leur équipe m'a contacté en 2022 pour convertir un appareil issu de leurs réserves en boîte à histoires.
 
