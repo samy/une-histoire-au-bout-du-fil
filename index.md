@@ -14,10 +14,11 @@ Les usages possibles sont infinis :
 - composer une date sur le cadran et écouter un son de l'époque
 - etc
 
-Ces téléphones existent pour l'instant en deux versions:
+Quelques usages possibles:
 <div class="blocks">
-  <div class="block"><strong>Avec cadran</strong><br />Vous pouvez via le cadran choisir le son à écouter<br />(<small>10 audios maxi</small>)</div>
-  <div class="block"><strong>Sans cadran</strong><br />Un son aléatoire est joué à chaque fois qu'on décroche<br />(<small>1000 audios maxi</small>)</div>
+  <div class="block large"><strong>Témoignages sonores</strong></div>
+  <div class="block large"><strong>Salle d'attente</strong></div>
+  <div class="block large"><strong>Livre d'or audio</strong><br />Pour les mariages</div>
 </div>
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire équiper un exemplaire que vous possédez déja:
