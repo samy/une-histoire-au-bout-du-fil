@@ -8,12 +8,6 @@ Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envi
   <img src="https://user-images.githubusercontent.com/1282106/174430930-4d068449-e63c-43ff-a97e-a942af0a418f.JPG" width="500" />
 </p>
 
-Les usages possibles sont infinis :
-- mettre à disposition des témoignages d'anciens du quartier
-- diffuser du contenu aidant à patienter dans une salle d'attente
-- composer une date sur le cadran et écouter un son de l'époque
-- etc
-
 Quelques usages possibles:
 <div class="blocks">
   <div class="block large"><strong>Témoignages sonores</strong></div>
