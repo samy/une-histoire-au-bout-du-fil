@@ -10,9 +10,9 @@ Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envi
 
 Quelques usages possibles:
 <div class="blocks">
-  <div class="block large"><strong><small>Témoignages sonores</strong>Pour un musée, un anniversaire, etc</small></div>
-  <div class="block large"><strong><small>Salle d'attente</strong>Mairies, gares, ...</small></div>
-  <div class="block large"><strong><small>Livre d'or pour les mariages</strong><small>Vos invités enregistrent des messages<br />et vous pouvez les réécouter</small></div>
+  <div class="block large"><strong>Témoignages sonores</strong><small>Pour un musée, un anniversaire, etc</small></div>
+  <div class="block large"><strong>Salle d'attente</strong><small>Mairies, gares, ...</small></div>
+  <div class="block large"><strong>Livre d'or pour les mariages</strong><small>Vos invités enregistrent des messages<br />et vous pouvez les réécouter</small></div>
   <div class="block large"><strong>AirBnB</strong><small>Pour les consignes d'utilisation, les bons plans du quartier...</small></div>
 </div>
 
