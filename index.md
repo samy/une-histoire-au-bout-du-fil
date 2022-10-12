@@ -12,8 +12,8 @@ Quelques usages possibles:
 <div class="blocks">
   <div class="block large"><strong><small>Témoignages sonores</strong>Pour un musée, un anniversaire, etc</small></div>
   <div class="block large"><strong><small>Salle d'attente</strong>Mairies, gares, ...</small></div>
-  <div class="block large"><strong><small>Livre d'or pour les mariages</strong><small>Vos invités enregistrent des messages et vous pouvez les réécouter</small></div>
-  <div class="block large"><strong>AirBnB</strong>Pour les consignes d'utilisation, les bons plans du quartier...</small></div>
+  <div class="block large"><strong><small>Livre d'or pour les mariages</strong><small>Vos invités enregistrent des messages<br />et vous pouvez les réécouter</small></div>
+  <div class="block large"><strong>AirBnB</strong><small>Pour les consignes d'utilisation, les bons plans du quartier...</small></div>
 </div>
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire équiper un exemplaire que vous possédez déja:
