@@ -12,7 +12,7 @@ Quelques usages possibles:
 <div class="blocks">
   <div class="block large"><strong>Témoignages sonores</strong></div>
   <div class="block large"><strong>Salle d'attente</strong></div>
-  <div class="block large"><strong>Livre d'or pour les mariages</strong></div>
+  <div class="block large"><strong>Livre d'or pour les mariages</strong><small>Vos invités laissent des messages sur l'appareil</small></div>
   <div class="block large"><strong>AirBnB</strong></div>
 </div>
 
