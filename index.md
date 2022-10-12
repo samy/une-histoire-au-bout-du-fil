@@ -18,7 +18,8 @@ Quelques usages possibles:
 <div class="blocks">
   <div class="block large"><strong>Témoignages sonores</strong></div>
   <div class="block large"><strong>Salle d'attente</strong></div>
-  <div class="block large"><strong>Livre d'or audio</strong><br />Pour les mariages</div>
+  <div class="block large"><strong>Livre d'or pour les mariages</strong></div>
+  <div class="block large"><strong>AirBnB</strong></div>
 </div>
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire équiper un exemplaire que vous possédez déja:
