@@ -10,10 +10,10 @@ Tout a commencé par un ancien téléphone à cadran trouvé aux puces et l'envi
 
 Quelques usages possibles:
 <div class="blocks">
-  <div class="block large"><strong>Témoignages sonores</strong></div>
-  <div class="block large"><strong>Salle d'attente</strong></div>
-  <div class="block large"><strong>Livre d'or pour les mariages</strong><small>Vos invités laissent des messages sur l'appareil</small></div>
-  <div class="block large"><strong>AirBnB</strong></div>
+  <div class="block large"><strong>Témoignages sonores</strong>Pour un musée, un anniversaire, etc</div>
+  <div class="block large"><strong>Salle d'attente</strong>Mairies, gares, ...</div>
+  <div class="block large"><strong>Livre d'or pour les mariages</strong><small>Vos invités enregistrent des messages et vous pouvez les réécouter</small></div>
+  <div class="block large"><strong>AirBnB</strong>Pour les consignes d'utilisation, les bons plans du quartier...</div>
 </div>
 
 Si vous souhaitez acquérir un de ces appareils, ou si vous souhaitez faire équiper un exemplaire que vous possédez déja:
