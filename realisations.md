@@ -1,14 +1,14 @@
 A ce jour, plusieurs modèles ont été réalisés.
 
-<div id="phone_gallery">
-  <div class="phone">
+<div class="blocks">
+  <div class="block">
     <strong>Ecomusée d'Alsace</strong>
     <br />
     <a href="/realisations/ecomusee-alsace">
       <img src="https://user-images.githubusercontent.com/1282106/187677757-ee553000-9ff1-4586-a910-51e2f617df83.jpg" />
     </a>
   </div>
-  <div class="phone">
+  <div class="block">
     <strong>Musée des Pompiers de Lyon</strong>
     <br />
     <a href="/realisations/musee-des-pompiers">
@@ -18,7 +18,7 @@ A ce jour, plusieurs modèles ont été réalisés.
       <span style="background-image: url('https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg')"></span>
     </a>
   </div>
-  <div class="phone">
+  <div class="block">
     <strong>AOIP (1940-1950)</strong>
     <br />
       <a href="#img2">
@@ -31,7 +31,7 @@ A ce jour, plusieurs modèles ont été réalisés.
     <small>Réalisé par l'équipe Sis'mots de <a href="https://www.museomix.org">Museomix</a> et installé au <a href="https://musee-sismologie.unistra.fr/">musée de Sismologie de Strasbourg</a>
     </small>
   </div>
-  <div class="phone">
+  <div class="block">
     <strong>Ericsson U43</strong>
     <br />
     <a href="#img3">
@@ -42,7 +42,7 @@ A ce jour, plusieurs modèles ont été réalisés.
     </a>
   </div>
   
-  <div class="phone">
+  <div class="block">
     <strong>Socotel S63</strong>
     <br />
       <a href="#img1">
