@@ -1,6 +1,6 @@
 A ce jour, plusieurs modèles ont été réalisés.
 
-<div class="blocks">
+<div class="blocks gallery">
   <div class="block">
     <strong>Ecomusée d'Alsace</strong>
     <br />
