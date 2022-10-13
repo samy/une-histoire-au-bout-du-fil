@@ -3,13 +3,13 @@ A ce jour, plusieurs modèles ont été réalisés.
 <div class="blocks gallery">
   <div class="block">
     <strong>Ecomusée d'Alsace</strong>
-    <a href="/realisations/ecomusee-alsace">
+    <a href="/realisations/ecomusee-alsace" class="link">
       <img src="https://user-images.githubusercontent.com/1282106/187677757-ee553000-9ff1-4586-a910-51e2f617df83.jpg" />
     </a>
   </div>
   <div class="block">
     <strong>Musée des Pompiers de Lyon</strong>
-    <a href="/realisations/musee-des-pompiers">
+    <a href="/realisations/musee-des-pompiers" class="link">
       <img src="https://user-images.githubusercontent.com/1282106/187677952-f411baea-322d-4a0d-b509-6b7f8b4063db.jpg" />     
     </a>
     <a href="#" class="lightbox" id="img4">
@@ -18,7 +18,7 @@ A ce jour, plusieurs modèles ont été réalisés.
   </div>
   <div class="block">
     <strong>AOIP (1940-1950)</strong>
-      <a href="#img2">
+      <a href="#img2" class="link">
           <img src="https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg" />
       </a>
        <a href="#" class="lightbox" id="img2">
@@ -29,7 +29,7 @@ A ce jour, plusieurs modèles ont été réalisés.
   </div>
   <div class="block">
     <strong>Ericsson U43</strong>
-    <a href="#img3">
+    <a href="#img3" class="link">
         <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" />
     </a>
       <a href="#" class="lightbox" id="img3">
@@ -39,7 +39,7 @@ A ce jour, plusieurs modèles ont été réalisés.
   
   <div class="block">
     <strong>Socotel S63</strong>
-      <a href="#img1">
+      <a href="#img1" class="link">
             <img src="https://user-images.githubusercontent.com/1282106/171498593-54b66068-4692-4513-837f-f1191890a560.jpg" />
       </a>
       <a href="#" class="lightbox" id="img1">
