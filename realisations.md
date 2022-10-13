@@ -24,8 +24,6 @@ A ce jour, plusieurs modèles ont été réalisés.
        <a href="#" class="lightbox" id="img2">
       <span style="background-image: url('https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg')"></span>
     </a>
-    <small>Réalisé par l'équipe Sis'mots de <a href="https://www.museomix.org">Museomix</a> et installé au <a href="https://musee-sismologie.unistra.fr/">musée de Sismologie de Strasbourg</a>
-    </small>
   </div>
   <div class="block">
     <strong>Ericsson U43</strong>
