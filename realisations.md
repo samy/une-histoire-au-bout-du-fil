@@ -31,7 +31,7 @@ A ce jour, plusieurs modèles ont été réalisés.
   <div class="block">
     <strong>Socotel S63</strong>
       <a class="link">
-        <img src="https://user-images.githubusercontent.com/1282106/195829134-68d227d0-1c82-4026-a4db-434f1f92a8fe.jpg" />
+        <img src="https://user-images.githubusercontent.com/1282106/195829700-7de9cece-1bed-4c99-b5a1-6e4825bd0d45.jpg" />
       </a>
   </div>
 </div>
