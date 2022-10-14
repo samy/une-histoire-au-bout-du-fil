@@ -18,11 +18,9 @@ A ce jour, plusieurs modèles ont été réalisés.
   </div>
   <div class="block">
     <strong>AOIP (1940-1950)</strong>
-      <a href="#img2" class="link">
-          <img src="https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg" />
+      <a class="link">
+          <img src="https://user-images.githubusercontent.com/1282106/195825861-3425cdb4-66f2-45be-9e84-3f2cd80e0856.jpg" />
       </a>
-       <a href="#" class="lightbox" id="img2">
-      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/129452034-c55ad1a5-5f9b-4c79-a58a-9e0bbab8d801.jpg')"></span>
     </a>
   </div>
   <div class="block">
