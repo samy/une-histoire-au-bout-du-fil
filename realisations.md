@@ -21,7 +21,6 @@ A ce jour, plusieurs modèles ont été réalisés.
       <a class="link">
           <img src="https://user-images.githubusercontent.com/1282106/195825861-3425cdb4-66f2-45be-9e84-3f2cd80e0856.jpg" />
       </a>
-    </a>
   </div>
   <div class="block">
     <strong>Ericsson U43</strong>
