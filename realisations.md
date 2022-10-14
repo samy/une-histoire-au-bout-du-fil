@@ -24,22 +24,16 @@ A ce jour, plusieurs modèles ont été réalisés.
   </div>
   <div class="block">
     <strong>Ericsson U43</strong>
-    <a href="#img3" class="link">
-        <img src="https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg" />
-    </a>
-      <a href="#" class="lightbox" id="img3">
-      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/149672898-92151184-353d-4b62-b923-86ea2b3fc8f1.jpeg')"></span>
+    <a class="link">
+        <img src="https://user-images.githubusercontent.com/1282106/195827575-ecf51785-b019-4c91-bcfb-811771735836.jpg" />
     </a>
   </div>
   
   <div class="block">
     <strong>Socotel S63</strong>
-      <a href="#img1" class="link">
-            <img src="https://user-images.githubusercontent.com/1282106/171498593-54b66068-4692-4513-837f-f1191890a560.jpg" />
+      <a class="link">
+            <img src="https://user-images.githubusercontent.com/1282106/195827647-a39390e7-e092-4eab-8d42-47f3a17e2e50.jpg" />
       </a>
-      <a href="#" class="lightbox" id="img1">
-      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/171498593-54b66068-4692-4513-837f-f1191890a560.jpg')"></span>
-    </a>
   </div>
 </div>
 
