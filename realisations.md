@@ -27,12 +27,11 @@ A ce jour, plusieurs modèles ont été réalisés.
     <a class="link">
         <img src="https://user-images.githubusercontent.com/1282106/195827575-ecf51785-b019-4c91-bcfb-811771735836.jpg" />
     </a>
-  </div>
-  
+  </div>  
   <div class="block">
     <strong>Socotel S63</strong>
       <a class="link">
-            <img src="https://user-images.githubusercontent.com/1282106/195827647-a39390e7-e092-4eab-8d42-47f3a17e2e50.jpg" />
+        <img src="https://user-images.githubusercontent.com/1282106/195829134-68d227d0-1c82-4026-a4db-434f1f92a8fe.jpg" />
       </a>
   </div>
 </div>
