@@ -94,5 +94,6 @@ bool needToPlayIntro() {
 
 /* Diffusion du message d'introduction */
 void playIntro() {
+  delay(1000); /* On laisse aux utilisateurs le temps de décrocher */
   myDFPlayer.playMp3Folder(0); /* L'intro est stockée dans le fichier commençant par 0000 dans le dossier MP3 */
 }
