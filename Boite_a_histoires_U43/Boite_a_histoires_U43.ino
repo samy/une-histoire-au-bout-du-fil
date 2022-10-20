@@ -33,13 +33,14 @@ void setup() {
 
   /* Etat initial du DFPlayer */
   myDFPlayer.pause();
-  myDFPlayer.volume(12);
+  myDFPlayer.volume(8);
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
 }
 
 void loop() {
+
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp()) {
     myDFPlayer.pause();

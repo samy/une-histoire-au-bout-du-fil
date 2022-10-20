@@ -7,11 +7,11 @@
 
 
 // define the pins used
-#define RESET 5      // VS1053 reset pin (output)
-#define CS 6        // VS1053 chip select pin (output)
+#define RESET 7      // VS1053 reset pin (output)
+#define CS 5        // VS1053 chip select pin (output)
 #define DCS 4        // VS1053 Data/command select pin (output)
 #define CARDCS 7     // Card chip select pin
-#define DREQ 3       // VS1053 Data request, ideally an Interrupt pin
+#define DREQ 3
 
 #define REC_BUTTON 1
 uint32_t fileSize = 0;
@@ -38,7 +38,7 @@ void setup() {
     while (1);  // don't do anything more
   }
 
-  //musicPlayer.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
+  musicPlayer.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
 
   if (!SD.begin(CARDCS)) {
     Serial.println("SD failed, or not present");

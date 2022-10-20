@@ -26,7 +26,7 @@ void setup() {
   }
 
   /* Etat initial du DFPlayer */
-  myDFPlayer.volume(8);
+  myDFPlayer.volume(15);
   myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
   myDFPlayer.EQ(DFPLAYER_EQ_NORMAL);
   myDFPlayer.disableLoop();
@@ -34,10 +34,13 @@ void setup() {
   pinMode(PIN_HANG, INPUT_PULLUP);
   audioFilesCount = myDFPlayer.readFileCounts();
   randomSeed(analogRead(0));
+  pinMode(A0, OUTPUT);
 
 }
 
 void loop() {
+
+  digitalWrite(A0, HIGH);
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp()) {
     myDFPlayer.pause();
@@ -58,4 +61,8 @@ void loop() {
 */
 bool isHangedUp() {
   return 0 == digitalRead(PIN_HANG);
+}
+
+int getUserVolume() {
+  return 30 * analogRead(A1) / 1023;
 }
