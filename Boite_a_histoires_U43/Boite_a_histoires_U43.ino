@@ -9,13 +9,20 @@
 #define PIN_PULSE 6
 #define PIN_HANG A3
 
+/* Fonctionnalités */
+#define INTRO_ENABLE true /* Pour activer le message au décrochage */
+#define INTRO_DELTA 60 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+
 /* Déclaration des variables */
 SoftwareSerial mySoftwareSerial(9, 10); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 int numberSpecified = -1;
 RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
+unsigned long timeSinceLastIntroPlay = 0;
+
 
 void setup() {
+
   /* Connexion série pour la remontée d'informations au PC */
   Serial.begin(9600);
 
@@ -45,6 +52,8 @@ void loop() {
   if (isHangedUp()) {
     myDFPlayer.pause();
     return;
+  } else if (needToPlayIntro()) {
+    playIntro();
   }
 
   /* Si un numéro a été composé sur le téléphone, on le stocke */
@@ -65,10 +74,25 @@ int getDialedNumber(RotaryDialer dialerObject) {
   return number == 0 ? 10 : number;
 }
 
-/** Récupération de l'état de décroché/raccroché
-  La composition du numéro ayant tendance à parasiter le circuit
-  on détecte ici des valeurs proches de 1023 qui correspondent à un vrai raccrochage)
-*/
+/* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
   return 1 == digitalRead(PIN_HANG);
+}
+
+/* Détermination de la nécessité de jouer le message d'intro */
+bool needToPlayIntro() {
+  if (!INTRO_ENABLE) {
+    return false;
+  }
+  /* Si l'écart entre le compteur de temps actuel et la dernière lecture de l'introduction dépasse l'intervalle qu'on a configuré, on joue l'intro */
+  if ((millis() - timeSinceLastIntroPlay) > INTRO_DELTA*1000) {
+    timeSinceLastIntroPlay = millis();
+    return true;
+  }
+  return false;
+}
+
+/* Diffusion du message d'introduction */
+void playIntro() {
+  myDFPlayer.playMp3Folder(0); /* L'intro est stockée dans le fichier commençant par 0000 dans le dossier MP3 */
 }
