@@ -10,11 +10,11 @@ Un 2e écouteur, fonctionnel, permet de profiter à deux de cette expérience.
 
 ## Informations techniques
 
-Ce modèle est un BL, correspondant à "batterie locale" (un jeu de piles était installé chez l'abonné, et permettait d'initier l'appel), par opposition aux modèles BC ("batterie centrale", pour lesquels l'énergie est fournie par le central téléphonique).
+Ce modèle est un Modèle 1924, de typeBL, correspondant à "batterie locale" (un jeu de piles était installé chez l'abonné, et permettait d'initier l'appel), par opposition aux modèles BC ("batterie centrale", pour lesquels l'énergie est fournie par le central téléphonique).
 
 Le petit bouton situé à droite de la colonne permettait de déclencher l'appel, mais n'a désormais plus d'utilité.
 
-Tous les éléments sont d'origine, à part les fils tissus qui étaient trop endommagés et incomplets pour être réutilisés.
+Tous les éléments sont d'origine, à part les fils qui étaient trop endommagés et incomplets pour être réutilisés.
 
 Comme tous les appareils "Une histoire au bout du fil", il est alimenté via une prise USB et contient une carte SD hébergeant les fichiers MP3 diffusés par le combiné.
 
