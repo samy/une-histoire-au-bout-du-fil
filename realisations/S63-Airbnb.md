@@ -1,4 +1,4 @@
-# S63 Airbnb
+# S63 modèle "Airbnb"
 
 Qui n'a jamais eu à consulter, dans un logement loué pour les vacances, ce vieux document photocopié et pas à jour contenant les instructions et bonnes adresses ?
 
