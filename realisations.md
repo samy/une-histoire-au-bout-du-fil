@@ -8,7 +8,7 @@ A ce jour, plusieurs modèles ont été réalisés.
     </a>
   </div>
   <div class="block">
-    <strong>Musée des Pompiers de Lyon</strong>
+    <strong><a href="/realisations/musee-des-pompiers" class="link">Musée des Pompiers de Lyon</a></strong>
     <a href="/realisations/musee-des-pompiers" class="link">
       <img src="https://user-images.githubusercontent.com/1282106/187677952-f411baea-322d-4a0d-b509-6b7f8b4063db.jpg" />     
     </a>
