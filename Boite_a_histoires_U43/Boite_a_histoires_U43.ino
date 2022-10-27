@@ -11,7 +11,7 @@
 
 /* Fonctionnalités */
 #define INTRO_ENABLE true /* Pour activer le message au décrochage */
-#define INTRO_DELTA 60 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define INTRO_DELTA 20 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 
 /* Déclaration des variables */
 SoftwareSerial mySoftwareSerial(9, 10); // RX, TX
@@ -19,7 +19,7 @@ DFRobotDFPlayerMini myDFPlayer;
 int numberSpecified = -1;
 RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
 unsigned long timeSinceLastIntroPlay = 0;
-
+int phoneStatus = 0;
 
 void setup() {
 
@@ -34,7 +34,6 @@ void setup() {
 
   /* Connexion au DFPlayer */
   if (!myDFPlayer.begin(mySoftwareSerial, true, false)) {  //Use softwareSerial to communicate with mp3.
-    Serial.println(F("Unable to play"));
     while (true);
   }
 
@@ -51,10 +50,19 @@ void loop() {
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp()) {
     myDFPlayer.pause();
+
+    phoneStatus = 0;
     return;
-  } else if (needToPlayIntro()) {
+  } else {
+    if (phoneStatus == 0) {
+      phoneStatus = 1;
+    }
+  }
+  if (timeSinceLastIntroPlay == 0 || (phoneStatus == 1 && needToPlayIntro())) {
+    phoneStatus = 2;
     playIntro();
   }
+  phoneStatus = 2;
 
   /* Si un numéro a été composé sur le téléphone, on le stocke */
   if (dialer.update()) {
@@ -84,9 +92,10 @@ bool needToPlayIntro() {
   if (!INTRO_ENABLE) {
     return false;
   }
-  /* Si l'écart entre le compteur de temps actuel et la dernière lecture de l'introduction dépasse l'intervalle qu'on a configuré, on joue l'intro */
-  if ((millis() - timeSinceLastIntroPlay) > INTRO_DELTA*1000) {
-    timeSinceLastIntroPlay = millis();
+  /* Si l'écart entre le compteur de temps actuel et la dernière lecture de l'introduction dépasse l'intervalle qu'on a configuré,
+    et que le téléphone était décroché avant
+    on joue l'intro */
+  if ((millis() - timeSinceLastIntroPlay) > INTRO_DELTA * 1000) {
     return true;
   }
   return false;
@@ -94,6 +103,8 @@ bool needToPlayIntro() {
 
 /* Diffusion du message d'introduction */
 void playIntro() {
+  timeSinceLastIntroPlay = millis();
+
   delay(1000); /* On laisse aux utilisateurs le temps de décrocher */
   myDFPlayer.playMp3Folder(0); /* L'intro est stockée dans le fichier commençant par 0000 dans le dossier MP3 */
 }
