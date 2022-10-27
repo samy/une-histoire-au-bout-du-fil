@@ -2,18 +2,21 @@ A ce jour, plusieurs modèles ont été réalisés.
 
 <div class="blocks gallery">
   <div class="block">
-    <strong>Ecomusée d'Alsace</strong>
+    <strong><a href="/realisations/S63-Airbnb">S63 "Airbnb"</a></strong>
+    <a href="/realisations/S63-Airbnb" class="link">
+      <img src="https://user-images.githubusercontent.com/1282106/187677757-ee553000-9ff1-4586-a910-51e2f617df83.jpg" />
+    </a>
+  </div>
+  <div class="block">
+    <strong><a href="/realisations/ecomusee-alsace">>Ecomusée d'Alsace</a></strong>
     <a href="/realisations/ecomusee-alsace" class="link">
       <img src="https://user-images.githubusercontent.com/1282106/187677757-ee553000-9ff1-4586-a910-51e2f617df83.jpg" />
     </a>
   </div>
   <div class="block">
-    <strong><a href="/realisations/musee-des-pompiers" class="link">Musée des Pompiers de Lyon</a></strong>
+    <strong><a href="/realisations/musee-des-pompiers">Musée des Pompiers de Lyon</a></strong>
     <a href="/realisations/musee-des-pompiers" class="link">
       <img src="https://user-images.githubusercontent.com/1282106/187677952-f411baea-322d-4a0d-b509-6b7f8b4063db.jpg" />     
-    </a>
-    <a href="#" class="lightbox" id="img4">
-      <span style="background-image: url('https://user-images.githubusercontent.com/1282106/171491132-978949f5-55bb-4b0e-a7de-7a1baf0c1879.jpg')"></span>
     </a>
   </div>
   <div class="block">
