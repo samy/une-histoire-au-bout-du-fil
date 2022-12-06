@@ -1,7 +1,7 @@
 
 /* Bibliothèques requises */
 #include <SoftwareSerial.h> /* Connexion série */
-#include <DFRobotDFPlayerMini.h> /* Lecteur MP3 */
+#include "DFRobotDFPlayerMini.h" /* Lecteur MP3 */
 #include "RotaryDialer.h" /* Gestion du cadran rotatif */
 
 /* Définition des constantes */
@@ -9,9 +9,28 @@
 #define PIN_PULSE 6
 #define PIN_HANG A3
 
+/* Constantes pour cadran UK */
+int needToPrint = 0;
+int count;
+int lastState = LOW;
+int trueState = LOW;
+long lastStateChangeTime = 0;
+int cleared = 0;
+int dialHasFinishedRotatingAfterMs = 100;
+int debounceDelay = 10;
+
 /* Fonctionnalités */
-#define INTRO_ENABLE true /* Pour activer le message au décrochage */
-#define INTRO_DELTA 20 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define INTRO_ENABLE false /* Pour activer le message au décrochage */
+#define INTRO_DELTA 20*3600*24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define DIAL_RANDOM false /* Si le cadran doit lire au hasard */
+#define DIALER_TYPE "UK" /* FR pour cadrans français, UK pour britanniques */
+
+/* Gestion bouton supplémentaire */
+#define EXTRA_HANG false /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG_PIN A5 /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG_REVERSE false /* Si le cadran doit lire au hasard */
+
+
 
 /* Déclaration des variables */
 SoftwareSerial mySoftwareSerial(9, 10); // RX, TX
@@ -20,6 +39,9 @@ int numberSpecified = -1;
 RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
 unsigned long timeSinceLastIntroPlay = 0;
 int phoneStatus = 0;
+int audioFilesCount = 0;
+bool currentState = 0;
+
 
 void setup() {
 
@@ -39,16 +61,22 @@ void setup() {
 
   /* Etat initial du DFPlayer */
   myDFPlayer.pause();
-  myDFPlayer.volume(8);
+  myDFPlayer.volume(5);
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
+  if (EXTRA_HANG) {
+    pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
+  }
+
+  randomSeed(analogRead(0));
+  audioFilesCount = myDFPlayer.readFileCounts();
+
 }
 
 void loop() {
-
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
-  if (isHangedUp()) {
+  if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
     myDFPlayer.pause();
 
     phoneStatus = 0;
@@ -65,13 +93,22 @@ void loop() {
   phoneStatus = 2;
 
   /* Si un numéro a été composé sur le téléphone, on le stocke */
-  if (dialer.update()) {
-    numberSpecified = getDialedNumber(dialer);
+  if (DIALER_TYPE == "FR") {
+    if (dialer.update()) {
+      numberSpecified = getDialedNumber(dialer);
+    }
+  }
+  if (DIALER_TYPE == "UK") {
+    numberSpecified = getUkDialerNumber();
   }
 
   /* Si un numéro a été composé, alors on joue le MP3 correspondant */
   if (numberSpecified != -1) {
-    myDFPlayer.playMp3Folder(numberSpecified);
+    if (DIAL_RANDOM) {
+      myDFPlayer.play(random(1, audioFilesCount));
+    } else {
+      myDFPlayer.playMp3Folder(numberSpecified);
+    }
     numberSpecified = -1;
   }
 }
@@ -85,6 +122,10 @@ int getDialedNumber(RotaryDialer dialerObject) {
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
   return 1 == digitalRead(PIN_HANG);
+}
+/* Récupération de l'état de décroché/raccroché */
+bool isExtraHangedUp() {
+  return (EXTRA_HANG_REVERSE ? 0 : 1) == digitalRead(EXTRA_HANG_PIN);
 }
 
 /* Détermination de la nécessité de jouer le message d'intro */
@@ -107,4 +148,38 @@ void playIntro() {
 
   delay(1000); /* On laisse aux utilisateurs le temps de décrocher */
   myDFPlayer.playMp3Folder(0); /* L'intro est stockée dans le fichier commençant par 0000 dans le dossier MP3 */
+}
+
+int getUkDialerNumber() {
+  int reading = digitalRead(PIN_PULSE);
+  int numberSpecified = -1;
+  if ((millis() - lastStateChangeTime) > dialHasFinishedRotatingAfterMs) {
+    // the dial isn't being dialed, or has just finished being dialed.
+    if (needToPrint) {
+      // if it's only just finished being dialed, we need to send the number down the serial
+      // line and reset the count. We mod the count by 10 because '0' will send 10 pulses.
+      numberSpecified = count % 10;
+      needToPrint = 0;
+      count = 0;
+      cleared = 0;
+    }
+  }
+
+  if (reading != lastState) {
+    lastStateChangeTime = millis();
+  }
+  if ((millis() - lastStateChangeTime) > debounceDelay) {
+    // debounce - this happens once it's stablized
+    if (reading != trueState) {
+      // this means that the switch has either just gone from closed->open or vice versa.
+      trueState = reading;
+      if (trueState == HIGH) {
+        // increment the count of pulses if it's gone high.
+        count++;
+        needToPrint = 1; // we'll need to print this number (once the dial has finished rotating)
+      }
+    }
+  }
+  lastState = reading;
+  return numberSpecified;
 }
