@@ -9,39 +9,18 @@
 #define PIN_PULSE 6
 #define PIN_HANG A3
 
-/* Constantes pour cadran UK */
-int needToPrint = 0;
-int count;
-int lastState = LOW;
-int trueState = LOW;
-long lastStateChangeTime = 0;
-int cleared = 0;
-int dialHasFinishedRotatingAfterMs = 100;
-int debounceDelay = 10;
-
 /* Fonctionnalités */
 #define INTRO_ENABLE false /* Pour activer le message au décrochage */
 #define INTRO_DELTA 20*3600*24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 #define DIAL_RANDOM false /* Si le cadran doit lire au hasard */
-#define DIALER_TYPE "UK" /* FR pour cadrans français, UK pour britanniques */
+#define DIALER_TYPE "FR" /* FR pour cadrans français, UK pour britanniques */
 
 /* Gestion bouton supplémentaire */
 #define EXTRA_HANG false /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_PIN A5 /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_REVERSE false /* Si le cadran doit lire au hasard */
 
-
-
-/* Déclaration des variables */
-SoftwareSerial mySoftwareSerial(9, 10); // RX, TX
-DFRobotDFPlayerMini myDFPlayer;
-int numberSpecified = -1;
-RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
-unsigned long timeSinceLastIntroPlay = 0;
-int phoneStatus = 0;
-int audioFilesCount = 0;
-bool currentState = 0;
-
+#include "Variables.h"
 
 void setup() {
 
