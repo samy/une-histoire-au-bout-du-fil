@@ -32,13 +32,7 @@ void setup() {
   while (!Serial);
   Serial.println("Adafruit VS1053 Ogg Recording Test");
 
-  // initialise the music player
-  if (!musicPlayer.begin()) {
-    Serial.println("VS1053 not found");
-    while (1);  // don't do anything more
-  }
 
-  musicPlayer.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
 
   if (!SD.begin(CARDCS)) {
     Serial.println("SD failed, or not present");
@@ -46,16 +40,11 @@ void setup() {
   }
   Serial.println("SD OK!");
 
-  // Set volume for left, right channels. lower numbers == louder volume!
-  musicPlayer.setVolume(5, 5);
+  Serial.println("Chargement plugin OK");
 
-  // when the button is pressed, record!
-  pinMode(REC_BUTTON, INPUT);
-  digitalWrite(REC_BUTTON, HIGH);
-
-
-  pinMode(0, OUTPUT); //règle la borne numérique numéro 1 de la carte Arduino en mode sortie
+  //pinMode(0, OUTPUT); //règle la borne numérique numéro 1 de la carte Arduino en mode sortie
   LoadPlugin(plugin, sizeof(plugin) / sizeof(plugin[0]));
+  Serial.println("Chargement plugin OK");
 
 }
 
@@ -241,38 +230,38 @@ void startRecordWav(boolean mic)
 
   while (!musicPlayer.readyForData() );
   //  //IMA fix patch
-    musicPlayer.sciWrite(VS1053_REG_WRAMADDR, 0x8010);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3e12);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0xb817);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3e14);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0xf812);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3e01);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0xb811);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x0007);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x9717);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x0020);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0xffd2);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x0030);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x11d1);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3111);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3704);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0xc024);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3b81);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3101);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3b81);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3f04);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0xc024);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x2808);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x4800);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x36f1);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x9811);
-    musicPlayer.sciWrite(VS1053_REG_WRAMADDR, 0x8028);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x2a00);
-    musicPlayer.sciWrite(VS1053_REG_WRAM, 0x040e);
+  musicPlayer.sciWrite(VS1053_REG_WRAMADDR, 0x8010);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3e12);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0xb817);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3e14);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0xf812);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3e01);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0xb811);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x0007);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x9717);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x0020);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0xffd2);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x0030);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x11d1);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3111);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3704);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0xc024);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3b81);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3101);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3b81);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x8024);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x3f04);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0xc024);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x2808);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x4800);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x36f1);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x9811);
+  musicPlayer.sciWrite(VS1053_REG_WRAMADDR, 0x8028);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x2a00);
+  musicPlayer.sciWrite(VS1053_REG_WRAM, 0x040e);
 }
 
 void stopRecordWav(void) {

@@ -4,7 +4,7 @@
 void LoadUserCode(void) {
   int i = 0;
 
-  while (i<sizeof(plugin)/sizeof(plugin[0])) {
+  while (i < sizeof(plugin) / sizeof(plugin[0])) {
     unsigned short addr, n, val;
     addr = plugin[i++];
     n = plugin[i++];
