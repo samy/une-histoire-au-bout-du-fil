@@ -1,4 +1,4 @@
-#include <SdFat.h>
+#include <SD.h>
 
 #define SD_FAT_TYPE 1
 
@@ -29,14 +29,15 @@ File32 file;
 #define INTRO_RECORD_ENABLE true
 #define INTRO_PLAY_ENABLE false
 
+
 #define PIN_HANG 10  //Port lié au fil du décrochage
 
-char PHONE_MODE[10] = "record";
+char phoneMode[] = "record";
 char introHasBeenPlayed=false;
 
 char line[40];
 char recordsNumber[10];
-char* tmpContent;
+char tmpContent;
 int phoneStatus = 0;
 
 
@@ -86,18 +87,18 @@ void initEnvironnement() {
   }
 }
 
-char* getRecordsNumber() {
+char getRecordsNumber() {
   if (!file.open(RECORDS_NUMBER_FILE_NAME, FILE_WRITE)) {
     error("open failed");
   }
 
-  int bits = file.attrib();
-  file.attrib(bits | FS_ATTRIB_HIDDEN);
+  //int bits = file.attrib();
+  //file.attrib(bits | FS_ATTRIB_HIDDEN);
 
   file.rewind();
   tmpContent = 0;
   while (file.available()) {
-    tmpContent = file.read();
+    tmpContent = (char) file.read();
   }
   if (sizeof(tmpContent) == 0) {
     tmpContent = 0;
@@ -111,8 +112,8 @@ void setRecordsNumber(char number) {
     error("open failed");
   }
 
-  int bits = file.attrib();
-  file.attrib(bits | FS_ATTRIB_HIDDEN);
+  //int bits = file.attrib();
+  //file.attrib(bits | FS_ATTRIB_HIDDEN);
 
   file.truncate();
   file.print(number);
@@ -123,8 +124,8 @@ bool needToPlayIntro() {
   if (introHasBeenPlayed) {
     return false;
   }
-  if ((PHONE_MODE == "record" && INTRO_RECORD_ENABLE)
-      || (PHONE_MODE == "play" && INTRO_PLAY_ENABLE)) {
+  if ((strcmp(phoneMode, "record") == 0 && INTRO_RECORD_ENABLE)
+      || (strcmp(phoneMode, "play") == 0 && INTRO_PLAY_ENABLE)) {
     introHasBeenPlayed = true;
     return true;
   }
