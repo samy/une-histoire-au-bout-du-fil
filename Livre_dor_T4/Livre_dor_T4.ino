@@ -1,4 +1,14 @@
+#include <Audio.h>
+#include <Wire.h>
+#include <SPI.h>
 #include <SD.h>
+#include <SerialFlash.h>
+
+#define INTRO_RECORD_ENABLE true
+#define INTRO_PLAY_ENABLE false
+
+
+#include "phone_guestbook.h"
 
 #define SD_FAT_TYPE 1
 
@@ -25,20 +35,19 @@ const uint8_t SD_CS_PIN = SDCARD_SS_PIN;
 SdFat32 sd;
 File32 file;
 
-#define RECORDS_NUMBER_FILE_NAME ".records_file_number"
-#define INTRO_RECORD_ENABLE true
-#define INTRO_PLAY_ENABLE false
+AudioPlaySdWav           playSdWav1;     //xy=546,333
+AudioOutputI2S           i2s1;           //xy=1018,324
+AudioConnection          patchCord1(playSdWav1, 0, i2s1, 0);
+AudioConnection          patchCord2(playSdWav1, 1, i2s1, 1);
 
+PhoneGuestBook guestbook;
 
-#define PIN_HANG 10  //Port lié au fil du décrochage
-
-char phoneMode[] = "record";
-char introHasBeenPlayed=false;
 
 char line[40];
 char recordsNumber[10];
 char tmpContent;
 int phoneStatus = 0;
+
 
 
 //------------------------------------------------------------------------------
@@ -62,7 +71,7 @@ void loop() {
       phoneStatus = 1;
     }
   }
-  if (phoneStatus == 1 && needToPlayIntro()) {
+  if (phoneStatus == 1 && guestbook.needToPlayIntro()) {
     phoneStatus = 2;
     //playIntro();
   }
@@ -87,52 +96,35 @@ void initEnvironnement() {
   }
 }
 
-char getRecordsNumber() {
-  if (!file.open(RECORDS_NUMBER_FILE_NAME, FILE_WRITE)) {
-    error("open failed");
-  }
+// char getRecordsNumber() {
+//   if (!file.open(RECORDS_NUMBER_FILE_NAME, FILE_WRITE)) {
+//     error("open failed");
+//   }
 
-  //int bits = file.attrib();
-  //file.attrib(bits | FS_ATTRIB_HIDDEN);
+//   //int bits = file.attrib();
+//   //file.attrib(bits | FS_ATTRIB_HIDDEN);
 
-  file.rewind();
-  tmpContent = 0;
-  while (file.available()) {
-    tmpContent = (char) file.read();
-  }
-  if (sizeof(tmpContent) == 0) {
-    tmpContent = 0;
-  }
-  file.close();
-  return tmpContent;
-}
+//   file.rewind();
+//   tmpContent = 0;
+//   while (file.available()) {
+//     tmpContent = (char) file.read();
+//   }
+//   if (sizeof(tmpContent) == 0) {
+//     tmpContent = 0;
+//   }
+//   file.close();
+//   return tmpContent;
+// }
 
-void setRecordsNumber(char number) {
-  if (!file.open(RECORDS_NUMBER_FILE_NAME, FILE_WRITE)) {
-    error("open failed");
-  }
+// void setRecordsNumber(char number) {
+//   if (!file.open(RECORDS_NUMBER_FILE_NAME, FILE_WRITE)) {
+//     error("open failed");
+//   }
 
-  //int bits = file.attrib();
-  //file.attrib(bits | FS_ATTRIB_HIDDEN);
+//   //int bits = file.attrib();
+//   //file.attrib(bits | FS_ATTRIB_HIDDEN);
 
-  file.truncate();
-  file.print(number);
-  file.close();
-}
-
-bool needToPlayIntro() {
-  if (introHasBeenPlayed) {
-    return false;
-  }
-  if ((strcmp(phoneMode, "record") == 0 && INTRO_RECORD_ENABLE)
-      || (strcmp(phoneMode, "play") == 0 && INTRO_PLAY_ENABLE)) {
-    introHasBeenPlayed = true;
-    return true;
-  }
-  return false;
-}
-
-/* Récupération de l'état de décroché/raccroché */
-bool isHangedUp() {
-  return 1 == digitalRead(PIN_HANG);
-}
+//   file.truncate();
+//   file.print(number);
+//   file.close();
+// }
