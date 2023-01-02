@@ -12,8 +12,8 @@ public:
   void enableIntroBeforeRecord();
   void enableIntroBeforePlay();
   bool needToPlayIntro();
-  bool IntroRecordEnabled;
-  bool IntroPlayEnabled;
+  bool introRecordEnabled;
+  bool introPlayEnabled;
   void enableRecordMode();
   int getMode();
   void setMode(int);
@@ -24,6 +24,7 @@ public:
   void continueRecording();
   void stopRecording();
   void stopPlaying();
+  void playIntro();
 private:
   int phoneMode;
   bool introHasBeenPlayed;
@@ -45,6 +46,18 @@ private:
 #define RECORD_MODE 1
 #define PLAY_MODE 0
 
+#ifndef RECORD_INTRO_FILENAME
+#define RECORD_INTRO_FILENAME "intro_record.wav"
+#endif
+
+#ifndef PLAY_INTRO_FILENAME
+#define PLAY_INTRO_FILENAME "intro_play.wav"
+#endif
+
+#ifndef COMMON_INTRO_FILENAME
+#define COMMON_INTRO_FILENAME "intro.wav"
+#endif
+
 bool isHangedUp();
 bool needToPlayIntro();
 
@@ -54,8 +67,8 @@ bool needToPlayIntro();
 
 extern SdFat32 sd;
 extern File32 file;
-extern AudioPlaySdWav playSdWav1;  //xy=546,333
-extern AudioOutputI2S i2s1;        //xy=1018,324
+extern AudioPlaySdWav playSdWav;  //xy=546,333
+extern AudioOutputI2S i2s1;       //xy=1018,324
 extern AudioConnection patchCord1;
 extern AudioConnection patchCord2;
 extern PhoneGuestBook guestbook;

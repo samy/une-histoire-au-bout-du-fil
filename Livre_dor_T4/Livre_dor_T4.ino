@@ -6,8 +6,11 @@
 
 #define INTRO_RECORD_ENABLE true
 #define INTRO_PLAY_ENABLE false
+#define INTRO_FILENAME "intro.wav"
+
 
 #include "phone_guestbook.h"
+
 
 
 
@@ -22,7 +25,6 @@ void setup() {
 }
 
 void loop() {
-  /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp()) {
     stopEverything();
 
@@ -35,7 +37,7 @@ void loop() {
   }
   if (phoneStatus == 1 && guestbook.needToPlayIntro()) {
     phoneStatus = 2;
-    //playIntro();
+    guestbook.playIntro();
   }
   phoneStatus = 2;
 }
@@ -70,4 +72,6 @@ void initEnvironnement() {
 }
 
 void stopEverything() {
+  guestbook.stopPlaying();
+  guestbook.stopRecording();
 }

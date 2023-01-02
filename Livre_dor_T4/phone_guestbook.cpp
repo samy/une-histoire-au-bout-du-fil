@@ -11,8 +11,8 @@ bool PhoneGuestBook::needToPlayIntro() {
   if (this->introHasBeenPlayed) {
     return false;
   }
-  if ((this->getMode() == RECORD_MODE && this->IntroRecordEnabled)
-      || (this->getMode() == PLAY_MODE && this->IntroPlayEnabled)) {
+  if ((this->getMode() == RECORD_MODE && this->introRecordEnabled)
+      || (this->getMode() == PLAY_MODE && this->introPlayEnabled)) {
     introHasBeenPlayed = true;
     return true;
   }
@@ -20,11 +20,11 @@ bool PhoneGuestBook::needToPlayIntro() {
 }
 
 void PhoneGuestBook::enableIntroBeforeRecord() {
-  this->IntroRecordEnabled = true;
+  this->introRecordEnabled = true;
 }
 
 void PhoneGuestBook::enableIntroBeforePlay() {
-  this->IntroPlayEnabled = true;
+  this->introPlayEnabled = true;
 }
 
 void PhoneGuestBook::enableRecordMode() {
@@ -116,10 +116,10 @@ void PhoneGuestBook::writeOutHeader(File audioFile) {  // update WAV header with
 SdFat32 sd;
 File32 file;
 
-AudioPlaySdWav playSdWav1;  //xy=546,333
-AudioOutputI2S i2s1;        //xy=1018,324
-AudioConnection patchCord1(playSdWav1, 0, i2s1, 0);
-AudioConnection patchCord2(playSdWav1, 1, i2s1, 1);
+AudioPlaySdWav playSdWav;  //xy=546,333
+AudioOutputI2S i2s1;       //xy=1018,324
+AudioConnection patchCord1(playSdWav, 0, i2s1, 0);
+AudioConnection patchCord2(playSdWav, 1, i2s1, 1);
 PhoneGuestBook guestbook;
 char line[40];
 char recordsNumber[10];
@@ -149,7 +149,34 @@ const int myInput = AUDIO_INPUT_MIC;
 
 void PhoneGuestBook::startPlaying() {
   Serial.println("startPlaying");
-  playSdWav1.play("RECORD.RAW");
+  playSdWav.play("RECORD.RAW");
+  mode = 2;
+}
+
+void PhoneGuestBook::playIntro() {
+  guestbook.stopPlaying();
+  if (this->getMode() == RECORD_MODE && this->introRecordEnabled) {
+    if (sd.exists(RECORD_INTRO_FILENAME)) {
+      playSdWav.play(RECORD_INTRO_FILENAME);
+
+      introHasBeenPlayed = true;
+    } else {
+      Serial.println("Record intro file not found.");
+    }
+  }
+  if (this->getMode() == PLAY_MODE && this->introPlayEnabled) {
+    if (sd.exists(PLAY_INTRO_FILENAME)) {
+      playSdWav.play(PLAY_INTRO_FILENAME);
+      introHasBeenPlayed = true;
+    } else {
+      Serial.println("Record intro file not found.");
+    }
+  }
+  if (!introHasBeenPlayed && (this->introPlayEnabled || this->introRecordEnabled) && sd.exists(COMMON_INTRO_FILENAME)) {
+    playSdWav.play(COMMON_INTRO_FILENAME);
+    introHasBeenPlayed = true;
+  }
+
   mode = 2;
 }
 
@@ -222,14 +249,14 @@ void PhoneGuestBook::stopRecording() {
 
 
 void PhoneGuestBook::continuePlaying() {
-  if (!playSdWav1.isPlaying()) {
-    playSdWav1.stop();
+  if (!playSdWav.isPlaying()) {
+    playSdWav.stop();
     mode = 0;
   }
 }
 
 void PhoneGuestBook::stopPlaying() {
   Serial.println("stopPlaying");
-  if (mode == 2) playSdWav1.stop();
+  if (mode == 2) playSdWav.stop();
   mode = 0;
 }
