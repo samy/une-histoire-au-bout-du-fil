@@ -1,3 +1,4 @@
+#include "synth_waveform.h"
 #include "FatLib/FatFile.h"
 #include "core_pins.h"
 #include "phone_guestbook.h"
@@ -17,6 +18,9 @@ bool PhoneGuestBook::needToPlayIntro() {
     return true;
   }
   return false;
+}
+bool PhoneGuestBook::needToPlayBeep() {
+  return BEEP_ENABLE;
 }
 
 void PhoneGuestBook::enableIntroBeforeRecord() {
@@ -116,10 +120,16 @@ void PhoneGuestBook::writeOutHeader(File audioFile) {  // update WAV header with
 SdFat32 sd;
 File32 file;
 
-AudioPlaySdWav playSdWav;  //xy=546,333
-AudioOutputI2S i2s1;       //xy=1018,324
-AudioConnection patchCord1(playSdWav, 0, i2s1, 0);
-AudioConnection patchCord2(playSdWav, 1, i2s1, 1);
+AudioSynthWaveform waveform;  //xy=404,310
+AudioPlaySdWav playSdWav;     //xy=412,441
+AudioMixer4 mixer;            //xy=752,329
+AudioOutputI2S i2s1;          //xy=1048,323
+AudioConnection patchCord1(waveform, 0, i2s1, 0);
+AudioConnection patchCord2(playSdWav, 0, mixer, 1);
+AudioConnection patchCord3(playSdWav, 1, mixer, 2);
+AudioConnection patchCord4(mixer, 0, i2s1, 0);
+AudioConnection patchCord5(mixer, 0, i2s1, 1);
+
 PhoneGuestBook guestbook;
 char line[40];
 char recordsNumber[10];
@@ -178,6 +188,14 @@ void PhoneGuestBook::playIntro() {
   }
 
   mode = 2;
+}
+
+void PhoneGuestBook::playBeep() {
+  waveform.begin(WAVEFORM_SINE);
+  waveform.amplitude(0.75);
+  
+  delay(400);
+  waveform.amplitude(0);
 }
 
 

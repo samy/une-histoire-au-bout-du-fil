@@ -12,6 +12,7 @@ public:
   void enableIntroBeforeRecord();
   void enableIntroBeforePlay();
   bool needToPlayIntro();
+  bool needToPlayBeep();
   bool introRecordEnabled;
   bool introPlayEnabled;
   void enableRecordMode();
@@ -25,6 +26,9 @@ public:
   void stopRecording();
   void stopPlaying();
   void playIntro();
+  void playBeep();
+
+  void playFileSynchronous();
 private:
   int phoneMode;
   bool introHasBeenPlayed;
@@ -58,6 +62,10 @@ private:
 #define COMMON_INTRO_FILENAME "intro.wav"
 #endif
 
+#ifndef BEEP_ENABLE
+#define BEEP_ENABLE true
+#endif
+
 bool isHangedUp();
 bool needToPlayIntro();
 
@@ -72,6 +80,7 @@ extern AudioOutputI2S i2s1;       //xy=1018,324
 extern AudioConnection patchCord1;
 extern AudioConnection patchCord2;
 extern PhoneGuestBook guestbook;
+extern AudioSynthWaveform waveform;
 extern char line[40];
 extern char recordsNumber[10];
 extern char tmpContent;
@@ -92,6 +101,9 @@ extern unsigned long recByteSaved;
 extern unsigned long NumSamples;
 extern byte byte1, byte2, byte3, byte4;
 extern AudioControlSGTL5000 audioShield;
+extern AudioSynthWaveform waveform1;  // To create the "beep" sfx
+extern float beep_volume;             // not too loud :-)
+
 
 
 #define SD_FAT_TYPE 1

@@ -20,11 +20,15 @@
 //-----------------
 //------------------------------------------------------------------------------
 void setup() {
-
   initEnvironnement();
+
 }
 
 void loop() {
+  guestbook.playBeep();
+  delay(100000);
+
+  return;
   if (isHangedUp()) {
     stopEverything();
 
@@ -35,30 +39,32 @@ void loop() {
       phoneStatus = 1;
     }
   }
+
+  /* INTRO */
   if (phoneStatus == 1 && guestbook.needToPlayIntro()) {
     phoneStatus = 2;
     guestbook.playIntro();
+    if (guestbook.needToPlayBeep()) {
+    }
   }
   phoneStatus = 2;
+
+  if (mode == 2) {
+    guestbook.continuePlaying();
+  }
 }
 
 void initEnvironnement() {
-
   Serial.begin(9600);
+  AudioMemory(10);
 
   // Wait for USB Serial
   // NECESSAIRE POUR REPROGRAMMER LE TEENSY
-  while (!Serial) {
-    yield();
-  }
-  while (!Serial.available()) {
-    yield();
-  }
 
 
-
+  Serial.println("Ok");
   // Initialize the SD.
-  if (!sd.begin(SD_CONFIG)) {
+  if (!sd.begin(SDCARD_CS_PIN)) {
     sd.initErrorHalt(&Serial);
     return;
   }
@@ -69,6 +75,9 @@ void initEnvironnement() {
 
   SPI.setMOSI(SDCARD_MOSI_PIN);
   SPI.setSCK(SDCARD_SCK_PIN);
+  waveform.frequency(440);
+    waveform.amplitude(1.0);
+
 }
 
 void stopEverything() {
