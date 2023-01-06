@@ -3,10 +3,21 @@
 
 #include <Arduino.h>
 #include <SD.h>
+#include <Bounce.h>
 
 #ifndef PHONE_GUESTBOOK
 #define PHONE_GUESTBOOK
+enum Mode { Initialising,
+            Ready,
+            Prompting,
+            Recording,
+            Playing,
+};
 
+enum Feature {
+  Recorder,
+  Player
+};
 class PhoneGuestBook {
 public:
   void enableIntroBeforeRecord();
@@ -17,8 +28,8 @@ public:
   bool introPlayEnabled;
   void enableRecordMode();
   int getMode();
-  void setMode(int);
-  void writeOutHeader(File audioFile);
+  void setMode(Mode mode);
+  void writeOutHeader();
   void startPlaying();
   void startRecording();
   void continuePlaying();
@@ -27,11 +38,16 @@ public:
   void stopPlaying();
   void playIntro();
   void playBeep();
+  void playLastRecording();
+  void end_Beep();
+  void wait(unsigned int milliseconds);
+  void updateButtons();
+  Mode phoneMode;
 
   void playFileSynchronous();
 private:
-  int phoneMode;
   bool introHasBeenPlayed;
+  void print_mode();
 };
 
 
@@ -75,19 +91,26 @@ bool needToPlayIntro();
 
 extern SdFat32 sd;
 extern File32 file;
-extern AudioPlaySdWav playSdWav;  //xy=546,333
+extern AudioPlaySdWavX playWav1;  //xy=546,333
 extern AudioOutputI2S i2s1;       //xy=1018,324
 extern AudioConnection patchCord1;
+extern AudioRecordQueue queue1;  // Creating an audio buffer in memory before saving to SD
+
 extern AudioConnection patchCord2;
+extern AudioConnection patchCord3;
+extern AudioConnection patchCord4;
+extern AudioConnection patchCord5;
 extern PhoneGuestBook guestbook;
 extern AudioSynthWaveform waveform;
+extern AudioMixer4 mixer;  // Allows merging several inputs to same output
+
 extern char line[40];
 extern char recordsNumber[10];
 extern char tmpContent;
 extern int phoneStatus;
 extern File frec;
 extern AudioRecordQueue queue1;  //xy=281,63
-extern int mode;                 // 0=stopped, 1=recording, 2=playing
+//extern int mode;                 // 0=stopped, 1=recording, 2=playing
 extern unsigned long ChunkSize;
 extern unsigned long Subchunk1Size;
 extern unsigned int AudioFormat;
@@ -103,37 +126,15 @@ extern byte byte1, byte2, byte3, byte4;
 extern AudioControlSGTL5000 audioShield;
 extern AudioSynthWaveform waveform1;  // To create the "beep" sfx
 extern float beep_volume;             // not too loud :-)
+extern char filename[15];
+
+extern Bounce buttonRecord;
+extern Bounce buttonChangeMode;
 
 
 
-#define SD_FAT_TYPE 1
 
-// SDCARD_SS_PIN is defined for the built-in SD on some boards.
-#ifndef SDCARD_SS_PIN
-const uint8_t SD_CS_PIN = SS;
-#else   // SDCARD_SS_PIN
-// Assume built-in SD is used.
-const uint8_t SD_CS_PIN = SDCARD_SS_PIN;
-#endif  // SDCARD_SS_PIN
 // Use these with the Teensy Audio Shield
 #define SDCARD_CS_PIN 10
 #define SDCARD_MOSI_PIN 7
 #define SDCARD_SCK_PIN 14
-// Try max SPI clock for an SD. Reduce SPI_CLOCK if errors occur.
-#define SPI_CLOCK SD_SCK_MHZ(50)
-
-// Try to select the best SD card configuration.
-#if HAS_SDIO_CLASS
-#define SD_CONFIG SdioConfig(FIFO_SDIO)
-#elif ENABLE_DEDICATED_SPI
-#define SD_CONFIG SdSpiConfig(SD_CS_PIN, DEDICATED_SPI, SPI_CLOCK)
-#else  // HAS_SDIO_CLASS
-#define SD_CONFIG SdSpiConfig(SD_CS_PIN, SHARED_SPI, SPI_CLOCK)
-#endif  // HAS_SDIO_CLASS
-
-
-
-
-
-
-extern const int myInput;
