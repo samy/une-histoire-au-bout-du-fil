@@ -33,9 +33,8 @@ void loop() {
   guestbook.updateButtons();
 
   switch (guestbook.phoneMode) {
-    case Mode::Ready:  //Téléphone raccroché
-      // Falling edge occurs when the handset is lifted --> 611 telephone
-      if (buttonRecord.fallingEdge()) {
+    case Mode::Ready:                    //Téléphone raccroché
+      if (buttonRecord.fallingEdge()) {  //Si on décroche
         Serial.println("Décrochage");
         guestbook.phoneMode = Mode::Prompting;
         print_mode();
@@ -50,16 +49,18 @@ void loop() {
       // Wait a second for users to put the handset to their ear
       guestbook.wait(1000);
       // Play the greeting inviting them to record their message
+
       playWav1.play("intro.wav");
       // Wait until the  message has finished playing
       //      while (playWav1.isPlaying()) {
       while (!playWav1.isStopped()) {
         // Check whether the handset is replaced
         guestbook.updateButtons();
-        // Handset is replaced
+
+        //Si on raccroche le téléphone
         if (buttonRecord.risingEdge()) {
-          playWav1.stop();
-          guestbook.phoneMode = Mode::Ready;
+          guestbook.stopEverything();
+
           print_mode();
           return;
         }
@@ -70,28 +71,41 @@ void loop() {
         //   return;
         // }
       }
-      // Debug message
-      Serial.println("Starting Recording");
       // Play the tone sound effect
-      waveform.begin(0.8, 440, WAVEFORM_SINE);
-      guestbook.wait(1250);
-      waveform.amplitude(0);
-      // Start the recording function
+      if (guestbook.needToPlayBeep()) {
+        waveform.begin(0.8, 440, WAVEFORM_SINE);
+        guestbook.wait(1250);
+        waveform.amplitude(0);
+      }
+
+      Serial.println("Starting Recording");
       guestbook.startRecording();
       break;
 
     case Mode::Recording:
+      guestbook.updateButtons();
+
       // Handset is replaced
       if (buttonRecord.risingEdge()) {
-        // Debug log
+        //Si on raccroche
         Serial.println("Stopping Recording");
         // Stop recording
-        guestbook.stopRecording();
-        // Play audio tone to confirm recording has ended
-        guestbook.end_Beep();
-      } else {
-        guestbook.continueRecording();
+        guestbook.stopEverything();
+        break;
       }
+      if (buttonReplay.risingEdge()) {
+        guestbook.stopEverything();
+        guestbook.playLastRecording();
+        break;
+      }
+      if (buttonReset.risingEdge()) {
+        guestbook.stopEverything();
+        SD.remove(filename);
+        guestbook.phoneMode = Mode::Prompting;
+
+        break;
+      }
+      guestbook.continueRecording();
       break;
 
     case Mode::Playing:  // to make compiler happy
@@ -100,8 +114,6 @@ void loop() {
     case Mode::Initialising:  // to make compiler happy
       break;
   }
-
-  //MTP.loop();  // This is mandatory to be placed in the loop code.
 }
 
 void loop_old() {
@@ -115,7 +127,7 @@ void loop_old() {
 
   return;
   if (isHangedUp()) {
-    stopEverything();
+    //stopEverything();
 
     phoneStatus = 0;
     return;
@@ -170,43 +182,8 @@ void initEnvironnement() {
   //waveform.amplitude(1.0);
 }
 
-void stopEverything() {
-  guestbook.stopPlaying();
-  guestbook.stopRecording();
-}
 
-void playFile(const char* filename) {
 
-  // Start playing the file.  This sketch continues to
-  // run while the file plays.
-  playWav1.play(filename);
-
-  // A brief delay for the library read WAV info
-  delay(25);
-
-  // Simply wait for the file to finish playing.
-  while (playWav1.isPlaying()) {
-    // uncomment these lines if you audio shield
-    // has the optional volume pot soldered
-    //float vol = analogRead(15);
-    //vol = vol / 1024;
-    // sgtl5000_1.volume(vol);
-  }
-}
-
-void printFiles(File dir, int numTabs) {
-  while (true) {
-    File entry = dir.openNextFile();
-    if (!entry) {
-      break;
-    }
-    for (uint8_t i = 0; i < numTabs; i++) {
-      Serial.print('\t');
-    }
-    Serial.println(entry.name());
-    entry.close();
-  }
-}
 
 time_t getTeensy3Time() {
   return Teensy3Clock.get();

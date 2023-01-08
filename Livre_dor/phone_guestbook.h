@@ -42,6 +42,7 @@ public:
   void end_Beep();
   void wait(unsigned int milliseconds);
   void updateButtons();
+  void stopEverything();
   Mode phoneMode;
 
   void playFileSynchronous();
@@ -129,7 +130,8 @@ extern float beep_volume;             // not too loud :-)
 extern char filename[15];
 
 extern Bounce buttonRecord;
-extern Bounce buttonChangeMode;
+extern Bounce buttonReplay;
+extern Bounce buttonReset;
 
 
 

@@ -1,3 +1,4 @@
+#include "Bounce.h"
 #include "play_sd_wav.h"
 #include "synth_waveform.h"
 #include "FatLib/FatFile.h"
@@ -25,7 +26,15 @@ bool PhoneGuestBook::needToPlayIntro() {
 bool PhoneGuestBook::needToPlayBeep() {
   return BEEP_ENABLE;
 }
-
+void PhoneGuestBook::stopEverything() {
+  if (!playWav1.isStopped()) {
+    playWav1.stop();
+  }
+  if (guestbook.phoneMode == Mode::Recording) {
+    guestbook.stopRecording();
+  }
+  guestbook.phoneMode = Mode::Ready;
+}
 void PhoneGuestBook::enableIntroBeforeRecord() {
   this->introRecordEnabled = true;
 }
@@ -127,13 +136,13 @@ AudioPlaySdWavX playWav1;     //xy=412,441
 AudioMixer4 mixer;            //xy=752,329
 AudioOutputI2S i2s1;          //xy=1048,323
 AudioRecordQueue queue1;      // Creating an audio buffer in memory before saving to SD
-AudioInputI2S               i2s2; // I2S input from microphone on audio shield
+AudioInputI2S i2s2;           // I2S input from microphone on audio shield
 
-AudioConnection patchCord1(waveform, 0, mixer, 0); // wave to mixer 
-AudioConnection patchCord3(playWav1, 0, mixer, 1); // wav file playback mixer
-AudioConnection patchCord4(mixer, 0, i2s1, 0); // mixer output to speaker (L)
-AudioConnection patchCord6(mixer, 0, i2s1, 1); // mixer output to speaker (R)
-AudioConnection patchCord5(i2s2, 0, queue1, 0); // mic input to queue (L)
+AudioConnection patchCord1(waveform, 0, mixer, 0);  // wave to mixer
+AudioConnection patchCord3(playWav1, 0, mixer, 1);  // wav file playback mixer
+AudioConnection patchCord4(mixer, 0, i2s1, 0);      // mixer output to speaker (L)
+AudioConnection patchCord6(mixer, 0, i2s1, 1);      // mixer output to speaker (R)
+AudioConnection patchCord5(i2s2, 0, queue1, 0);     // mic input to queue (L)
 
 PhoneGuestBook guestbook;
 char line[40];
@@ -158,7 +167,8 @@ byte byte1, byte2, byte3, byte4;
 AudioControlSGTL5000 audioShield;
 char filename[15];
 Bounce buttonRecord = Bounce(PIN_HANG, 40);
-
+Bounce buttonReplay = Bounce(PIN_REPLAY, 40);
+Bounce  buttonReset = Bounce(PIN_RESET, 40);
 
 
 void PhoneGuestBook::startPlaying() {
