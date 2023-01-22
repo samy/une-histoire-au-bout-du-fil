@@ -26,15 +26,16 @@ const int myInput = AUDIO_INPUT_MIC;
 //------------------------------------------------------------------------------
 void setup() {
   initEnvironnement();
+  guestbook.stopEverything();
 }
 
 void loop() {
+  guestbook.adjustVolume();
   // First, read the buttons
   guestbook.updateButtons();
-
   switch (guestbook.phoneMode) {
     case Mode::Ready:                    //Téléphone raccroché
-      if (buttonRecord.fallingEdge()) {  //Si on décroche
+      if (1 == digitalRead(PIN_HANG)) {  //Si on décroche
         Serial.println("Décrochage");
         guestbook.phoneMode = Mode::Prompting;
         print_mode();
@@ -58,9 +59,9 @@ void loop() {
         guestbook.updateButtons();
 
         //Si on raccroche le téléphone
-        if (buttonRecord.risingEdge()) {
+        if (0 == digitalRead(PIN_HANG)) {
+          Serial.println("Raccrochage");
           guestbook.stopEverything();
-
           print_mode();
           return;
         }
@@ -71,6 +72,8 @@ void loop() {
         //   return;
         // }
       }
+      Serial.println("Fin intro");
+
       // Play the tone sound effect
       if (guestbook.needToPlayBeep()) {
         waveform.begin(0.8, 440, WAVEFORM_SINE);
@@ -83,35 +86,31 @@ void loop() {
       break;
 
     case Mode::Recording:
-      guestbook.updateButtons();
+      digitalWrite(PIN_LED, HIGH);
 
       // Handset is replaced
-      if (buttonRecord.risingEdge()) {
+      if (0 == digitalRead(PIN_HANG)) {
         //Si on raccroche
         Serial.println("Stopping Recording");
         // Stop recording
         guestbook.stopEverything();
         break;
       }
-      if (buttonReplay.risingEdge()) {
+      if (buttonReset.fallingEdge()) {
+        Serial.println("Falling");
         guestbook.stopEverything();
-        guestbook.playLastRecording();
-        break;
-      }
-      if (buttonReset.risingEdge()) {
-        guestbook.stopEverything();
+
         SD.remove(filename);
         guestbook.phoneMode = Mode::Prompting;
-
-        break;
       }
       guestbook.continueRecording();
       break;
 
-    case Mode::Playing:  // to make compiler happy
+    case Mode::Playing:
+      guestbook.adjustVolume();
       break;
 
-    case Mode::Initialising:  // to make compiler happy
+    case Mode::Initialising:
       break;
   }
 }
@@ -172,6 +171,9 @@ void initEnvironnement() {
     }
   }
   pinMode(PIN_HANG, INPUT_PULLUP);
+  pinMode(PIN_RESET, INPUT_PULLUP);
+
+  pinMode(PIN_LED, OUTPUT);
   setSyncProvider(getTeensy3Time);
   FsDateTime::setCallback(dateTime);
   guestbook.phoneMode = Mode::Ready;

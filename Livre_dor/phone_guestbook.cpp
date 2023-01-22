@@ -27,6 +27,7 @@ bool PhoneGuestBook::needToPlayBeep() {
   return BEEP_ENABLE;
 }
 void PhoneGuestBook::stopEverything() {
+  digitalWrite(PIN_LED, LOW);
   if (!playWav1.isStopped()) {
     playWav1.stop();
   }
@@ -37,6 +38,11 @@ void PhoneGuestBook::stopEverything() {
 }
 void PhoneGuestBook::enableIntroBeforeRecord() {
   this->introRecordEnabled = true;
+}
+
+void PhoneGuestBook::adjustVolume() {
+  int sensorValue = analogRead(A1);
+  audioShield.lineOutLevel(13+(int)((30-13)*((float)sensorValue/1023)));
 }
 
 void PhoneGuestBook::enableIntroBeforePlay() {
@@ -166,9 +172,9 @@ unsigned long NumSamples = 0L;
 byte byte1, byte2, byte3, byte4;
 AudioControlSGTL5000 audioShield;
 char filename[15];
-Bounce buttonRecord = Bounce(PIN_HANG, 40);
+Bounce buttonRecord = Bounce(PIN_HANG, 750);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
 Bounce buttonReplay = Bounce(PIN_REPLAY, 40);
-Bounce  buttonReset = Bounce(PIN_RESET, 40);
+Bounce buttonReset = Bounce(PIN_RESET, 150);
 
 
 void PhoneGuestBook::startPlaying() {
@@ -260,12 +266,14 @@ void PhoneGuestBook::startRecording() {
   //  for (uint8_t i=0; i<9999; i++) { // BUGFIX uint8_t overflows if it reaches 255
   for (uint16_t i = 0; i < 9999; i++) {
     // Format the counter as a five-digit number with leading zeroes, followed by file extension
-    snprintf(filename, 11, " %05d.wav", i);
+    snprintf(filename, 11, "%05d.wav", i);
     // Create if does not exist, do not open existing, write, sync after write
     if (!SD.exists(filename)) {
       break;
     }
   }
+  Serial.print("filename ");
+  Serial.println(filename);
   frec = SD.open(filename, FILE_WRITE);
   Serial.println("Opened file !");
   if (frec) {
@@ -393,4 +401,5 @@ void PhoneGuestBook::wait(unsigned int milliseconds) {
 
 void PhoneGuestBook::updateButtons() {
   buttonRecord.update();
+  buttonReset.update();
 }

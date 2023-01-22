@@ -44,6 +44,7 @@ public:
   void updateButtons();
   void stopEverything();
   Mode phoneMode;
+  void adjustVolume();
 
   void playFileSynchronous();
 private:
