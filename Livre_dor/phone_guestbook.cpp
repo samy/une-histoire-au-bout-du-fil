@@ -31,10 +31,11 @@ void PhoneGuestBook::stopEverything() {
   if (!playWav1.isStopped()) {
     playWav1.stop();
   }
-  if (guestbook.phoneMode == Mode::Recording) {
+  if (guestbook.getMode() == Mode::Recording) {
     guestbook.stopRecording();
   }
-  guestbook.phoneMode = Mode::Ready;
+
+  guestbook.setMode(Mode::Ready);
 }
 void PhoneGuestBook::enableIntroBeforeRecord() {
   this->introRecordEnabled = true;
@@ -42,7 +43,7 @@ void PhoneGuestBook::enableIntroBeforeRecord() {
 
 void PhoneGuestBook::adjustVolume() {
   int sensorValue = analogRead(A1);
-  audioShield.lineOutLevel(13+(int)((30-13)*((float)sensorValue/1023)));
+  audioShield.lineOutLevel(13 + (int)((30 - 13) * ((float)sensorValue / 1023)));
 }
 
 void PhoneGuestBook::enableIntroBeforePlay() {
@@ -60,6 +61,12 @@ int PhoneGuestBook::getMode() {
 
 void PhoneGuestBook::setMode(Mode mode) {
   this->phoneMode = mode;
+  print_mode();
+}
+
+void PhoneGuestBook::setFeature(Feature feature) {
+  this->feature = feature;
+  print_feature();
 }
 
 void PhoneGuestBook::writeOutHeader() {  // update WAV header with final filesize/datasize
@@ -157,6 +164,7 @@ char tmpContent;
 int phoneStatus = 0;
 // The file where data is recorded
 File frec;
+File recordsDir = SD.open("/Enregistrements/");  //Root Directory
 //int mode = 0;             // 0=stopped, 1=recording, 2=playing
 unsigned long ChunkSize = 0L;
 unsigned long Subchunk1Size = 16;
@@ -184,31 +192,7 @@ void PhoneGuestBook::startPlaying() {
 }
 
 void PhoneGuestBook::playIntro() {
-  guestbook.stopPlaying();
-  if (this->getMode() == RECORD_MODE && this->introRecordEnabled) {
-    if (sd.exists(RECORD_INTRO_FILENAME)) {
-      playWav1.play(RECORD_INTRO_FILENAME);
-
-      introHasBeenPlayed = true;
-    } else {
-      Serial.println("Record intro file not found.");
-    }
-  }
-  if (this->getMode() == PLAY_MODE && this->introPlayEnabled) {
-    if (sd.exists(PLAY_INTRO_FILENAME)) {
-      playWav1.play(PLAY_INTRO_FILENAME);
-      introHasBeenPlayed = true;
-    } else {
-      Serial.println("Record intro file not found.");
-    }
-  }
-  if (!introHasBeenPlayed && (this->introPlayEnabled || this->introRecordEnabled) && sd.exists(COMMON_INTRO_FILENAME)) {
-    Serial.println("Common intro played");
-    playWav1.play("intro.wav");
-    introHasBeenPlayed = true;
-  }
-
-  //mode = 2;
+  playWav1.play(INTRO_FILENAME);
 }
 
 void PhoneGuestBook::playBeep() {
@@ -266,7 +250,7 @@ void PhoneGuestBook::startRecording() {
   //  for (uint8_t i=0; i<9999; i++) { // BUGFIX uint8_t overflows if it reaches 255
   for (uint16_t i = 0; i < 9999; i++) {
     // Format the counter as a five-digit number with leading zeroes, followed by file extension
-    snprintf(filename, 11, "%05d.wav", i);
+    snprintf(filename, 11, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
     // Create if does not exist, do not open existing, write, sync after write
     if (!SD.exists(filename)) {
       break;
@@ -297,6 +281,11 @@ void PhoneGuestBook::print_mode(void) {  // only for debugging
   else if (phoneMode == Mode::Playing) Serial.println(" Playing");
   else if (phoneMode == Mode::Initialising) Serial.println(" Initialising");
   else Serial.println(" Undefined");
+}
+void PhoneGuestBook::print_feature(void) {  // only for debugging
+  Serial.print("Feature switched to: ");
+  if (feature == Feature::Player) Serial.println(" Player");
+  else if (feature == Feature::Recorder) Serial.println(" Recorder");
 }
 
 
@@ -365,6 +354,24 @@ void PhoneGuestBook::playLastRecording() {
   this->phoneMode = Mode::Ready;
   print_mode();
   end_Beep();
+}
+
+void PhoneGuestBook::startPlayingRandomAudio() {
+  // Find the first available file number
+  int counter = 0;
+  for (int i = 0; i < 9999; i++) {
+    snprintf(filename, 11, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
+    if (!SD.exists(filename)) {
+      counter = i - 1;
+      break;
+    }
+  }
+
+  // now play file with index idx == last recorded file
+  snprintf(filename, 11, " %05d.wav", (int)random(1, counter));
+  Serial.println(filename);
+  playWav1.play(filename);
+  this->setMode(Mode::Playing);
 }
 
 void PhoneGuestBook::end_Beep(void) {

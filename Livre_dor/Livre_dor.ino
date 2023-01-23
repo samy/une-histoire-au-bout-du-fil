@@ -9,9 +9,7 @@
 #include "play_sd_wav.h"  // local copy with fixes
 
 #define INTRO_RECORD_ENABLE true
-#define INTRO_PLAY_ENABLE false
 #define INTRO_FILENAME "intro.wav"
-
 
 #include "phone_guestbook.h"
 
@@ -38,7 +36,7 @@ void loop() {
       if (1 == digitalRead(PIN_HANG)) {  //Si on décroche
         Serial.println("Décrochage");
         guestbook.phoneMode = Mode::Prompting;
-        print_mode();
+        guestbook.print_mode();
       }
       // else if (buttonPlay.fallingEdge()) {
       //   //playAllRecordings();
@@ -49,11 +47,9 @@ void loop() {
     case Mode::Prompting:  //Téléphone décroché, il va démarrer
       // Wait a second for users to put the handset to their ear
       guestbook.wait(1000);
-      // Play the greeting inviting them to record their message
 
-      playWav1.play("intro.wav");
+      guestbook.playIntro();
       // Wait until the  message has finished playing
-      //      while (playWav1.isPlaying()) {
       while (!playWav1.isStopped()) {
         // Check whether the handset is replaced
         guestbook.updateButtons();
@@ -62,15 +58,17 @@ void loop() {
         if (0 == digitalRead(PIN_HANG)) {
           Serial.println("Raccrochage");
           guestbook.stopEverything();
-          print_mode();
           return;
         }
-        // if (buttonPlay.fallingEdge()) {
-        //   playWav1.stop();
-        //   //playAllRecordings();
-        //   playLastRecording();
-        //   return;
-        // }
+
+        //Si on passe le téléphone en mode lecteur
+        if (0 == digitalRead(PIN_MODE_CHANGE)) {
+          Serial.println("Lecteur");
+          guestbook.stopEverything();
+          guestbook.setFeature(Feature::Player);
+          guestbook.setMode(Mode::Playing);
+          return;
+        }
       }
       Serial.println("Fin intro");
 
@@ -101,50 +99,48 @@ void loop() {
         guestbook.stopEverything();
 
         SD.remove(filename);
-        guestbook.phoneMode = Mode::Prompting;
+        guestbook.setMode(Mode::Prompting);
+      }
+      //Si on passe le téléphone en mode lecteur
+      if (0 == digitalRead(PIN_MODE_CHANGE)) {
+        Serial.println("Lecteur");
+        guestbook.stopEverything();
+        guestbook.setFeature(Feature::Player);
+        guestbook.setMode(Mode::Playing);
+        return;
       }
       guestbook.continueRecording();
       break;
 
     case Mode::Playing:
       guestbook.adjustVolume();
+      if (!playWav1.isStopped()) {
+        while (playWav1.isPlaying()) {
+          //Si on passe le téléphone en mode enregistreur
+          if (1 == digitalRead(PIN_MODE_CHANGE)) {
+            Serial.println("Enregistreur");
+            guestbook.stopEverything();
+            guestbook.setFeature(Feature::Recorder);
+            guestbook.setMode(Mode::Prompting);
+            return;
+          }
+          //Si on raccroche
+          if (0 == digitalRead(PIN_HANG)) {
+            Serial.println("Stopping playing");
+            guestbook.stopEverything();
+            break;
+          }
+        }
+      } else {
+        //On joue un audio
+        guestbook.startPlayingRandomAudio();
+      }
+
       break;
 
     case Mode::Initialising:
       break;
   }
-}
-
-void loop_old() {
-  guestbook.updateButtons();
-
-
-  //guestbook.playIntro();
-  delay(25);
-  //guestbook.playBeep();
-  return;
-
-  return;
-  if (isHangedUp()) {
-    //stopEverything();
-
-    phoneStatus = 0;
-    return;
-  } else {
-    if (phoneStatus == 0) {
-      phoneStatus = 1;
-    }
-  }
-
-
-  /* INTRO */
-  if (phoneStatus == 1 && guestbook.needToPlayIntro()) {
-    phoneStatus = 2;
-    guestbook.playIntro();
-    if (guestbook.needToPlayBeep()) {
-    }
-  }
-  phoneStatus = 2;
 }
 
 void initEnvironnement() {
@@ -153,8 +149,6 @@ void initEnvironnement() {
   Serial.begin(9600);
   AudioMemory(60);
 
-  // Wait for USB Serial
-  // NECESSAIRE POUR REPROGRAMMER LE TEENSY
   audioShield.enable();
   audioShield.inputSelect(myInput);
   //audioShield.micGain(40);  //0-63
@@ -164,7 +158,6 @@ void initEnvironnement() {
   SPI.setMOSI(SDCARD_MOSI_PIN);
   SPI.setSCK(SDCARD_SCK_PIN);
   if (!(SD.begin(SDCARD_CS_PIN))) {
-    // stop here, but print a message repetitively
     while (1) {
       Serial.println("Unable to access the SD card");
       delay(500);
@@ -172,20 +165,21 @@ void initEnvironnement() {
   }
   pinMode(PIN_HANG, INPUT_PULLUP);
   pinMode(PIN_RESET, INPUT_PULLUP);
+  pinMode(PIN_MODE_CHANGE, INPUT_PULLUP);
 
   pinMode(PIN_LED, OUTPUT);
   setSyncProvider(getTeensy3Time);
   FsDateTime::setCallback(dateTime);
-  guestbook.phoneMode = Mode::Ready;
-  print_mode();
 
+  guestbook.setMode(Mode::Ready);
 
-  // waveform.frequency(440);
-  //waveform.amplitude(1.0);
+  // Gestion du mode lecteur / enregistreur
+  if (1 == digitalRead(PIN_MODE_CHANGE)) {
+    guestbook.setFeature(Feature::Recorder);
+  } else {
+    guestbook.setFeature(Feature::Player);
+  }
 }
-
-
-
 
 time_t getTeensy3Time() {
   return Teensy3Clock.get();
@@ -201,15 +195,4 @@ void dateTime(uint16_t* date, uint16_t* time, uint8_t* ms10) {
 
   // Return low time bits in units of 10 ms.
   *ms10 = second() & 1 ? 100 : 0;
-}
-
-void print_mode(void) {  // only for debugging
-  Serial.print("Mode switched to: ");
-  // Initialising, Ready, Prompting, Recording, Playing
-  if (guestbook.phoneMode == Mode::Ready) Serial.println(" Ready");
-  else if (guestbook.phoneMode == Mode::Prompting) Serial.println(" Prompting");
-  else if (guestbook.phoneMode == Mode::Recording) Serial.println(" Recording");
-  else if (guestbook.phoneMode == Mode::Playing) Serial.println(" Playing");
-  else if (guestbook.phoneMode == Mode::Initialising) Serial.println(" Initialising");
-  else Serial.println(" Undefined");
 }

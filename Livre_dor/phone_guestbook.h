@@ -29,6 +29,8 @@ public:
   void enableRecordMode();
   int getMode();
   void setMode(Mode mode);
+  void setFeature(Feature feature);
+
   void writeOutHeader();
   void startPlaying();
   void startRecording();
@@ -44,12 +46,14 @@ public:
   void updateButtons();
   void stopEverything();
   Mode phoneMode;
+  Feature feature;
   void adjustVolume();
-
-  void playFileSynchronous();
+  void print_mode();
+  void print_feature();
+  void playRandomAudio();
+  void startPlayingRandomAudio();
 private:
   bool introHasBeenPlayed;
-  void print_mode();
 };
 
 
@@ -57,6 +61,13 @@ private:
 #define RECORDS_NUMBER_FILE_NAME ".records_file_number"
 #endif
 
+#ifndef INTRO_PLAY_ENABLE
+#define INTRO_PLAY_ENABLE false
+#endif
+
+#ifndef INTRO_FILENAME
+#define INTRO_FILENAME "intro.wav"
+#endif
 
 
 #define PIN_HANG 0         //Port lié au fil du décrochage
@@ -82,6 +93,10 @@ private:
 
 #ifndef BEEP_ENABLE
 #define BEEP_ENABLE true
+#endif
+
+#ifndef RECORDS_FOLDER_NAME
+#define RECORDS_FOLDER_NAME "Enregistrements"
 #endif
 
 bool isHangedUp();
