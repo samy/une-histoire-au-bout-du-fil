@@ -17,3 +17,6 @@ Source : https://www.instructables.com/Interface-a-rotary-phone-dial-to-an-Ardui
 | --- | --- |
 | Brun clair | +5V |
 | Orange  | GND et A6 |
+
+## Détection décrochage
+Il faudra se brancher sur les connecteurs T1 et T19 du circuit du téléphone (et à défaut, sur T1 et T4)
