@@ -8,11 +8,6 @@ Ce téléphone provient de Grande-Bretagne (et cet exemplaire date de 1968)
 Afin de simplifier la conversion de mes téléphones, j'avais créé un boitier générique, avec 4 connecteurs A, B, C et D reliés aux 4 fils du cadran.
 Mais cela fonctionnait avec un cadran français, et pas britannique comme celui-ci (le code couleur est différent).
 
-Dans le cas du cadran britannique, le cablâge est le suivant:
-
-![image](https://user-images.githubusercontent.com/1282106/205170210-0486af23-0cba-4cc6-9b5d-63479379ac73.png)
-Source : https://www.instructables.com/Interface-a-rotary-phone-dial-to-an-Arduino/
-
 | PIN PCB | Couleur fil UK |
 | --- | --- |
 | A | Bleu  |
