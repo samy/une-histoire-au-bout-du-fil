@@ -13,10 +13,12 @@ Dans le cas du cadran britannique, le cablâge est le suivant:
 ![image](https://user-images.githubusercontent.com/1282106/205170210-0486af23-0cba-4cc6-9b5d-63479379ac73.png)
 Source : https://www.instructables.com/Interface-a-rotary-phone-dial-to-an-Arduino/
 
-| Couleur fil cadran | Connecteur boîtier |
+| PIN PCB | Couleur fil UK |
 | --- | --- |
-| Brun clair | +5V |
-| Orange  | GND et A6 |
+| A | Bleu  |
+| B | Orange  |
+| C | Brun clair (ou rose)  |
+| D | Gris  |
 
 ## Détection décrochage
 Il faudra se brancher sur les connecteurs T1 et T19 du circuit du téléphone (et à défaut, sur T1 et T4)
