@@ -23,3 +23,6 @@ La hauteur sous l'appareil étant insuffisante pour glisser le lecteur de carte 
 
 ## Combiné
 Un bruit de fond peut survenir dans le combiné, il suffit de rajouter une résistance de 4.7kΩ (pour un volume de 10). Si nécessaire monter jusqu'à 10kΩ (pour un volume de 15).
+
+## Lecteur microSD
+Si la SD n'est pas reconnue (erreur Time Out du DFPlayer), enlever (à la pince) la résistance située dans le lecteur SD
