@@ -20,3 +20,6 @@ Il faudra se brancher sur les connecteurs T1 et T19 du circuit du téléphone (e
 
 ## Pieds
 La hauteur sous l'appareil étant insuffisante pour glisser le lecteur de carte microSD, il est nécessaire d'imprimer des cylindres de **16mm** de diamètre et d'au moins **6mm** de haut.
+
+## Combiné
+Un bruit de fond peut survenir dans le combiné, il suffit de rajouter une résistance de 4.7kΩ (pour un volume de 10). Si nécessaire monter jusqu'à 10kΩ (pour un volume de 15).
