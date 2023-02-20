@@ -1,23 +1,23 @@
 
 /* Bibliothèques requises */
-#include <SoftwareSerial.h> /* Connexion série */
+#include <SoftwareSerial.h>      /* Connexion série */
 #include "DFRobotDFPlayerMini.h" /* Lecteur MP3 */
-#include "RotaryDialer.h" /* Gestion du cadran rotatif */
+#include "RotaryDialer.h"        /* Gestion du cadran rotatif */
 
 /* Définition des constantes */
-#define PIN_READY  A2
+#define PIN_READY A2
 #define PIN_PULSE 6
 #define PIN_HANG A3
 
 /* Fonctionnalités */
-#define INTRO_ENABLE false /* Pour activer le message au décrochage */
-#define INTRO_DELTA 20*3600*24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false /* Si le cadran doit lire au hasard */
-#define DIALER_TYPE "FR" /* FR pour cadrans français, UK pour britanniques */
+#define INTRO_ENABLE false         /* Pour activer le message au décrochage */
+#define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
+#define DIALER_TYPE "UK"           /* FR pour cadrans français, UK pour britanniques */
 
 /* Gestion bouton supplémentaire */
-#define EXTRA_HANG false /* Si le cadran doit lire au hasard */
-#define EXTRA_HANG_PIN A5 /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG false         /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG_PIN A5        /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_REVERSE false /* Si le cadran doit lire au hasard */
 
 #include "Variables.h"
@@ -35,12 +35,15 @@ void setup() {
 
   /* Connexion au DFPlayer */
   if (!myDFPlayer.begin(mySoftwareSerial, true, false)) {  //Use softwareSerial to communicate with mp3.
-    while (true);
+    Serial.println("bad");
+    while (true)
+      ;
   }
+  Serial.println("OK");
 
   /* Etat initial du DFPlayer */
   myDFPlayer.pause();
-  myDFPlayer.volume(5);
+  myDFPlayer.volume(10);
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
@@ -50,7 +53,6 @@ void setup() {
 
   randomSeed(analogRead(0));
   audioFilesCount = myDFPlayer.readFileCounts();
-
 }
 
 void loop() {
@@ -75,10 +77,12 @@ void loop() {
   if (DIALER_TYPE == "FR") {
     if (dialer.update()) {
       numberSpecified = getDialedNumber(dialer);
+      //Serial.println(numberSpecified);
     }
   }
   if (DIALER_TYPE == "UK") {
     numberSpecified = getUkDialerNumber();
+    //Serial.println(numberSpecified);
   }
 
   /* Si un numéro a été composé, alors on joue le MP3 correspondant */
@@ -86,6 +90,7 @@ void loop() {
     if (DIAL_RANDOM) {
       myDFPlayer.play(random(1, audioFilesCount));
     } else {
+      Serial.println(numberSpecified);
       myDFPlayer.playMp3Folder(numberSpecified);
     }
     numberSpecified = -1;
@@ -125,7 +130,7 @@ bool needToPlayIntro() {
 void playIntro() {
   timeSinceLastIntroPlay = millis();
 
-  delay(1000); /* On laisse aux utilisateurs le temps de décrocher */
+  delay(1000);                 /* On laisse aux utilisateurs le temps de décrocher */
   myDFPlayer.playMp3Folder(0); /* L'intro est stockée dans le fichier commençant par 0000 dans le dossier MP3 */
 }
 
@@ -155,7 +160,7 @@ int getUkDialerNumber() {
       if (trueState == HIGH) {
         // increment the count of pulses if it's gone high.
         count++;
-        needToPrint = 1; // we'll need to print this number (once the dial has finished rotating)
+        needToPrint = 1;  // we'll need to print this number (once the dial has finished rotating)
       }
     }
   }
