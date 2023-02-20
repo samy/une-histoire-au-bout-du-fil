@@ -84,7 +84,9 @@ void loop() {
       break;
 
     case Mode::Recording:
-      digitalWrite(PIN_LED, HIGH);
+      if (RECORD_LED_ENABLE) {
+        digitalWrite(PIN_LED, HIGH);
+      }
 
       // Handset is replaced
       if (0 == digitalRead(PIN_HANG)) {

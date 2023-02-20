@@ -27,7 +27,6 @@ bool PhoneGuestBook::needToPlayBeep() {
   return BEEP_ENABLE;
 }
 void PhoneGuestBook::stopEverything() {
-  digitalWrite(PIN_LED, LOW);
   if (!playWav1.isStopped()) {
     playWav1.stop();
   }
@@ -48,11 +47,6 @@ void PhoneGuestBook::adjustVolume() {
 
 void PhoneGuestBook::enableIntroBeforePlay() {
   this->introPlayEnabled = true;
-}
-
-void PhoneGuestBook::enableRecordMode() {
-  digitalWrite(PIN_LED, LOW);
-  this->setMode(Mode::Recording);
 }
 
 int PhoneGuestBook::getMode() {
@@ -164,7 +158,7 @@ char tmpContent;
 int phoneStatus = 0;
 // The file where data is recorded
 File frec;
-File recordsDir = SD.open("/Enregistrements/");  //Root Directory
+File recordsDir = SD.open("/RECORD/");  //Root Directory
 //int mode = 0;             // 0=stopped, 1=recording, 2=playing
 unsigned long ChunkSize = 0L;
 unsigned long Subchunk1Size = 16;
@@ -250,12 +244,13 @@ void PhoneGuestBook::startRecording() {
   //  for (uint8_t i=0; i<9999; i++) { // BUGFIX uint8_t overflows if it reaches 255
   for (uint16_t i = 0; i < 9999; i++) {
     // Format the counter as a five-digit number with leading zeroes, followed by file extension
-    snprintf(filename, 11, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
+    snprintf(filename, 18, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
     // Create if does not exist, do not open existing, write, sync after write
     if (!SD.exists(filename)) {
       break;
     }
   }
+
   Serial.print("filename ");
   Serial.println(filename);
   frec = SD.open(filename, FILE_WRITE);
@@ -318,6 +313,7 @@ void PhoneGuestBook::stopRecording() {
   Serial.println("Closed file");
   phoneMode = Mode::Ready;
   print_mode();
+  digitalWrite(PIN_LED, LOW);
 }
 
 void PhoneGuestBook::playLastRecording() {

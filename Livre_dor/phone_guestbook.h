@@ -95,8 +95,12 @@ private:
 #define BEEP_ENABLE true
 #endif
 
+#ifndef RECORD_LED_ENABLE
+#define RECORD_LED_ENABLE true
+#endif
+
 #ifndef RECORDS_FOLDER_NAME
-#define RECORDS_FOLDER_NAME "Enregistrements"
+#define RECORDS_FOLDER_NAME "RECORD"
 #endif
 
 bool isHangedUp();
