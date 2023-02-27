@@ -123,7 +123,8 @@ extern AudioConnection patchCord4;
 extern AudioConnection patchCord5;
 extern PhoneGuestBook guestbook;
 extern AudioSynthWaveform waveform;
-extern AudioMixer4 mixer;  // Allows merging several inputs to same output
+extern AudioMixer4 mixer;          // Allows merging several inputs to same output
+extern AudioFilterBiquad biquad1;  //xy=970,445
 
 extern char line[40];
 extern char recordsNumber[10];

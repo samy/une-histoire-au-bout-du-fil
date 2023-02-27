@@ -8,7 +8,7 @@ Mode phoneMode = Mode::Initialising;
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 1 == digitalRead(PIN_HANG);
+  return 0 == digitalRead(PIN_HANG);
 }
 
 
@@ -138,18 +138,17 @@ void PhoneGuestBook::writeOutHeader() {  // update WAV header with final filesiz
 SdFat32 sd;
 File32 file;
 
-AudioSynthWaveform waveform;  //xy=404,310
-AudioPlaySdWavX playWav1;     //xy=412,441
-AudioMixer4 mixer;            //xy=752,329
-AudioOutputI2S i2s1;          //xy=1048,323
-AudioRecordQueue queue1;      // Creating an audio buffer in memory before saving to SD
-AudioInputI2S i2s2;           // I2S input from microphone on audio shield
-
+AudioSynthWaveform waveform;                        //xy=404,310
+AudioPlaySdWavX playWav1;                           //xy=412,441
+AudioMixer4 mixer;                                  //xy=752,329
+AudioOutputI2S i2s1;                                //xy=1048,323
+AudioRecordQueue queue1;                            // Creating an audio buffer in memory before saving to SD
+AudioInputI2S i2s2;                                 // I2S input from microphone on audio shield
 AudioConnection patchCord1(waveform, 0, mixer, 0);  // wave to mixer
 AudioConnection patchCord3(playWav1, 0, mixer, 1);  // wav file playback mixer
 AudioConnection patchCord4(mixer, 0, i2s1, 0);      // mixer output to speaker (L)
 AudioConnection patchCord6(mixer, 0, i2s1, 1);      // mixer output to speaker (R)
-AudioConnection patchCord5(i2s2, 0, queue1, 0);     // mic input to queue (L)
+AudioConnection patchCord5(i2s2, 0, queue1, 0);     // mic input to queue (L)   // mic input to queue (L)
 
 PhoneGuestBook guestbook;
 char line[40];
@@ -316,41 +315,6 @@ void PhoneGuestBook::stopRecording() {
   digitalWrite(PIN_LED, LOW);
 }
 
-void PhoneGuestBook::playLastRecording() {
-  // Find the first available file number
-  uint16_t idx = 0;
-  for (uint16_t i = 0; i < 9999; i++) {
-    // Format the counter as a five-digit number with leading zeroes, followed by file extension
-    snprintf(filename, 11, " %05d.wav", i);
-    // check, if file with index i exists
-    if (!SD.exists(filename)) {
-      idx = i - 1;
-      break;
-    }
-  }
-  // now play file with index idx == last recorded file
-  snprintf(filename, 11, " %05d.wav", idx);
-  Serial.println(filename);
-  playWav1.play(filename);
-  this->phoneMode = Mode::Playing;
-  print_mode();
-  while (!playWav1.isStopped()) {  // this works for playWav
-    //buttonPlay.update();
-    //buttonRecord.update();
-    // Button is pressed again
-    //      if(buttonPlay.risingEdge() || buttonRecord.risingEdge()) { // FIX
-    // if (buttonPlay.fallingEdge() || buttonRecord.risingEdge()) {
-    //   playWav1.stop();
-    //   mode = Mode::Ready;
-    //   print_mode();
-    //   return;
-    // }
-  }
-  // file has been played
-  this->phoneMode = Mode::Ready;
-  print_mode();
-  end_Beep();
-}
 
 void PhoneGuestBook::startPlayingRandomAudio() {
   // Find the first available file number

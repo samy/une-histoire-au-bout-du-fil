@@ -7,6 +7,8 @@
 #include <TimeLib.h>
 //#include <MTP_Teensy.h>
 #include "play_sd_wav.h"  // local copy with fixes
+#define TOGGLE_WATCHDOG_LED()
+
 
 #define INTRO_RECORD_ENABLE true
 #define INTRO_FILENAME "intro.wav"
@@ -28,12 +30,12 @@ void setup() {
 }
 
 void loop() {
-  guestbook.adjustVolume();
+  //guestbook.adjustVolume();
   // First, read the buttons
   guestbook.updateButtons();
   switch (guestbook.phoneMode) {
     case Mode::Ready:                    //Téléphone raccroché
-      if (1 == digitalRead(PIN_HANG)) {  //Si on décroche
+      if (0 == digitalRead(PIN_HANG)) {  //Si on décroche
         Serial.println("Décrochage");
         guestbook.phoneMode = Mode::Prompting;
         guestbook.print_mode();
@@ -85,33 +87,35 @@ void loop() {
 
     case Mode::Recording:
       if (RECORD_LED_ENABLE) {
-        digitalWrite(PIN_LED, HIGH);
+    //    digitalWrite(PIN_LED, HIGH);
       }
 
       // Handset is replaced
-      if (0 == digitalRead(PIN_HANG)) {
+      if (buttonRecord.fallingEdge()) {
         //Si on raccroche
         Serial.println("Stopping Recording");
         // Stop recording
         guestbook.stopEverything();
         break;
+      } else {
+        guestbook.continueRecording();
       }
       if (buttonReset.fallingEdge()) {
-        Serial.println("Falling");
+        Serial.println("Reset");
         guestbook.stopEverything();
 
         SD.remove(filename);
         guestbook.setMode(Mode::Prompting);
       }
       //Si on passe le téléphone en mode lecteur
-      if (0 == digitalRead(PIN_MODE_CHANGE)) {
-        Serial.println("Lecteur");
-        guestbook.stopEverything();
-        guestbook.setFeature(Feature::Player);
-        guestbook.setMode(Mode::Playing);
-        return;
-      }
-      guestbook.continueRecording();
+      // if (0 == digitalRead(PIN_MODE_CHANGE)) {
+      //   Serial.println("Lecteur");
+      //   guestbook.stopEverything();
+      //   guestbook.setFeature(Feature::Player);
+      //   guestbook.setMode(Mode::Playing);
+      //   return;
+      // }    
+      
       break;
 
     case Mode::Playing:
@@ -127,7 +131,7 @@ void loop() {
             return;
           }
           //Si on raccroche
-          if (0 == digitalRead(PIN_HANG)) {
+          if (1 == digitalRead(PIN_HANG)) {
             Serial.println("Stopping playing");
             guestbook.stopEverything();
             break;
@@ -149,12 +153,15 @@ void initEnvironnement() {
   guestbook.phoneMode = Mode::Initialising;
 
   Serial.begin(9600);
-  AudioMemory(60);
+  AudioMemory(200);
 
   audioShield.enable();
   audioShield.inputSelect(myInput);
-  //audioShield.micGain(40);  //0-63
-  audioShield.volume(0.3);  //0-1
+  audioShield.volume(0.6);  //0-1
+  mixer.gain(0, 0.5f);
+  mixer.gain(1, 0.5f);
+  audioShield.micGain(30);
+  audioShield.unmuteLineout();
 
   // Initialize the SD.
   SPI.setMOSI(SDCARD_MOSI_PIN);
