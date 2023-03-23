@@ -160,7 +160,7 @@ void initEnvironnement() {
   audioShield.volume(0.6);  //0-1
   mixer.gain(0, 0.5f);
   mixer.gain(1, 0.5f);
-  audioShield.micGain(30);
+  audioShield.micGain(10);
   audioShield.unmuteLineout();
 
   // Initialize the SD.

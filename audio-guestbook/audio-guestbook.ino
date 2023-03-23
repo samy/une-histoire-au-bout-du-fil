@@ -37,7 +37,7 @@
 #define SDCARD_SCK_PIN 14
 // And those used for inputs
 #define HOOK_PIN 0
-#define PLAYBACK_BUTTON_PIN 1
+#define PLAYBACK_BUTTON_PIN 4
 
 #define noINSTRUMENT_SD_WRITE
 
@@ -115,8 +115,8 @@ void setup() {
   sgtl5000_1.inputSelect(AUDIO_INPUT_MIC);
   //sgtl5000_1.adcHighPassFilterDisable(); //
   sgtl5000_1.volume(0.95);
-sgtl5000_1.adcHighPassFilterEnable();
-    sgtl5000_1.unmuteLineout();
+  sgtl5000_1.adcHighPassFilterEnable();
+  sgtl5000_1.unmuteLineout();
   mixer.gain(0, 5.0f);
   mixer.gain(1, 5.0f);
 
@@ -156,13 +156,12 @@ sgtl5000_1.adcHighPassFilterEnable();
 
 void loop() {
   // First, read the buttons
-  buttonRecord.update();
   buttonPlay.update();
 
   switch (mode) {
     case Mode::Ready:
       // Falling edge occurs when the handset is lifted --> 611 telephone
-      if (buttonRecord.fallingEdge()) {
+      if (0 == digitalRead(HOOK_PIN)) {
         Serial.println("Handset lifted");
         mode = Mode::Prompting;
         print_mode();
@@ -184,7 +183,7 @@ void loop() {
         buttonRecord.update();
         buttonPlay.update();
         // Handset is replaced
-        if (buttonRecord.risingEdge()) {
+        if (1 == digitalRead(HOOK_PIN)) {
           playWav1.stop();
           mode = Mode::Ready;
           print_mode();
@@ -209,7 +208,7 @@ void loop() {
 
     case Mode::Recording:
       // Handset is replaced
-      if (buttonRecord.risingEdge()) {
+      if (1 == digitalRead(HOOK_PIN)) {
         // Debug log
         Serial.println("Stopping Recording");
         // Stop recording

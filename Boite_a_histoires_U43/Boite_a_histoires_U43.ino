@@ -5,15 +5,15 @@
 #include "RotaryDialer.h"        /* Gestion du cadran rotatif */
 
 /* Définition des constantes */
-#define PIN_READY A2
-#define PIN_PULSE 6
-#define PIN_HANG A3
+#define PIN_READY 1
+#define PIN_PULSE 2
+#define PIN_HANG 0
 
 /* Fonctionnalités */
 #define INTRO_ENABLE false         /* Pour activer le message au décrochage */
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 #define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
-#define DIALER_TYPE "UK"           /* FR pour cadrans français, UK pour britanniques */
+#define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
 
 /* Gestion bouton supplémentaire */
 #define EXTRA_HANG false         /* Si le cadran doit lire au hasard */
@@ -26,7 +26,6 @@ void setup() {
 
   /* Connexion série pour la remontée d'informations au PC */
   Serial.begin(9600);
-
   /* Connexion série pour la communication avec le DFPlayer */
   mySoftwareSerial.begin(9600);
 
@@ -59,7 +58,7 @@ void loop() {
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
     myDFPlayer.pause();
-
+    Serial.println("Raccroche");
     phoneStatus = 0;
     return;
   } else {
@@ -77,16 +76,15 @@ void loop() {
   if (DIALER_TYPE == "FR") {
     if (dialer.update()) {
       numberSpecified = getDialedNumber(dialer);
-      //Serial.println(numberSpecified);
     }
   }
   if (DIALER_TYPE == "UK") {
     numberSpecified = getUkDialerNumber();
-    //Serial.println(numberSpecified);
   }
 
   /* Si un numéro a été composé, alors on joue le MP3 correspondant */
   if (numberSpecified != -1) {
+    myDFPlayer.pause();
     if (DIAL_RANDOM) {
       myDFPlayer.play(random(1, audioFilesCount));
     } else {
@@ -165,5 +163,5 @@ int getUkDialerNumber() {
     }
   }
   lastState = reading;
-  return numberSpecified;
+  return numberSpecified == 0 ? 10 : numberSpecified;
 }
