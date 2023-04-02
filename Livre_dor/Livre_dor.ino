@@ -5,6 +5,8 @@
 #include <SD.h>
 #include <SerialFlash.h>
 #include <TimeLib.h>
+#include "RotaryDialer.h" /* Gestion du cadran rotatif */
+
 //#include <MTP_Teensy.h>
 #include "play_sd_wav.h"  // local copy with fixes
 #define TOGGLE_WATCHDOG_LED()
@@ -16,17 +18,20 @@
 #include "phone_guestbook.h"
 
 const int myInput = AUDIO_INPUT_MIC;
-
-
+#define PIN_READY 1
+#define PIN_PULSE 2
+RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
+int numberSpecified = -1;
 
 //------------------------------------------------------------------------------
 // Store error strings in flash to save RAM.
-#define error(s) sd.errorHalt(&Serial, F(s))
+//#define error(s) sd.errorHalt(&Serial, F(s))
 //-----------------
 //------------------------------------------------------------------------------
 void setup() {
   initEnvironnement();
   guestbook.stopEverything();
+  dialer.setup();
 }
 
 void loop() {
@@ -40,6 +45,11 @@ void loop() {
         guestbook.phoneMode = Mode::Prompting;
         guestbook.print_mode();
       }
+      if (1 == digitalRead(PIN_MODE_CHANGE)) {
+        Serial.println("Bascule mode");
+        guestbook.phoneMode = Mode::Prompting;
+        guestbook.print_mode();
+      }
       // else if (buttonPlay.fallingEdge()) {
       //   //playAllRecordings();
       //   //playLastRecording();
@@ -50,6 +60,8 @@ void loop() {
       // Wait a second for users to put the handset to their ear
       guestbook.wait(1000);
 
+
+
       guestbook.playIntro();
       // Wait until the  message has finished playing
       while (!playWav1.isStopped()) {
@@ -57,7 +69,7 @@ void loop() {
         guestbook.updateButtons();
 
         //Si on raccroche le téléphone
-        if (0 == digitalRead(PIN_HANG)) {
+        if (1 == digitalRead(PIN_HANG)) {
           Serial.println("Raccrochage");
           guestbook.stopEverything();
           return;
@@ -76,7 +88,7 @@ void loop() {
 
       // Play the tone sound effect
       if (guestbook.needToPlayBeep()) {
-        waveform.begin(0.8, 440, WAVEFORM_SINE);
+        waveform.begin(0.5, 440, WAVEFORM_SINE);
         guestbook.wait(1250);
         waveform.amplitude(0);
       }
@@ -86,12 +98,9 @@ void loop() {
       break;
 
     case Mode::Recording:
-      if (RECORD_LED_ENABLE) {
-    //    digitalWrite(PIN_LED, HIGH);
-      }
 
       // Handset is replaced
-      if (buttonRecord.fallingEdge()) {
+      if (buttonRecord.risingEdge()) {
         //Si on raccroche
         Serial.println("Stopping Recording");
         // Stop recording
@@ -107,21 +116,39 @@ void loop() {
         SD.remove(filename);
         guestbook.setMode(Mode::Prompting);
       }
-      //Si on passe le téléphone en mode lecteur
-      // if (0 == digitalRead(PIN_MODE_CHANGE)) {
-      //   Serial.println("Lecteur");
-      //   guestbook.stopEverything();
-      //   guestbook.setFeature(Feature::Player);
-      //   guestbook.setMode(Mode::Playing);
-      //   return;
-      // }    
-      
+      if (0 == digitalRead(PIN_MODE_CHANGE)) {
+        Serial.println("Lecteur");
+        guestbook.stopEverything();
+        guestbook.setFeature(Feature::Player);
+        guestbook.setMode(Mode::Playing);
+        digitalWrite(PIN_LED, 0);
+        return;
+      }
+
       break;
 
     case Mode::Playing:
       guestbook.adjustVolume();
+      if (1 == digitalRead(PIN_MODE_CHANGE)) {
+        Serial.println("Bascule mode");
+        guestbook.phoneMode = Mode::Prompting;
+        guestbook.print_mode();
+        return;
+      }
+
       if (!playWav1.isStopped()) {
+        guestbook.continuePlaying();
+
+
+
         while (playWav1.isPlaying()) {
+          guestbook.updateButtons();
+          if (dialer.update()) {
+            numberSpecified = getDialedNumber(dialer);
+            guestbook.stopPlaying();
+          }
+
+
           //Si on passe le téléphone en mode enregistreur
           if (1 == digitalRead(PIN_MODE_CHANGE)) {
             Serial.println("Enregistreur");
@@ -136,9 +163,16 @@ void loop() {
             guestbook.stopEverything();
             break;
           }
+          if (buttonReset.fallingEdge()) {
+            guestbook.stopPlaying();
+          }
         }
+
+
+
       } else {
         //On joue un audio
+        Serial.println("startPlayingRandomAudio");
         guestbook.startPlayingRandomAudio();
       }
 
@@ -160,7 +194,7 @@ void initEnvironnement() {
   audioShield.volume(0.6);  //0-1
   mixer.gain(0, 0.5f);
   mixer.gain(1, 0.5f);
-  audioShield.micGain(10);
+  audioShield.micGain(5);
   audioShield.unmuteLineout();
 
   // Initialize the SD.
@@ -184,10 +218,15 @@ void initEnvironnement() {
 
   // Gestion du mode lecteur / enregistreur
   if (1 == digitalRead(PIN_MODE_CHANGE)) {
+    Serial.println("Recorder");
     guestbook.setFeature(Feature::Recorder);
   } else {
+    Serial.println("Player");
     guestbook.setFeature(Feature::Player);
   }
+  digitalWrite(PIN_LED, LOW);
+  guestbook.hasAnAudioBeenPlayedBefore = false;
+  dialer.setup();
 }
 
 time_t getTeensy3Time() {
@@ -204,4 +243,10 @@ void dateTime(uint16_t* date, uint16_t* time, uint8_t* ms10) {
 
   // Return low time bits in units of 10 ms.
   *ms10 = second() & 1 ? 100 : 0;
+}
+
+/* Récupération du numéro composé (le DFPlayer démarre à 1, donc le 0 est converti en 10) */
+int getDialedNumber(RotaryDialer dialerObject) {
+  int number = dialer.getNextNumber();
+  return number == 0 ? 10 : number;
 }

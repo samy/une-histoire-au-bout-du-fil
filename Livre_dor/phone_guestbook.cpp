@@ -33,8 +33,11 @@ void PhoneGuestBook::stopEverything() {
   if (guestbook.getMode() == Mode::Recording) {
     guestbook.stopRecording();
   }
-
-  guestbook.setMode(Mode::Ready);
+  //Serial.println("stopEverything");
+  if (guestbook.getMode() != Mode::Ready) {
+    guestbook.setMode(Mode::Ready);
+  }
+  guestbook.hasAnAudioBeenPlayedBefore = false;
 }
 void PhoneGuestBook::enableIntroBeforeRecord() {
   this->introRecordEnabled = true;
@@ -130,9 +133,9 @@ void PhoneGuestBook::writeOutHeader() {  // update WAV header with final filesiz
   frec.write(byte3);
   frec.write(byte4);
   frec.close();
-  Serial.println("header written");
-  Serial.print("Subchunk2: ");
-  Serial.println(Subchunk2Size);
+  //Serial.println("header written");
+  //Serial.print("Subchunk2: ");
+  //Serial.println(Subchunk2Size);
 }
 
 SdFat32 sd;
@@ -235,6 +238,7 @@ void PhoneGuestBook::continueRecording() {
 }
 
 void PhoneGuestBook::startRecording() {
+  digitalWrite(PIN_LED, HIGH);
 #if defined(INSTRUMENT_SD_WRITE)
   worstSDwrite = 0;
   printNext = 0;
@@ -243,7 +247,7 @@ void PhoneGuestBook::startRecording() {
   //  for (uint8_t i=0; i<9999; i++) { // BUGFIX uint8_t overflows if it reaches 255
   for (uint16_t i = 0; i < 9999; i++) {
     // Format the counter as a five-digit number with leading zeroes, followed by file extension
-    snprintf(filename, 18, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
+    snprintf(filename, 20, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
     // Create if does not exist, do not open existing, write, sync after write
     if (!SD.exists(filename)) {
       break;
@@ -267,14 +271,14 @@ void PhoneGuestBook::startRecording() {
 }
 
 void PhoneGuestBook::print_mode(void) {  // only for debugging
-  Serial.print("Mode switched to: ");
+  Serial.print("Bascule en mode: ");
   // Initialising, Ready, Prompting, Recording, Playing
-  if (phoneMode == Mode::Ready) Serial.println(" Ready");
-  else if (phoneMode == Mode::Prompting) Serial.println(" Prompting");
-  else if (phoneMode == Mode::Recording) Serial.println(" Recording");
-  else if (phoneMode == Mode::Playing) Serial.println(" Playing");
-  else if (phoneMode == Mode::Initialising) Serial.println(" Initialising");
-  else Serial.println(" Undefined");
+  if (phoneMode == Mode::Ready) Serial.println(" En veille");
+  else if (phoneMode == Mode::Prompting) Serial.println(" Prêt à enregistrer");
+  else if (phoneMode == Mode::Recording) Serial.println(" Enregistrement");
+  else if (phoneMode == Mode::Playing) Serial.println(" Lecture");
+  else if (phoneMode == Mode::Initialising) Serial.println(" Initialisation");
+  else Serial.println(" Indéfini");
 }
 void PhoneGuestBook::print_feature(void) {  // only for debugging
   Serial.print("Feature switched to: ");
@@ -286,14 +290,12 @@ void PhoneGuestBook::print_feature(void) {  // only for debugging
 void PhoneGuestBook::continuePlaying() {
   if (!playWav1.isPlaying()) {
     playWav1.stop();
-    // mode = 0;
   }
 }
 
 void PhoneGuestBook::stopPlaying() {
   Serial.println("stopPlaying");
-  if (phoneMode == 2) playWav1.stop();
-  // mode = 0;
+  playWav1.stop();
 }
 
 void PhoneGuestBook::stopRecording() {
@@ -312,26 +314,57 @@ void PhoneGuestBook::stopRecording() {
   Serial.println("Closed file");
   phoneMode = Mode::Ready;
   print_mode();
+  //Serial.println("stopRecording");
   digitalWrite(PIN_LED, LOW);
 }
 
 
 void PhoneGuestBook::startPlayingRandomAudio() {
-  // Find the first available file number
-  int counter = 0;
-  for (int i = 0; i < 9999; i++) {
-    snprintf(filename, 11, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
-    if (!SD.exists(filename)) {
-      counter = i - 1;
+  File RecordsRoot = SD.open(RECORDS_FOLDER_NAME);
+
+  int fileCountOnSD = 0;
+  while (true) {
+
+    File entry = RecordsRoot.openNextFile();
+    if (!entry) {
       break;
     }
+
+    if (!entry.isDirectory()) {
+      fileCountOnSD++;
+    }
+    entry.close();
   }
 
-  // now play file with index idx == last recorded file
-  snprintf(filename, 11, " %05d.wav", (int)random(1, counter));
+  int randomFileNumber = random(1, fileCountOnSD);
+  int counter = 1;
+  const char* filenameToRead;
+
+  snprintf(filename, 18, "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, fileCountOnSD));
   Serial.println(filename);
-  playWav1.play(filename);
-  this->setMode(Mode::Playing);
+  if (guestbook.hasAnAudioBeenPlayedBefore) {
+    delay(DELAY_BETWEEN_PLAYS);
+  }
+
+  guestbook.hasAnAudioBeenPlayedBefore = true;
+  while (true) {
+
+    File entry = RecordsRoot.openNextFile();
+    if (counter == randomFileNumber) {
+      filenameToRead = entry.name();
+      Serial.println("CAYLEBON")
+      break;
+    }
+    if (!entry) {
+      break;
+    }
+
+    entry.close();
+    counter++;
+  }
+  Serial.print("filenameToRead");
+  Serial.println(filenameToRead);
+  playWav1.play(filenameToRead);
 }
 
 void PhoneGuestBook::end_Beep(void) {
