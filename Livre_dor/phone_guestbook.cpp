@@ -320,51 +320,24 @@ void PhoneGuestBook::stopRecording() {
 
 
 void PhoneGuestBook::startPlayingRandomAudio() {
-  File RecordsRoot = SD.open(RECORDS_FOLDER_NAME);
-
-  int fileCountOnSD = 0;
-  while (true) {
-
-    File entry = RecordsRoot.openNextFile();
-    if (!entry) {
+  // Find the first available file number
+  int counter = 0;
+  for (int i = 0; i < 9999; i++) {
+    snprintf(filename, 18, "%s%05d.wav", RECORDS_FOLDER_NAME, i);
+    if (!SD.exists(filename)) {
+      counter = i;
       break;
     }
-
-    if (!entry.isDirectory()) {
-      fileCountOnSD++;
-    }
-    entry.close();
   }
 
-  int randomFileNumber = random(1, fileCountOnSD);
-  int counter = 1;
-  const char* filenameToRead;
-
-  snprintf(filename, 18, "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, fileCountOnSD));
+  
+  snprintf(filename, 18, "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, counter));
   Serial.println(filename);
   if (guestbook.hasAnAudioBeenPlayedBefore) {
     delay(DELAY_BETWEEN_PLAYS);
   }
-
   guestbook.hasAnAudioBeenPlayedBefore = true;
-  while (true) {
-
-    File entry = RecordsRoot.openNextFile();
-    if (counter == randomFileNumber) {
-      filenameToRead = entry.name();
-      Serial.println("CAYLEBON")
-      break;
-    }
-    if (!entry) {
-      break;
-    }
-
-    entry.close();
-    counter++;
-  }
-  Serial.print("filenameToRead");
-  Serial.println(filenameToRead);
-  playWav1.play(filenameToRead);
+  playWav1.play(filename);
 }
 
 void PhoneGuestBook::end_Beep(void) {
@@ -403,3 +376,4 @@ void PhoneGuestBook::updateButtons() {
   buttonRecord.update();
   buttonReset.update();
 }
+
