@@ -73,18 +73,22 @@ void loop() {
   phoneStatus = 2;
 
   /* Si un numéro a été composé sur le téléphone, on le stocke */
-  if (DIALER_TYPE == "FR") {
+  if (strcmp(DIALER_TYPE, "FR") == 0) {
     if (dialer.update()) {
       numberSpecified = getDialedNumber(dialer);
     }
   }
-  if (DIALER_TYPE == "UK") {
+  if (strcmp(DIALER_TYPE, "UK") == 0) {
     numberSpecified = getUkDialerNumber();
   }
 
   /* Si un numéro a été composé, alors on joue le MP3 correspondant */
   if (numberSpecified != -1) {
     myDFPlayer.pause();
+    if (isFirstPlaySinceHangUp) {
+      delay(1000);
+      isFirstPlaySinceHangUp = false;
+    }
     if (DIAL_RANDOM) {
       myDFPlayer.play(random(1, audioFilesCount));
     } else {
