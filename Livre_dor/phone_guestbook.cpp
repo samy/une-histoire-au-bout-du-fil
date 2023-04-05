@@ -4,6 +4,8 @@
 #include "FatLib/FatFile.h"
 #include "core_pins.h"
 #include "phone_guestbook.h"
+#include <MTP_Teensy.h>
+
 Mode phoneMode = Mode::Initialising;
 
 /* Récupération de l'état de décroché/raccroché */
@@ -237,7 +239,19 @@ void PhoneGuestBook::continueRecording() {
 #endif  // defined(INSTRUMENT_SD_WRITE)
 }
 
+void PhoneGuestBook::setMTPdeviceChecks(bool nable) {
+  if (nable) {
+    MTP.storage()->set_DeltaDeviceCheckTimeMS(this->MTPcheckInterval);
+    Serial.print("En");
+  } else {
+    MTP.storage()->set_DeltaDeviceCheckTimeMS((uint32_t)-1);
+    Serial.print("Dis");
+  }
+  Serial.println("abled MTP storage device checks");
+}
 void PhoneGuestBook::startRecording() {
+  setMTPdeviceChecks(false);  // disable MTP device checks while recording
+
   digitalWrite(PIN_LED, HIGH);
 #if defined(INSTRUMENT_SD_WRITE)
   worstSDwrite = 0;
@@ -316,6 +330,7 @@ void PhoneGuestBook::stopRecording() {
   print_mode();
   //Serial.println("stopRecording");
   digitalWrite(PIN_LED, LOW);
+  setMTPdeviceChecks(true);  // enable MTP device checks, recording is finished
 }
 
 
@@ -330,7 +345,7 @@ void PhoneGuestBook::startPlayingRandomAudio() {
     }
   }
 
-  
+
   snprintf(filename, 18, "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, counter));
   Serial.println(filename);
   if (guestbook.hasAnAudioBeenPlayedBefore) {
@@ -340,24 +355,6 @@ void PhoneGuestBook::startPlayingRandomAudio() {
   playWav1.play(filename);
 }
 
-void PhoneGuestBook::end_Beep(void) {
-  waveform.frequency(523.25);
-  waveform.amplitude(beep_volume);
-  wait(250);
-  waveform.amplitude(0);
-  wait(250);
-  waveform.amplitude(beep_volume);
-  wait(250);
-  waveform.amplitude(0);
-  wait(250);
-  waveform.amplitude(beep_volume);
-  wait(250);
-  waveform.amplitude(0);
-  wait(250);
-  waveform.amplitude(beep_volume);
-  wait(250);
-  waveform.amplitude(0);
-}
 
 void PhoneGuestBook::wait(unsigned int milliseconds) {
   elapsedMillis msec = 0;
@@ -376,4 +373,3 @@ void PhoneGuestBook::updateButtons() {
   buttonRecord.update();
   buttonReset.update();
 }
-

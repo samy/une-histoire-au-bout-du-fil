@@ -27,12 +27,15 @@ public:
   bool needToPlayBeep();
   bool introRecordEnabled;
   bool introPlayEnabled;
+  uint32_t MTPcheckInterval;  // default value of device check interval [ms]
+
   void enableRecordMode();
   int getMode();
   void setMode(Mode mode);
   void setFeature(Feature feature);
 
   void writeOutHeader();
+  void setMTPdeviceChecks(bool nable);
   void startPlaying();
   void startRecording();
   void continuePlaying();
@@ -42,7 +45,6 @@ public:
   void playIntro();
   void playBeep();
   void playLastRecording();
-  void end_Beep();
   void wait(unsigned int milliseconds);
   void updateButtons();
   void stopEverything();
@@ -136,6 +138,7 @@ extern char line[40];
 extern char recordsNumber[10];
 extern char tmpContent;
 extern int phoneStatus;
+extern uint32_t MTPcheckInterval;
 extern File frec;
 extern AudioRecordQueue queue1;  //xy=281,63
 //extern int mode;                 // 0=stopped, 1=recording, 2=playing

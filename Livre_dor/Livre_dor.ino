@@ -1,3 +1,9 @@
+/*
+Dans l'IDE Arduino, choisir comme réglages:
+- USB Type : Serial + MTP Disk
+*/
+
+
 #include <Bounce.h>
 #include <Audio.h>
 #include <Wire.h>
@@ -7,7 +13,8 @@
 #include <TimeLib.h>
 #include "RotaryDialer.h" /* Gestion du cadran rotatif */
 
-//#include <MTP_Teensy.h>
+#include <MTP_Teensy.h>
+
 #include "play_sd_wav.h"  // local copy with fixes
 #define TOGGLE_WATCHDOG_LED()
 
@@ -35,6 +42,8 @@ void setup() {
 }
 
 void loop() {
+  MTP.loop();  // This is mandatory to be placed in the loop code.
+
   //guestbook.adjustVolume();
   // First, read the buttons
   guestbook.updateButtons();
@@ -194,7 +203,7 @@ void initEnvironnement() {
   audioShield.volume(0.6);  //0-1
   mixer.gain(0, 0.5f);
   mixer.gain(1, 0.5f);
-  audioShield.micGain(5);
+  audioShield.micGain(0);
   audioShield.unmuteLineout();
 
   // Initialize the SD.
@@ -227,6 +236,10 @@ void initEnvironnement() {
   digitalWrite(PIN_LED, LOW);
   guestbook.hasAnAudioBeenPlayedBefore = false;
   dialer.setup();
+  MTP.begin();
+  MTP.addFilesystem(SD, "Livre d'or");  // choose a nice name for the SD card volume to appear in your file explorer
+  Serial.println("Added SD card via MTP");
+  guestbook.MTPcheckInterval = MTP.storage()->get_DeltaDeviceCheckTimeMS();
 }
 
 time_t getTeensy3Time() {
@@ -250,3 +263,5 @@ int getDialedNumber(RotaryDialer dialerObject) {
   int number = dialer.getNextNumber();
   return number == 0 ? 10 : number;
 }
+
+
