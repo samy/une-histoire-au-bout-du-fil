@@ -4,8 +4,8 @@
 #include "RotaryDialer.h" /* Gestion du cadran rotatif */
 
 /* Définition des constantes */
-#define PIN_READY  A2
-#define PIN_PULSE 2
+#define PIN_READY A2
+#define PIN_PULSE 6
 #define PIN_HANG A3
 
 /* Déclaration des variables */
