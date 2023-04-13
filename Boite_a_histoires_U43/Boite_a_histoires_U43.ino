@@ -5,14 +5,20 @@
 #include "RotaryDialer.h"        /* Gestion du cadran rotatif */
 
 /* Définition des constantes */
-#define PIN_READY 1
-#define PIN_PULSE 2
-#define PIN_HANG 0
+// Cadran FR
+#define PIN_READY A2
+#define PIN_PULSE 6
+#define PIN_HANG A3
+
+// Cadran UK
+//#define PIN_READY 1
+//#define PIN_PULSE 2
+//#define PIN_HANG 3
 
 /* Fonctionnalités */
 #define INTRO_ENABLE false         /* Pour activer le message au décrochage */
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
+#define DIAL_RANDOM true           /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
 
 /* Gestion bouton supplémentaire */
@@ -58,7 +64,7 @@ void loop() {
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
     myDFPlayer.pause();
-    Serial.println("Raccroche");
+    //Serial.println("Raccroche");
     phoneStatus = 0;
     return;
   } else {
@@ -66,6 +72,7 @@ void loop() {
       phoneStatus = 1;
     }
   }
+
   if (timeSinceLastIntroPlay == 0 || (phoneStatus == 1 && needToPlayIntro())) {
     phoneStatus = 2;
     playIntro();
@@ -75,6 +82,8 @@ void loop() {
   /* Si un numéro a été composé sur le téléphone, on le stocke */
   if (strcmp(DIALER_TYPE, "FR") == 0) {
     if (dialer.update()) {
+      Serial.println("numero");
+
       numberSpecified = getDialedNumber(dialer);
     }
   }
@@ -82,8 +91,10 @@ void loop() {
     numberSpecified = getUkDialerNumber();
   }
 
+
   /* Si un numéro a été composé, alors on joue le MP3 correspondant */
   if (numberSpecified != -1) {
+    Serial.print(numberSpecified);
     myDFPlayer.pause();
     if (isFirstPlaySinceHangUp) {
       delay(1000);
@@ -107,7 +118,7 @@ int getDialedNumber(RotaryDialer dialerObject) {
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 1 == digitalRead(PIN_HANG);
+  return 0 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {
