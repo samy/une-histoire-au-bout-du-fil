@@ -101,7 +101,7 @@ void loop() {
       isFirstPlaySinceHangUp = false;
     }
     if (DIAL_RANDOM) {
-      myDFPlayer.play(random(1, audioFilesCount));
+      myDFPlayer.play(random(1, audioFilesCount + 1)); //We need to add 1 to let the last audio played
     } else {
       Serial.println(numberSpecified);
       myDFPlayer.playMp3Folder(numberSpecified);
