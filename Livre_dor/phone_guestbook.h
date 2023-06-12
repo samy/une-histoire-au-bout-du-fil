@@ -31,6 +31,8 @@ public:
 
   void enableRecordMode();
   int getMode();
+  int getFeature();
+
   void setMode(Mode mode);
   void setFeature(Feature feature);
 
@@ -42,6 +44,8 @@ public:
   void continueRecording();
   void stopRecording();
   void stopPlaying();
+
+  bool isPlaying();
   void playIntro();
   void playBeep();
   void playLastRecording();
@@ -56,6 +60,7 @@ public:
   void playRandomAudio();
   void startPlayingRandomAudio();
   bool hasAnAudioBeenPlayedBefore;
+  bool isOn;
 private:
   bool introHasBeenPlayed;
 };
@@ -74,11 +79,7 @@ private:
 #endif
 
 
-#define PIN_HANG 0         //Port lié au fil du décrochage
-#define PIN_RESET 4        //Pour annuler l'enregistrement courant
-#define PIN_REPLAY 2       //Pour réécouter le dernier enregistrement
-#define PIN_MODE_CHANGE 5  //Pour indiquer qu'on doit changer de mode
-#define PIN_LED 3          //Pour indiquer que le mode enregistrement est actif
+
 
 #define RECORD_MODE 1
 #define PLAY_MODE 0
@@ -104,7 +105,7 @@ private:
 #endif
 
 #ifndef RECORDS_FOLDER_NAME
-#define RECORDS_FOLDER_NAME "/RECORD/"
+#define RECORDS_FOLDER_NAME "/Messages/"
 #endif
 
 #ifndef DELAY_BETWEEN_PLAYS
@@ -159,6 +160,8 @@ extern AudioSynthWaveform waveform1;  // To create the "beep" sfx
 extern float beep_volume;             // not too loud :-)
 extern char filename[15];
 extern Bounce buttonRecord;
+extern Bounce buttonChange;
+
 extern Bounce buttonReplay;
 extern Bounce buttonReset;
 

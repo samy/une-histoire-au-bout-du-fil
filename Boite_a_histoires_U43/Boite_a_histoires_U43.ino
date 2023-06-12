@@ -20,11 +20,13 @@
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 #define DIAL_RANDOM true           /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
+#define NO_DIALER true             /* FR pour cadrans français, UK pour britanniques */
+
 
 /* Gestion bouton supplémentaire */
-#define EXTRA_HANG false         /* Si le cadran doit lire au hasard */
-#define EXTRA_HANG_PIN A5        /* Si le cadran doit lire au hasard */
-#define EXTRA_HANG_REVERSE false /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG true         /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG_PIN A2       /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG_REVERSE true /* Si le cadran doit lire au hasard */
 
 #include "Variables.h"
 
@@ -48,7 +50,7 @@ void setup() {
 
   /* Etat initial du DFPlayer */
   myDFPlayer.pause();
-  myDFPlayer.volume(10);
+  myDFPlayer.volume(7);
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
@@ -61,10 +63,14 @@ void setup() {
 }
 
 void loop() {
+  if (audioFilesCount == 0) {
+    Serial.println("Pas de fichiers audio dans le dossier MP3");
+    return;
+  }
+
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
     myDFPlayer.pause();
-    //Serial.println("Raccroche");
     phoneStatus = 0;
     return;
   } else {
@@ -73,43 +79,49 @@ void loop() {
     }
   }
 
-  if (timeSinceLastIntroPlay == 0 || (phoneStatus == 1 && needToPlayIntro())) {
+  if (timeSinceLastIntroPlay == 99999 || (phoneStatus == 1 && needToPlayIntro())) {
     phoneStatus = 2;
     playIntro();
   }
   phoneStatus = 2;
 
-  /* Si un numéro a été composé sur le téléphone, on le stocke */
-  if (strcmp(DIALER_TYPE, "FR") == 0) {
-    if (dialer.update()) {
-      Serial.println("numero");
-
-      numberSpecified = getDialedNumber(dialer);
+  if (!NO_DIALER) {
+    /* Si un numéro a été composé sur le téléphone, on le stocke */
+    if (strcmp(DIALER_TYPE, "FR") == 0) {
+      if (dialer.update()) {
+        numberSpecified = getDialedNumber(dialer);
+      }
     }
-  }
-  if (strcmp(DIALER_TYPE, "UK") == 0) {
-    numberSpecified = getUkDialerNumber();
-  }
+    if (strcmp(DIALER_TYPE, "UK") == 0) {
+      numberSpecified = getUkDialerNumber();
+    }
 
-
-  /* Si un numéro a été composé, alors on joue le MP3 correspondant */
-  if (numberSpecified != -1) {
-    Serial.print(numberSpecified);
-    myDFPlayer.pause();
-    if (isFirstPlaySinceHangUp) {
+    /* Si un numéro a été composé, alors on joue le MP3 correspondant */
+    if (numberSpecified != -1) {
+      Serial.print(numberSpecified);
+      myDFPlayer.pause();
+      if (isFirstPlaySinceHangUp) {
+        delay(1000);
+        isFirstPlaySinceHangUp = false;
+      }
+      if (DIAL_RANDOM) {
+        myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
+      } else {
+        Serial.println(numberSpecified);
+        myDFPlayer.playMp3Folder(numberSpecified);
+      }
+      numberSpecified = -1;
+    }
+  } else {
+    /* Si le lecteur n'est pas actuellement en train de jouer */
+    if (myDFPlayer.readState() == 514 || myDFPlayer.readState() == 512) {
       delay(1000);
-      isFirstPlaySinceHangUp = false;
+
+      myDFPlayer.playMp3Folder(random(0, audioFilesCount - 1));
     }
-    if (DIAL_RANDOM) {
-      myDFPlayer.play(random(1, audioFilesCount + 1)); //We need to add 1 to let the last audio played
-    } else {
-      Serial.println(numberSpecified);
-      myDFPlayer.playMp3Folder(numberSpecified);
-    }
-    numberSpecified = -1;
+    delay(1000);
   }
 }
-
 /* Récupération du numéro composé (le DFPlayer démarre à 1, donc le 0 est converti en 10) */
 int getDialedNumber(RotaryDialer dialerObject) {
   int number = dialer.getNextNumber();
@@ -118,7 +130,7 @@ int getDialedNumber(RotaryDialer dialerObject) {
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 0 == digitalRead(PIN_HANG);
+  return 1 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {

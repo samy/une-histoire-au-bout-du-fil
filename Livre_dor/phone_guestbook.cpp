@@ -1,10 +1,16 @@
+
+#include "Settings.h"
+
 #include "Bounce.h"
 #include "play_sd_wav.h"
 #include "synth_waveform.h"
 #include "FatLib/FatFile.h"
 #include "core_pins.h"
 #include "phone_guestbook.h"
+
+#ifdef MTP_ENABLE
 #include <MTP_Teensy.h>
+#endif
 
 Mode phoneMode = Mode::Initialising;
 
@@ -29,6 +35,7 @@ bool PhoneGuestBook::needToPlayBeep() {
   return BEEP_ENABLE;
 }
 void PhoneGuestBook::stopEverything() {
+  guestbook.isOn = false;
   if (!playWav1.isStopped()) {
     playWav1.stop();
   }
@@ -58,6 +65,10 @@ int PhoneGuestBook::getMode() {
   return this->phoneMode;
 }
 
+int PhoneGuestBook::getFeature() {
+  return this->feature;
+}
+
 void PhoneGuestBook::setMode(Mode mode) {
   this->phoneMode = mode;
   print_mode();
@@ -65,6 +76,11 @@ void PhoneGuestBook::setMode(Mode mode) {
 
 void PhoneGuestBook::setFeature(Feature feature) {
   this->feature = feature;
+  if (feature == Feature::Recorder) {
+    digitalWrite(PIN_LED, HIGH);
+  } else {
+    digitalWrite(PIN_LED, LOW);
+  }
   print_feature();
 }
 
@@ -162,7 +178,7 @@ char tmpContent;
 int phoneStatus = 0;
 // The file where data is recorded
 File frec;
-File recordsDir = SD.open("/RECORD/");  //Root Directory
+File recordsDir = SD.open(RECORDS_FOLDER_NAME);  //Root Directory
 //int mode = 0;             // 0=stopped, 1=recording, 2=playing
 unsigned long ChunkSize = 0L;
 unsigned long Subchunk1Size = 16;
@@ -178,9 +194,15 @@ unsigned long NumSamples = 0L;
 byte byte1, byte2, byte3, byte4;
 AudioControlSGTL5000 audioShield;
 char filename[15];
-Bounce buttonRecord = Bounce(PIN_HANG, 750);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
+Bounce buttonRecord = Bounce(PIN_HANG, 750);         //High bounce delay since it is an ON/OFF and not a temporary pressed button
+Bounce buttonChange = Bounce(PIN_MODE_CHANGE, 750);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
+#ifdef REPLAY_ENABLE
 Bounce buttonReplay = Bounce(PIN_REPLAY, 40);
+#endif
+
+#ifdef RESET_ENABLE
 Bounce buttonReset = Bounce(PIN_RESET, 150);
+#endif
 
 
 void PhoneGuestBook::startPlaying() {
@@ -238,7 +260,7 @@ void PhoneGuestBook::continueRecording() {
   }
 #endif  // defined(INSTRUMENT_SD_WRITE)
 }
-
+#ifdef MTP_ENABLE
 void PhoneGuestBook::setMTPdeviceChecks(bool nable) {
   if (nable) {
     MTP.storage()->set_DeltaDeviceCheckTimeMS(this->MTPcheckInterval);
@@ -249,8 +271,15 @@ void PhoneGuestBook::setMTPdeviceChecks(bool nable) {
   }
   Serial.println("abled MTP storage device checks");
 }
+#endif
+
 void PhoneGuestBook::startRecording() {
+
+  phoneMode = Mode::Recording;
+  print_mode();
+#ifdef MTP_ENABLE
   setMTPdeviceChecks(false);  // disable MTP device checks while recording
+#endif
 
   digitalWrite(PIN_LED, HIGH);
 #if defined(INSTRUMENT_SD_WRITE)
@@ -261,23 +290,21 @@ void PhoneGuestBook::startRecording() {
   //  for (uint8_t i=0; i<9999; i++) { // BUGFIX uint8_t overflows if it reaches 255
   for (uint16_t i = 0; i < 9999; i++) {
     // Format the counter as a five-digit number with leading zeroes, followed by file extension
-    snprintf(filename, 20, "/%s/%05d.wav", RECORDS_FOLDER_NAME, i);
+    snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME), "%s%05d.wav", RECORDS_FOLDER_NAME, i);
     // Create if does not exist, do not open existing, write, sync after write
     if (!SD.exists(filename)) {
       break;
     }
   }
 
-  Serial.print("filename ");
-  Serial.println(filename);
+  //Serial.print("filename ");
+  //Serial.println(filename);
   frec = SD.open(filename, FILE_WRITE);
-  Serial.println("Opened file !");
+  //Serial.println("Opened file !");
   if (frec) {
     Serial.print("Recording to ");
     Serial.println(filename);
     queue1.begin();
-    phoneMode = Mode::Recording;
-    print_mode();
     recByteSaved = 0L;
   } else {
     Serial.println("Couldn't open file to record!");
@@ -312,6 +339,10 @@ void PhoneGuestBook::stopPlaying() {
   playWav1.stop();
 }
 
+bool PhoneGuestBook::isPlaying() {
+  return playWav1.isPlaying();
+}
+
 void PhoneGuestBook::stopRecording() {
   // Stop adding any new data to the queue
   queue1.end();
@@ -325,12 +356,14 @@ void PhoneGuestBook::stopRecording() {
   this->writeOutHeader();
   // Close the file
   frec.close();
-  Serial.println("Closed file");
+  //Serial.println("Closed file");
   phoneMode = Mode::Ready;
   print_mode();
   //Serial.println("stopRecording");
   digitalWrite(PIN_LED, LOW);
+#ifdef MTP_ENABLE
   setMTPdeviceChecks(true);  // enable MTP device checks, recording is finished
+#endif
 }
 
 
@@ -338,7 +371,7 @@ void PhoneGuestBook::startPlayingRandomAudio() {
   // Find the first available file number
   int counter = 0;
   for (int i = 0; i < 9999; i++) {
-    snprintf(filename, 18, "%s%05d.wav", RECORDS_FOLDER_NAME, i);
+    snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME), "%s%05d.wav", RECORDS_FOLDER_NAME, i);
     if (!SD.exists(filename)) {
       counter = i;
       break;
@@ -346,7 +379,7 @@ void PhoneGuestBook::startPlayingRandomAudio() {
   }
 
 
-  snprintf(filename, 18, "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, counter));
+  snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME), "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, counter));
   Serial.println(filename);
   if (guestbook.hasAnAudioBeenPlayedBefore) {
     delay(DELAY_BETWEEN_PLAYS);
@@ -371,5 +404,10 @@ void PhoneGuestBook::wait(unsigned int milliseconds) {
 
 void PhoneGuestBook::updateButtons() {
   buttonRecord.update();
+  buttonChange.update();
+
+#ifdef RESET_ENABLE
+
   buttonReset.update();
+#endif
 }
