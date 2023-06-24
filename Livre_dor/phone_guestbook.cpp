@@ -217,7 +217,7 @@ void PhoneGuestBook::playIntro() {
 
 void PhoneGuestBook::playBeep() {
   waveform.begin(WAVEFORM_SINE);
-  waveform.amplitude(0.75);
+  waveform.amplitude(0.10);
 
   delay(400);
   waveform.amplitude(0);
@@ -377,6 +377,12 @@ void PhoneGuestBook::startPlayingRandomAudio() {
       break;
     }
   }
+  if (counter == 0) {
+    Serial.println("No files to play");
+    return;
+  }
+  Serial.println("startPlayingRandomAudio");
+
 
 
   snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME), "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, counter));
@@ -403,8 +409,8 @@ void PhoneGuestBook::wait(unsigned int milliseconds) {
 }
 
 void PhoneGuestBook::updateButtons() {
-  buttonRecord.update();
-  buttonChange.update();
+  // buttonRecord.update();
+  //buttonChange.update();
 
 #ifdef RESET_ENABLE
 

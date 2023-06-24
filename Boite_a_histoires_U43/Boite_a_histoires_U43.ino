@@ -18,13 +18,13 @@
 /* Fonctionnalités */
 #define INTRO_ENABLE false         /* Pour activer le message au décrochage */
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM true           /* Si le cadran doit lire au hasard */
+#define DIAL_RANDOM false           /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
-#define NO_DIALER true             /* FR pour cadrans français, UK pour britanniques */
+#define NO_DIALER false             /* FR pour cadrans français, UK pour britanniques */
 
 
 /* Gestion bouton supplémentaire */
-#define EXTRA_HANG true         /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG false         /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_PIN A2       /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_REVERSE true /* Si le cadran doit lire au hasard */
 
@@ -98,7 +98,7 @@ void loop() {
 
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberSpecified != -1) {
-      Serial.print(numberSpecified);
+      Serial.println(numberSpecified);
       myDFPlayer.pause();
       if (isFirstPlaySinceHangUp) {
         delay(1000);
@@ -107,7 +107,6 @@ void loop() {
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
-        Serial.println(numberSpecified);
         myDFPlayer.playMp3Folder(numberSpecified);
       }
       numberSpecified = -1;
