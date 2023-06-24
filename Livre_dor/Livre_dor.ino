@@ -268,9 +268,9 @@ void initEnvironnement() {
   audioShield.volume(0.9);
   mixer.gain(0, 1.5f);
   mixer.gain(1, 1.5f);
-  audioShield.micGain(0);
+  audioShield.micGain(10);
 
-  audioShield.lineInLevel(0);
+  //audioShield.lineInLevel(0);
 
   // Initialize the SD.
   SPI.setMOSI(SDCARD_MOSI_PIN);
