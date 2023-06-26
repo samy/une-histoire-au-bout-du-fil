@@ -231,7 +231,7 @@ void PhoneGuestBook::continueRecording() {
 #if defined(INSTRUMENT_SD_WRITE)
   uint32_t started = micros();
 #endif  // defined(INSTRUMENT_SD_WRITE)
-#define NBLOX 16
+#define NBLOX 2
   // Check if there is data in the queue
   if (queue1.available() >= NBLOX) {
     byte buffer[NBLOX * AUDIO_BLOCK_SAMPLES * sizeof(int16_t)];
