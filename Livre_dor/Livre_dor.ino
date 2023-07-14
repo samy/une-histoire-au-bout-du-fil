@@ -62,6 +62,13 @@ void setup() {
 
 void loop() {
   guestbook.updateButtons();
+  if (buttonRecord.fallingEdge()) {
+    Serial.println("Decroche");
+  }
+  if (buttonRecord.risingEdge()) {
+    Serial.println("Raccroche");
+  }
+  return;
 #ifdef MTP_ENABLE
   if (guestbook.isOn) {
     MTP.loop();  // This is mandatory to be placed in the loop code.
@@ -71,8 +78,8 @@ void loop() {
   //guestbook.adjustVolume();
   // First, read the buttons
   switch (guestbook.phoneMode) {
-    case Mode::Ready:                                       //Téléphone raccroché
-      if (1 == digitalRead(PIN_HANG) && !guestbook.isOn) {  //Si on décroche
+    case Mode::Sleep:                                     //Téléphone raccroché
+      if (!guestbook.isRaccroche() && !guestbook.isOn) {  //Si on décroche
         Serial.println("Décrochage");
         guestbook.isOn = true;
         if (0 == digitalRead(PIN_MODE_CHANGE)) {
@@ -114,9 +121,10 @@ void loop() {
         // guestbook.updateButtons();
 
         //Si on raccroche le téléphone
-        if (0 == digitalRead(PIN_HANG)) {
+        if (guestbook.isRaccroche()) {
           Serial.println("Raccrochage");
           guestbook.stopEverything();
+          delay(2000);
           return;
         }
 
@@ -142,14 +150,18 @@ void loop() {
       break;
 
     case Mode::Recording:
+      digitalWrite(PIN_LED, HIGH);
+      Serial.println("Activation LED");
+
       guestbook.updateButtons();
       // Handset is replaced
-      if (0 == digitalRead(PIN_HANG)) {
+      if (guestbook.isRaccroche()) {
         //Si on raccroche
         Serial.println("Arrêt enregistrement");
         Serial.println("Raccrochage");
         // Stop recording
         guestbook.stopEverything();
+        delay(2000);
         break;
       } else {
         guestbook.continueRecording();
@@ -169,7 +181,8 @@ void loop() {
         guestbook.stopEverything();
         guestbook.setFeature(Feature::Player);
         guestbook.setMode(Mode::Playing);
-        digitalWrite(PIN_LED, 0);
+        digitalWrite(PIN_LED, LOW);
+        Serial.println("Desactivation LED");
         return;
       }
 
@@ -209,9 +222,10 @@ void loop() {
             return;
           }
           //Si on raccroche
-          if (0 == digitalRead(PIN_HANG)) {
+          if (guestbook.isRaccroche()) {
             Serial.println("Stopping playing");
             guestbook.stopEverything();
+            delay(2000);
             break;
           }
 #ifdef RESET_ENABLE
@@ -236,9 +250,10 @@ void loop() {
           return;
         }
         //Si on raccroche
-        if (0 == digitalRead(PIN_HANG)) {
+        if (guestbook.isRaccroche()) {
           Serial.println("Stopping playing");
           guestbook.stopEverything();
+          delay(2000);
           break;
         }
 #ifdef RESET_ENABLE
@@ -292,7 +307,7 @@ void initEnvironnement() {
   setSyncProvider(getTeensy3Time);
   FsDateTime::setCallback(dateTime);
 
-  guestbook.setMode(Mode::Ready);
+  guestbook.setMode(Mode::Sleep);
 
   // Gestion du mode lecteur / enregistreur
   if (0 == digitalRead(PIN_MODE_CHANGE)) {

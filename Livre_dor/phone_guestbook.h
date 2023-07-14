@@ -9,7 +9,7 @@
 #ifndef PHONE_GUESTBOOK
 #define PHONE_GUESTBOOK
 enum Mode { Initialising,
-            Ready,
+            Sleep,
             Prompting,
             Recording,
             Playing,
@@ -46,6 +46,8 @@ public:
   void stopPlaying();
 
   bool isPlaying();
+  bool isRaccroche();
+
   void playIntro();
   void playBeep();
   void playLastRecording();

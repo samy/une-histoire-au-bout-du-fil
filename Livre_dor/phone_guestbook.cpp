@@ -15,8 +15,8 @@
 Mode phoneMode = Mode::Initialising;
 
 /* Récupération de l'état de décroché/raccroché */
-bool isHangedUp() {
-  return 0 == digitalRead(PIN_HANG);
+bool PhoneGuestBook::isRaccroche() {
+  return 1 == digitalRead(PIN_HANG);
 }
 
 
@@ -43,8 +43,8 @@ void PhoneGuestBook::stopEverything() {
     guestbook.stopRecording();
   }
   //Serial.println("stopEverything");
-  if (guestbook.getMode() != Mode::Ready) {
-    guestbook.setMode(Mode::Ready);
+  if (guestbook.getMode() != Mode::Sleep) {
+    guestbook.setMode(Mode::Sleep);
   }
   guestbook.hasAnAudioBeenPlayedBefore = false;
 }
@@ -79,6 +79,8 @@ void PhoneGuestBook::setFeature(Feature feature) {
   if (feature == Feature::Recorder) {
     digitalWrite(PIN_LED, HIGH);
   } else {
+    Serial.println("Desactivation LED");
+
     digitalWrite(PIN_LED, LOW);
   }
   print_feature();
@@ -194,7 +196,10 @@ unsigned long NumSamples = 0L;
 byte byte1, byte2, byte3, byte4;
 AudioControlSGTL5000 audioShield;
 char filename[15];
-Bounce buttonRecord = Bounce(PIN_HANG, 750);         //High bounce delay since it is an ON/OFF and not a temporary pressed button
+
+/* 2023-07-10 : 500 for TESLA model, 750 for others */
+Bounce buttonRecord = Bounce(PIN_HANG, 500);         //High bounce delay since it is an ON/OFF and not a temporary pressed button
+
 Bounce buttonChange = Bounce(PIN_MODE_CHANGE, 750);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
 #ifdef REPLAY_ENABLE
 Bounce buttonReplay = Bounce(PIN_REPLAY, 40);
@@ -313,8 +318,8 @@ void PhoneGuestBook::startRecording() {
 
 void PhoneGuestBook::print_mode(void) {  // only for debugging
   Serial.print("Bascule en mode: ");
-  // Initialising, Ready, Prompting, Recording, Playing
-  if (phoneMode == Mode::Ready) Serial.println(" En veille");
+  // Initialising, Sleep, Prompting, Recording, Playing
+  if (phoneMode == Mode::Sleep) Serial.println(" En veille");
   else if (phoneMode == Mode::Prompting) Serial.println(" Prêt à enregistrer");
   else if (phoneMode == Mode::Recording) Serial.println(" Enregistrement");
   else if (phoneMode == Mode::Playing) Serial.println(" Lecture");
@@ -357,10 +362,12 @@ void PhoneGuestBook::stopRecording() {
   // Close the file
   frec.close();
   //Serial.println("Closed file");
-  phoneMode = Mode::Ready;
+  phoneMode = Mode::Sleep;
   print_mode();
   //Serial.println("stopRecording");
   digitalWrite(PIN_LED, LOW);
+  Serial.println("Desactivation LED");
+
 #ifdef MTP_ENABLE
   setMTPdeviceChecks(true);  // enable MTP device checks, recording is finished
 #endif
@@ -409,7 +416,7 @@ void PhoneGuestBook::wait(unsigned int milliseconds) {
 }
 
 void PhoneGuestBook::updateButtons() {
-  // buttonRecord.update();
+  buttonRecord.update();
   //buttonChange.update();
 
 #ifdef RESET_ENABLE
