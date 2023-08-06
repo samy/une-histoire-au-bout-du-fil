@@ -51,56 +51,64 @@ long unsigned int debounceDelay = 10;
 //------------------------------------------------------------------------------
 void setup() {
   initEnvironnement();
-  guestbook.stopEverything();
-  dialer.setup();
-  if (0 == digitalRead(PIN_MODE_CHANGE)) {
-    guestbook.setFeature(Feature::Recorder);
-  } else {
-    guestbook.setFeature(Feature::Player);
-  }
 }
 
 void loop() {
   guestbook.updateButtons();
-  if (buttonRecord.fallingEdge()) {
-    Serial.println("Decroche");
+
+  if (buttonChange.risingEdge() && guestbook.getFeature() != Feature::Recorder) {
+    guestbook.setFeature(Feature::Recorder);
+    guestbook.stopEverything();
+    guestbook.setMode(Mode::Prompting);
+    return;
   }
-  if (buttonRecord.risingEdge()) {
-    Serial.println("Raccroche");
+  if (buttonChange.fallingEdge() && guestbook.getFeature() != Feature::Player) {
+    guestbook.setFeature(Feature::Player);
+    guestbook.setMode(Mode::Playing);
+
+    return;
   }
-  return;
+  if (buttonHang.risingEdge() && guestbook.getMode() != Mode::Sleep) {
+    guestbook.isOn = false;
+    guestbook.setMode(Mode::Sleep);
+    return;
+  }
+
+
 #ifdef MTP_ENABLE
   if (guestbook.isOn) {
     MTP.loop();  // This is mandatory to be placed in the loop code.
   }
 #endif
-
   //guestbook.adjustVolume();
   // First, read the buttons
   switch (guestbook.phoneMode) {
-    case Mode::Sleep:                                     //Téléphone raccroché
-      if (!guestbook.isRaccroche() && !guestbook.isOn) {  //Si on décroche
-        Serial.println("Décrochage");
-        guestbook.isOn = true;
-        if (0 == digitalRead(PIN_MODE_CHANGE)) {
-          guestbook.phoneMode = Mode::Prompting;
-        } else {
-          guestbook.phoneMode = Mode::Playing;
-        }
+    case Mode::Sleep:
+      if (guestbook.isRaccroche()) {
+        guestbook.isOn = false;
+        return;
+      }
+      if (!guestbook.isOn) {  //Si on décroche
 
-        guestbook.print_mode();
-      } else {
+        guestbook.isOn = true;
+        if (isInRecordModeAccordingToSwitch()) {
+          guestbook.setMode(Mode::Prompting);
+        } else {
+          guestbook.setMode(Mode::Playing);
+        }
         return;
       }
 
       /* Changement mode */
-      if (0 == digitalRead(PIN_MODE_CHANGE) && guestbook.getFeature() != Feature::Recorder) {
+      if (switchToRecordMode()) {
         guestbook.setFeature(Feature::Recorder);
+
+        return;
       }
-      // else if (buttonPlay.fallingEdge()) {
-      //   //playAllRecordings();
-      //   //playLastRecording();
-      // }
+      if (switchToPlayMode()) {
+        guestbook.setFeature(Feature::Player);
+        return;
+      }
       break;
 
     case Mode::Prompting:  //Téléphone décroché, il va démarrer
@@ -129,7 +137,7 @@ void loop() {
         }
 
         //Si on passe le téléphone en mode lecteur
-        if (1 == digitalRead(PIN_MODE_CHANGE)) {
+        if (switchToPlayMode()) {
           Serial.println("Lecteur");
           guestbook.stopEverything();
           guestbook.setFeature(Feature::Player);
@@ -151,7 +159,6 @@ void loop() {
 
     case Mode::Recording:
       digitalWrite(PIN_LED, HIGH);
-      Serial.println("Activation LED");
 
       guestbook.updateButtons();
       // Handset is replaced
@@ -164,6 +171,15 @@ void loop() {
         delay(2000);
         break;
       } else {
+        if (switchToPlayMode()) {
+          Serial.println("Lecteur");
+          guestbook.stopEverything();
+          guestbook.setFeature(Feature::Player);
+          guestbook.setMode(Mode::Playing);
+          digitalWrite(PIN_LED, LOW);
+          Serial.println("Desactivation LED");
+          return;
+        }
         guestbook.continueRecording();
       }
 #ifdef RESET_ENABLE
@@ -176,35 +192,26 @@ void loop() {
       }
 #endif
 
-      if (1 == digitalRead(PIN_MODE_CHANGE)) {
-        Serial.println("Lecteur");
-        guestbook.stopEverything();
-        guestbook.setFeature(Feature::Player);
-        guestbook.setMode(Mode::Playing);
-        digitalWrite(PIN_LED, LOW);
-        Serial.println("Desactivation LED");
-        return;
-      }
+
 
       break;
 
     case Mode::Playing:
       guestbook.adjustVolume();
-      if (0 == digitalRead(PIN_MODE_CHANGE)) {
+      if (switchToRecordMode()) {
+
         Serial.println("Bascule mode");
         guestbook.setFeature(Feature::Recorder);
-        guestbook.phoneMode = Mode::Prompting;
-        guestbook.print_mode();
+
+        guestbook.setMode(Mode::Prompting);
         return;
       }
 
       if (!playWav1.isStopped()) {
         guestbook.continuePlaying();
 
-
-
         while (playWav1.isPlaying()) {
-          //guestbook.updateButtons();
+          guestbook.updateButtons();
           if (dialer.update()) {
             numberSpecified = getDialedNumber(dialer);
             Serial.println("Cadran");
@@ -214,10 +221,11 @@ void loop() {
           }
 
           //Si on passe le téléphone en mode enregistreur
-          if (0 == digitalRead(PIN_MODE_CHANGE)) {
+          if (switchToRecordMode()) {
             Serial.println("Enregistreur");
             guestbook.stopEverything();
             guestbook.setFeature(Feature::Recorder);
+
             guestbook.setMode(Mode::Prompting);
             return;
           }
@@ -238,14 +246,14 @@ void loop() {
         //On joue un audio
         if (playWav1.isStopped()) {
           guestbook.startPlayingRandomAudio();
-          delay(1500);
         }
 
         //Si on passe le téléphone en mode enregistreur
-        if (0 == digitalRead(PIN_MODE_CHANGE) && guestbook.getFeature() != Feature::Recorder) {
+        if (switchToRecordMode()) {
           Serial.println("Enregistreur");
           guestbook.stopEverything();
           guestbook.setFeature(Feature::Recorder);
+
           guestbook.setMode(Mode::Prompting);
           return;
         }
@@ -253,7 +261,6 @@ void loop() {
         if (guestbook.isRaccroche()) {
           Serial.println("Stopping playing");
           guestbook.stopEverything();
-          delay(2000);
           break;
         }
 #ifdef RESET_ENABLE
@@ -309,14 +316,22 @@ void initEnvironnement() {
 
   guestbook.setMode(Mode::Sleep);
 
+
   // Gestion du mode lecteur / enregistreur
-  if (0 == digitalRead(PIN_MODE_CHANGE)) {
-    Serial.println("Recorder");
+  if (1 == digitalRead(PIN_MODE_CHANGE)) {
     guestbook.setFeature(Feature::Recorder);
+
   } else {
-    Serial.println("Player");
     guestbook.setFeature(Feature::Player);
   }
+  if (!guestbook.isRaccroche()) {
+    if (guestbook.getFeature() == Feature::Recorder) {
+      guestbook.setMode(Mode::Prompting);
+    } else {
+      guestbook.setMode(Playing);
+    }
+  }
+
   digitalWrite(PIN_LED, LOW);
   guestbook.hasAnAudioBeenPlayedBefore = false;
   dialer.setup();
@@ -394,9 +409,12 @@ int getUkDialerNumber() {
 }
 
 bool switchToRecordMode() {
-  return buttonChange.fallingEdge();
+  return buttonChange.risingEdge();
+}
+bool isInRecordModeAccordingToSwitch() {
+  return 1 == digitalRead(PIN_MODE_CHANGE);
 }
 
 bool switchToPlayMode() {
-  return buttonChange.risingEdge();
+  return buttonChange.fallingEdge();
 }

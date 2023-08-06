@@ -47,6 +47,7 @@ void PhoneGuestBook::stopEverything() {
     guestbook.setMode(Mode::Sleep);
   }
   guestbook.hasAnAudioBeenPlayedBefore = false;
+  digitalWrite(PIN_LED, LOW);
 }
 void PhoneGuestBook::enableIntroBeforeRecord() {
   this->introRecordEnabled = true;
@@ -198,9 +199,9 @@ AudioControlSGTL5000 audioShield;
 char filename[15];
 
 /* 2023-07-10 : 500 for TESLA model, 750 for others */
-Bounce buttonRecord = Bounce(PIN_HANG, 500);         //High bounce delay since it is an ON/OFF and not a temporary pressed button
+Bounce buttonHang = Bounce(PIN_HANG, 500);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
 
-Bounce buttonChange = Bounce(PIN_MODE_CHANGE, 750);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
+Bounce buttonChange = Bounce(PIN_MODE_CHANGE, 150);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
 #ifdef REPLAY_ENABLE
 Bounce buttonReplay = Bounce(PIN_REPLAY, 40);
 #endif
@@ -406,18 +407,18 @@ void PhoneGuestBook::wait(unsigned int milliseconds) {
   elapsedMillis msec = 0;
 
   while (msec <= milliseconds) {
-    // buttonRecord.update();
+    // buttonHang.update();
     // buttonPlay.update();
-    // if (buttonRecord.fallingEdge()) Serial.println("Button (pin 0) Press");
+    // if (buttonHang.fallingEdge()) Serial.println("Button (pin 0) Press");
     // if (buttonPlay.fallingEdge()) Serial.println("Button (pin 1) Press");
-    // if (buttonRecord.risingEdge()) Serial.println("Button (pin 0) Release");
+    // if (buttonHang.risingEdge()) Serial.println("Button (pin 0) Release");
     // if (buttonPlay.risingEdge()) Serial.println("Button (pin 1) Release");
   }
 }
 
 void PhoneGuestBook::updateButtons() {
-  buttonRecord.update();
-  //buttonChange.update();
+  buttonHang.update();
+  buttonChange.update();
 
 #ifdef RESET_ENABLE
 

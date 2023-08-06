@@ -18,7 +18,7 @@
 /* Fonctionnalités */
 #define INTRO_ENABLE false         /* Pour activer le message au décrochage */
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false           /* Si le cadran doit lire au hasard */
+#define DIAL_RANDOM true           /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
 #define NO_DIALER false             /* FR pour cadrans français, UK pour britanniques */
 
@@ -129,7 +129,7 @@ int getDialedNumber(RotaryDialer dialerObject) {
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 1 == digitalRead(PIN_HANG);
+  return 0 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {

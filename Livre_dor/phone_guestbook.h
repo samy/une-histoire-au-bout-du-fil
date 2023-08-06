@@ -161,7 +161,7 @@ extern AudioControlSGTL5000 audioShield;
 extern AudioSynthWaveform waveform1;  // To create the "beep" sfx
 extern float beep_volume;             // not too loud :-)
 extern char filename[15];
-extern Bounce buttonRecord;
+extern Bounce buttonHang;
 extern Bounce buttonChange;
 
 extern Bounce buttonReplay;
