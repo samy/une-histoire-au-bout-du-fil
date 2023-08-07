@@ -102,7 +102,6 @@ void loop() {
       /* Changement mode */
       if (phoneSwitchedToRecordMode()) {
         guestbook.setFeature(Feature::Recorder);
-
         return;
       }
       if (switchToPlayMode()) {
