@@ -78,7 +78,7 @@ void PhoneGuestBook::setMode(Mode mode) {
 void PhoneGuestBook::setFeature(Feature feature) {
   this->feature = feature;
   if (feature == Feature::Recorder) {
-    digitalWrite(PIN_LED, HIGH);
+    //    digitalWrite(PIN_LED, HIGH);
   } else {
     Serial.println("Desactivation LED");
 
@@ -280,8 +280,7 @@ void PhoneGuestBook::setMTPdeviceChecks(bool nable) {
 #endif
 
 void PhoneGuestBook::startRecording() {
-
-  phoneMode = Mode::Recording;
+  guestbook.setMode(Mode::Recording);
   print_mode();
 #ifdef MTP_ENABLE
   setMTPdeviceChecks(false);  // disable MTP device checks while recording

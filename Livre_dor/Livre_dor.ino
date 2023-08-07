@@ -100,7 +100,7 @@ void loop() {
       }
 
       /* Changement mode */
-      if (switchToRecordMode()) {
+      if (phoneSwitchedToRecordMode()) {
         guestbook.setFeature(Feature::Recorder);
 
         return;
@@ -155,10 +155,10 @@ void loop() {
 
       Serial.println("Starting Recording");
       guestbook.startRecording();
+
       break;
 
     case Mode::Recording:
-      digitalWrite(PIN_LED, HIGH);
 
       guestbook.updateButtons();
       // Handset is replaced
@@ -198,7 +198,7 @@ void loop() {
 
     case Mode::Playing:
       guestbook.adjustVolume();
-      if (switchToRecordMode()) {
+      if (phoneSwitchedToRecordMode()) {
 
         Serial.println("Bascule mode");
         guestbook.setFeature(Feature::Recorder);
@@ -221,7 +221,7 @@ void loop() {
           }
 
           //Si on passe le téléphone en mode enregistreur
-          if (switchToRecordMode()) {
+          if (phoneSwitchedToRecordMode()) {
             Serial.println("Enregistreur");
             guestbook.stopEverything();
             guestbook.setFeature(Feature::Recorder);
@@ -249,7 +249,7 @@ void loop() {
         }
 
         //Si on passe le téléphone en mode enregistreur
-        if (switchToRecordMode()) {
+        if (phoneSwitchedToRecordMode()) {
           Serial.println("Enregistreur");
           guestbook.stopEverything();
           guestbook.setFeature(Feature::Recorder);
@@ -408,7 +408,7 @@ int getUkDialerNumber() {
   return numberSpecified == 0 ? 10 : numberSpecified;
 }
 
-bool switchToRecordMode() {
+bool phoneSwitchedToRecordMode() {
   return buttonChange.risingEdge();
 }
 bool isInRecordModeAccordingToSwitch() {
