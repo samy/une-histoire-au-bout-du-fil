@@ -42,7 +42,6 @@ void PhoneGuestBook::stopEverything() {
   if (guestbook.getMode() == Mode::Recording) {
     guestbook.stopRecording();
   }
-  //Serial.println("stopEverything");
   if (guestbook.getMode() != Mode::Sleep) {
     guestbook.setMode(Mode::Sleep);
   }
@@ -80,8 +79,6 @@ void PhoneGuestBook::setFeature(Feature feature) {
   if (feature == Feature::Recorder) {
     //    digitalWrite(PIN_LED, HIGH);
   } else {
-    Serial.println("Desactivation LED");
-
     digitalWrite(PIN_LED, LOW);
   }
   print_feature();
@@ -199,7 +196,7 @@ AudioControlSGTL5000 audioShield;
 char filename[15];
 
 /* 2023-07-10 : 500 for TESLA model, 750 for others */
-Bounce buttonHang = Bounce(PIN_HANG, 500);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
+Bounce buttonHang = Bounce(PIN_HANG, 750);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
 
 Bounce buttonChange = Bounce(PIN_MODE_CHANGE, 150);  //High bounce delay since it is an ON/OFF and not a temporary pressed button
 #ifdef REPLAY_ENABLE
@@ -225,7 +222,6 @@ void PhoneGuestBook::playBeep() {
   waveform.begin(WAVEFORM_SINE);
   waveform.amplitude(0.10);
 
-  delay(400);
   waveform.amplitude(0);
 }
 
@@ -358,15 +354,15 @@ void PhoneGuestBook::stopRecording() {
     queue1.freeBuffer();
     recByteSaved += AUDIO_BLOCK_SAMPLES * sizeof(int16_t);
   }
+  Serial.println("Ecriture headers");
   this->writeOutHeader();
   // Close the file
   frec.close();
   //Serial.println("Closed file");
-  phoneMode = Mode::Sleep;
-  print_mode();
+  guestbook.setMode(Mode::Sleep);
   //Serial.println("stopRecording");
   digitalWrite(PIN_LED, LOW);
-  Serial.println("Desactivation LED");
+  Serial.println("Desactivation LED (stopRecording)");
 
 #ifdef MTP_ENABLE
   setMTPdeviceChecks(true);  // enable MTP device checks, recording is finished

@@ -56,24 +56,29 @@ void setup() {
 void loop() {
   guestbook.updateButtons();
 
-  if (buttonChange.risingEdge() && guestbook.getFeature() != Feature::Recorder) {
+  /* Bascule en mode "livre d'or" */
+  if (phoneSwitchedToRecordMode()) {
     guestbook.setFeature(Feature::Recorder);
     guestbook.stopEverything();
     guestbook.setMode(Mode::Prompting);
     return;
   }
-  if (buttonChange.fallingEdge() && guestbook.getFeature() != Feature::Player) {
+
+  /* Bascule en lecteur */
+  if (phoneSwitchedToPlayMode()) {
     guestbook.setFeature(Feature::Player);
     guestbook.setMode(Mode::Playing);
 
     return;
   }
-  if (buttonHang.risingEdge() && guestbook.getMode() != Mode::Sleep) {
+
+  /* Raccrochage */
+  if (phoneClosed()) {
     guestbook.isOn = false;
-    guestbook.setMode(Mode::Sleep);
+    guestbook.stopEverything();
+    delay(1000);
     return;
   }
-
 
 #ifdef MTP_ENABLE
   if (guestbook.isOn) {
@@ -117,7 +122,6 @@ void loop() {
         guestbook.stopPlaying();
       }
 
-      delay(2000);
       if (guestbook.getFeature() == Feature::Recorder) {
         guestbook.playIntro();
         Serial.println("Fin intro");
@@ -161,7 +165,7 @@ void loop() {
 
       guestbook.updateButtons();
       // Handset is replaced
-      if (guestbook.isRaccroche()) {
+      if (phoneClosed() || guestbook.isRaccroche()) {
         //Si on raccroche
         Serial.println("Arrêt enregistrement");
         Serial.println("Raccrochage");
@@ -171,12 +175,13 @@ void loop() {
         break;
       } else {
         if (switchToPlayMode()) {
+          Serial.println("Desactivation LED (switchToPlayMode)");
+
           Serial.println("Lecteur");
           guestbook.stopEverything();
           guestbook.setFeature(Feature::Player);
           guestbook.setMode(Mode::Playing);
           digitalWrite(PIN_LED, LOW);
-          Serial.println("Desactivation LED");
           return;
         }
         guestbook.continueRecording();
@@ -286,7 +291,7 @@ void initEnvironnement() {
   audioShield.inputSelect(myInput);
 
   //Réglages pour Electret standard
-  audioShield.volume(0.9);
+  audioShield.volume(1.0);
   mixer.gain(0, 1.5f);
   mixer.gain(1, 1.5f);
   audioShield.micGain(10);
@@ -408,8 +413,17 @@ int getUkDialerNumber() {
 }
 
 bool phoneSwitchedToRecordMode() {
-  return buttonChange.risingEdge();
+  return buttonChange.risingEdge() && guestbook.getFeature() != Feature::Recorder;
 }
+
+bool phoneSwitchedToPlayMode() {
+  return buttonChange.fallingEdge() && guestbook.getFeature() != Feature::Player;
+}
+
+bool phoneClosed() {
+  return buttonHang.risingEdge() && guestbook.getMode() != Mode::Sleep;
+}
+
 bool isInRecordModeAccordingToSwitch() {
   return 1 == digitalRead(PIN_MODE_CHANGE);
 }
