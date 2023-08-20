@@ -3,6 +3,9 @@ Dans l'IDE Arduino, choisir comme réglages:
 - USB Type : Serial + MTP Disk
 */
 
+#define REVERSE_MODE_CHANGE true
+
+
 /* Les paramètres (n° de PIN, activation du MTP, etc) sont dans le fichier Settings.h */
 #include "Settings.h"
 
@@ -51,6 +54,7 @@ long unsigned int debounceDelay = 10;
 //------------------------------------------------------------------------------
 void setup() {
   initEnvironnement();
+  
 }
 
 void loop() {
@@ -413,11 +417,11 @@ int getUkDialerNumber() {
 }
 
 bool phoneSwitchedToRecordMode() {
-  return buttonChange.risingEdge() && guestbook.getFeature() != Feature::Recorder;
+  return (REVERSE_MODE_CHANGE ? buttonChange.fallingEdge() : buttonChange.risingEdge())  && guestbook.getFeature() != Feature::Recorder;
 }
 
 bool phoneSwitchedToPlayMode() {
-  return buttonChange.fallingEdge() && guestbook.getFeature() != Feature::Player;
+  return (REVERSE_MODE_CHANGE ? buttonChange.risingEdge() : buttonChange.fallingEdge()) && guestbook.getFeature() != Feature::Player;
 }
 
 bool phoneClosed() {
@@ -425,9 +429,9 @@ bool phoneClosed() {
 }
 
 bool isInRecordModeAccordingToSwitch() {
-  return 1 == digitalRead(PIN_MODE_CHANGE);
+  return (REVERSE_MODE_CHANGE ? 0 : 1) == digitalRead(PIN_MODE_CHANGE);
 }
 
 bool switchToPlayMode() {
-  return buttonChange.fallingEdge();
+  return  (REVERSE_MODE_CHANGE ? buttonChange.risingEdge() : buttonChange.fallingEdge());
 }
