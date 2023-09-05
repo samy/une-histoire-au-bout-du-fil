@@ -16,7 +16,7 @@ Mode phoneMode = Mode::Initialising;
 
 /* Récupération de l'état de décroché/raccroché */
 bool PhoneGuestBook::isRaccroche() {
-  return 1 == digitalRead(PIN_HANG);
+  return 0 == digitalRead(PIN_HANG);
 }
 
 
@@ -77,7 +77,7 @@ void PhoneGuestBook::setMode(Mode mode) {
 void PhoneGuestBook::setFeature(Feature feature) {
   this->feature = feature;
   if (feature == Feature::Recorder) {
-    //    digitalWrite(PIN_LED, HIGH);
+    //digitalWrite(PIN_LED, HIGH);
   } else {
     digitalWrite(PIN_LED, LOW);
   }

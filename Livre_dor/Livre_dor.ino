@@ -54,7 +54,6 @@ long unsigned int debounceDelay = 10;
 //------------------------------------------------------------------------------
 void setup() {
   initEnvironnement();
-  
 }
 
 void loop() {
@@ -417,7 +416,7 @@ int getUkDialerNumber() {
 }
 
 bool phoneSwitchedToRecordMode() {
-  return (REVERSE_MODE_CHANGE ? buttonChange.fallingEdge() : buttonChange.risingEdge())  && guestbook.getFeature() != Feature::Recorder;
+  return (REVERSE_MODE_CHANGE ? buttonChange.fallingEdge() : buttonChange.risingEdge()) && guestbook.getFeature() != Feature::Recorder;
 }
 
 bool phoneSwitchedToPlayMode() {
@@ -433,5 +432,5 @@ bool isInRecordModeAccordingToSwitch() {
 }
 
 bool switchToPlayMode() {
-  return  (REVERSE_MODE_CHANGE ? buttonChange.risingEdge() : buttonChange.fallingEdge());
+  return (REVERSE_MODE_CHANGE ? buttonChange.risingEdge() : buttonChange.fallingEdge());
 }
