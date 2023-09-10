@@ -20,11 +20,12 @@
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 #define DIAL_RANDOM true           /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
-#define NO_DIALER false             /* FR pour cadrans français, UK pour britanniques */
+#define NO_DIALER false            /* FR pour cadrans français, UK pour britanniques */
+#define DIALED_NUMBERS_MAX 3       /* FR pour cadrans français, UK pour britanniques */
 
 
 /* Gestion bouton supplémentaire */
-#define EXTRA_HANG false         /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG false        /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_PIN A2       /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_REVERSE true /* Si le cadran doit lire au hasard */
 
@@ -89,16 +90,29 @@ void loop() {
     /* Si un numéro a été composé sur le téléphone, on le stocke */
     if (strcmp(DIALER_TYPE, "FR") == 0) {
       if (dialer.update()) {
-        numberSpecified = getDialedNumber(dialer);
+        numberDialed = getDialedNumber(dialer);
       }
     }
     if (strcmp(DIALER_TYPE, "UK") == 0) {
-      numberSpecified = getUkDialerNumber();
+      numberDialed = getUkDialerNumber();
     }
 
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
-    if (numberSpecified != -1) {
-      Serial.println(numberSpecified);
+    if (numberDialed != -1) {
+      dialedIndex++;
+
+      /* We store dialed numbers */
+      if (dialedIndex < DIALED_NUMBERS_MAX) {
+        dialedNumbers[dialedIndex] = numberDialed;
+        numberDialed = -1;
+        return;
+      }
+
+      for (int i = 1; i <= DIALED_NUMBERS_MAX; i++) {
+        finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i]
+      }
+
+      Serial.println(finalDialedNumber);
       myDFPlayer.pause();
       if (isFirstPlaySinceHangUp) {
         delay(1000);
@@ -107,9 +121,10 @@ void loop() {
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
-        myDFPlayer.playMp3Folder(numberSpecified);
+        myDFPlayer.playMp3Folder(finalDialedNumber);
       }
-      numberSpecified = -1;
+      numberDialed = -1;
+      finalDialedNumber = 0;
     }
   } else {
     /* Si le lecteur n'est pas actuellement en train de jouer */
@@ -160,13 +175,13 @@ void playIntro() {
 
 int getUkDialerNumber() {
   int reading = digitalRead(PIN_PULSE);
-  int numberSpecified = -1;
+  int numberDialed = -1;
   if ((millis() - lastStateChangeTime) > dialHasFinishedRotatingAfterMs) {
     // the dial isn't being dialed, or has just finished being dialed.
     if (needToPrint) {
       // if it's only just finished being dialed, we need to send the number down the serial
       // line and reset the count. We mod the count by 10 because '0' will send 10 pulses.
-      numberSpecified = count % 10;
+      numberDialed = count % 10;
       needToPrint = 0;
       count = 0;
       cleared = 0;
@@ -189,5 +204,5 @@ int getUkDialerNumber() {
     }
   }
   lastState = reading;
-  return numberSpecified == 0 ? 10 : numberSpecified;
+  return numberDialed == 0 ? 10 : numberDialed;
 }
