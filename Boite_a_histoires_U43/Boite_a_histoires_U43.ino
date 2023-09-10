@@ -119,7 +119,7 @@ void loop() {
         isFirstPlaySinceHangUp = false;
       }
       if (DIAL_RANDOM) {
-        myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
+        *myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
         myDFPlayer.playMp3Folder(finalDialedNumber);
       }
