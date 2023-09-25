@@ -90,6 +90,7 @@ bool RotaryDialer::hasNextNumber() {
 }
 
 int RotaryDialer::getNextNumber() {
+  Serial.println("getNextNumber");
 	if (hasCompletedNumber) {
 		hasCompletedNumber = false;
 		return number;

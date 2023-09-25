@@ -1,3 +1,6 @@
+#ifdef USE_TINYUSB
+#include <Adafruit_TinyUSB.h>
+#endif
 
 /* Bibliothèques requises */
 #include <SoftwareSerial.h>      /* Connexion série */
@@ -10,19 +13,27 @@
 #define PIN_PULSE 6
 #define PIN_HANG A3
 
+#define PIN_LED_INFO 1
+
 // Cadran UK
 //#define PIN_READY 1
 //#define PIN_PULSE 2
 //#define PIN_HANG 3
 
 /* Fonctionnalités */
-#define INTRO_ENABLE false         /* Pour activer le message au décrochage */
+#define INTRO_ENABLE false /* Pour activer le message au décrochage */
+#define LED_ENABLE false
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM true           /* Si le cadran doit lire au hasard */
+#define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
 #define NO_DIALER false            /* FR pour cadrans français, UK pour britanniques */
-#define DIALED_NUMBERS_MAX 3       /* FR pour cadrans français, UK pour britanniques */
+#define DIALED_NUMBERS_MAX 2       /* FR pour cadrans français, UK pour britanniques */
 
+#ifdef ARDUINO_ARCH_RP2040
+#define IS_RP2040 true
+#else
+#define IS_RP2040 true /* A faire seulement si le TX DFPlayer est bien branché sur le RX du Xiao */
+#endif
 
 /* Gestion bouton supplémentaire */
 #define EXTRA_HANG false        /* Si le cadran doit lire au hasard */
@@ -32,23 +43,28 @@
 #include "Variables.h"
 
 void setup() {
-
-  /* Connexion série pour la remontée d'informations au PC */
   Serial.begin(9600);
+  /* Connexion série pour la remontée d'informations au PC */
+
+
   /* Connexion série pour la communication avec le DFPlayer */
   mySoftwareSerial.begin(9600);
-
   /* Initiation de la gestion du cadran rotatif */
   dialer.setup();
 
   /* Connexion au DFPlayer */
   if (!myDFPlayer.begin(mySoftwareSerial, true, false)) {  //Use softwareSerial to communicate with mp3.
-    Serial.println("bad");
-    while (true)
-      ;
+    if (IS_RP2040) {
+      Serial1.println("bad");
+    } else {
+      Serial.println("bad");
+    }
   }
-  Serial.println("OK");
-
+  if (IS_RP2040) {
+    Serial1.println("OK");
+  } else {
+    Serial.println("OK");
+  }
   /* Etat initial du DFPlayer */
   myDFPlayer.pause();
   myDFPlayer.volume(7);
@@ -60,25 +76,47 @@ void setup() {
   }
 
   randomSeed(analogRead(0));
+  delay(2000);
   audioFilesCount = myDFPlayer.readFileCounts();
+  if (LED_ENABLE) {
+    pinMode(PIN_LED_INFO, OUTPUT);
+  }
 }
 
 void loop() {
-  if (audioFilesCount == 0) {
-    Serial.println("Pas de fichiers audio dans le dossier MP3");
+  if (myDFPlayer.available()) {
+    //
+  }
+  if (audioFilesCount <= 0) {
+    if (IS_RP2040) {
+      Serial1.println("Pas de fichiers audio dans le dossier MP3");
+    } else {
+      Serial.println("Pas de fichiers audio dans le dossier MP3");
+    }
     return;
   }
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
+    if (LED_ENABLE) {
+      digitalWrite(PIN_LED_INFO, LOW);
+    }
+    delay(200);
     myDFPlayer.pause();
     phoneStatus = 0;
+    dialedIndex = 0;
+
     return;
   } else {
+    if (LED_ENABLE) {
+      digitalWrite(PIN_LED_INFO, HIGH);
+    }
     if (phoneStatus == 0) {
+      dialedIndex = 0;
       phoneStatus = 1;
     }
   }
+
 
   if (timeSinceLastIntroPlay == 99999 || (phoneStatus == 1 && needToPlayIntro())) {
     phoneStatus = 2;
@@ -87,10 +125,17 @@ void loop() {
   phoneStatus = 2;
 
   if (!NO_DIALER) {
+
     /* Si un numéro a été composé sur le téléphone, on le stocke */
     if (strcmp(DIALER_TYPE, "FR") == 0) {
       if (dialer.update()) {
+
+        Serial.println("test_if_dialer_update");
+
         numberDialed = getDialedNumber(dialer);
+
+        Serial.print("numberDialed");
+        Serial.println(numberDialed);
       }
     }
     if (strcmp(DIALER_TYPE, "UK") == 0) {
@@ -99,32 +144,49 @@ void loop() {
 
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
+      Serial.print("dialedIndex");
+      Serial.println(dialedIndex);
       dialedIndex++;
 
       /* We store dialed numbers */
-      if (dialedIndex < DIALED_NUMBERS_MAX) {
+      if (dialedIndex <= DIALED_NUMBERS_MAX) {
         dialedNumbers[dialedIndex] = numberDialed;
+        numberDialed = -1;
+        if (dialedIndex < DIALED_NUMBERS_MAX) {
+          Serial.println("return");
+
+          return;
+        }
+      }
+
+      if (dialedIndex > DIALED_NUMBERS_MAX) {
+        Serial.println("reset");
+        dialedIndex = 0;
         numberDialed = -1;
         return;
       }
 
-      for (int i = 1; i <= DIALED_NUMBERS_MAX; i++) {
-        finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i]
+      for (int i = 1; i <= dialedIndex; i++) {
+        finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i];
       }
-
-      Serial.println(finalDialedNumber);
+      dialedIndex = 0;
       myDFPlayer.pause();
       if (isFirstPlaySinceHangUp) {
         delay(1000);
         isFirstPlaySinceHangUp = false;
       }
       if (DIAL_RANDOM) {
-        *myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
+        myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
-        myDFPlayer.playMp3Folder(finalDialedNumber);
+        //myDFPlayer.playMp3Folder(finalDialedNumber);
+        myDFPlayer.playMp3Folder(1);
       }
+
+      Serial.print("finalDialedNumber");
+      Serial.println(finalDialedNumber);
       numberDialed = -1;
       finalDialedNumber = 0;
+      return;
     }
   } else {
     /* Si le lecteur n'est pas actuellement en train de jouer */
@@ -139,12 +201,12 @@ void loop() {
 /* Récupération du numéro composé (le DFPlayer démarre à 1, donc le 0 est converti en 10) */
 int getDialedNumber(RotaryDialer dialerObject) {
   int number = dialer.getNextNumber();
-  return number == 0 ? 10 : number;
+  return number;
 }
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 0 == digitalRead(PIN_HANG);
+  return 1 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {
@@ -204,5 +266,5 @@ int getUkDialerNumber() {
     }
   }
   lastState = reading;
-  return numberDialed == 0 ? 10 : numberDialed;
+  return numberDialed;
 }

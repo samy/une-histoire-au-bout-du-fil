@@ -9,7 +9,12 @@ long unsigned int dialHasFinishedRotatingAfterMs = 100;
 long unsigned int debounceDelay = 10;
 
 /* Déclaration des variables */
+#if (IS_RP2040)
+#define mySoftwareSerial Serial1
+#else
 SoftwareSerial mySoftwareSerial(9, 10);  // RX, TX
+#endif
+
 DFRobotDFPlayerMini myDFPlayer;
 int numberSpecified = -1;
 RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);

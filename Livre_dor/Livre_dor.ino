@@ -3,7 +3,7 @@ Dans l'IDE Arduino, choisir comme réglages:
 - USB Type : Serial + MTP Disk
 */
 
-#define REVERSE_MODE_CHANGE true
+#define REVERSE_MODE_CHANGE false
 
 
 /* Les paramètres (n° de PIN, activation du MTP, etc) sont dans le fichier Settings.h */
@@ -57,6 +57,7 @@ void setup() {
 }
 
 void loop() {
+
   guestbook.updateButtons();
 
   /* Bascule en mode "livre d'or" */
@@ -102,6 +103,7 @@ void loop() {
         if (isInRecordModeAccordingToSwitch()) {
           guestbook.setMode(Mode::Prompting);
         } else {
+          Serial.println("switch to play");
           guestbook.setMode(Mode::Playing);
         }
         return;
@@ -119,6 +121,7 @@ void loop() {
       break;
 
     case Mode::Prompting:  //Téléphone décroché, il va démarrer
+      Serial.println("Mode Prompting");
       // Wait a second for users to put the handset to their ear
       guestbook.wait(1000);
       if (guestbook.isPlaying()) {
@@ -199,11 +202,20 @@ void loop() {
       }
 #endif
 
-
-
       break;
 
     case Mode::Playing:
+
+      if (dialer.update()) {
+        numberSpecified = getDialedNumber(dialer);
+        if (numberSpecified != -1) {
+          Serial.println("Cadran");
+          delay(500);
+          numberSpecified = -1;
+          guestbook.startPlayingRandomAudio();
+          return;
+        }
+      }
       guestbook.adjustVolume();
       if (phoneSwitchedToRecordMode()) {
 
@@ -216,16 +228,9 @@ void loop() {
 
       if (!playWav1.isStopped()) {
         guestbook.continuePlaying();
-
         while (playWav1.isPlaying()) {
           guestbook.updateButtons();
-          if (dialer.update()) {
-            numberSpecified = getDialedNumber(dialer);
-            Serial.println("Cadran");
-            guestbook.stopPlaying();
-            delay(500);
-            guestbook.startPlayingRandomAudio();
-          }
+
 
           //Si on passe le téléphone en mode enregistreur
           if (phoneSwitchedToRecordMode()) {
@@ -251,8 +256,19 @@ void loop() {
         }
       } else {
         //On joue un audio
-        if (playWav1.isStopped()) {
+        if (playWav1.isStopped() && AUTO_PLAY) {
           guestbook.startPlayingRandomAudio();
+          return;
+        }
+        if (dialer.update()) {
+          numberSpecified = getDialedNumber(dialer);
+          if (numberSpecified != -1) {
+            Serial.println("Cadran");
+            delay(500);
+            numberSpecified = -1;
+            guestbook.startPlayingRandomAudio();
+            return;
+          }
         }
 
         //Si on passe le téléphone en mode enregistreur

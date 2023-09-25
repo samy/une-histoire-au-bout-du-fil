@@ -77,7 +77,7 @@ void PhoneGuestBook::setMode(Mode mode) {
 void PhoneGuestBook::setFeature(Feature feature) {
   this->feature = feature;
   if (feature == Feature::Recorder) {
-    //digitalWrite(PIN_LED, HIGH);
+    digitalWrite(PIN_LED, HIGH);
   } else {
     digitalWrite(PIN_LED, LOW);
   }
@@ -371,6 +371,7 @@ void PhoneGuestBook::stopRecording() {
 
 
 void PhoneGuestBook::startPlayingRandomAudio() {
+  guestbook.stopPlaying();
   // Find the first available file number
   int counter = 0;
   for (int i = 0; i < 9999; i++) {

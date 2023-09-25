@@ -10,6 +10,7 @@
 
 #define MTP_DISABLE         rue
 #define REPLAY_DISABLE true
+#define AUTO_PLAY false
 
 /* Réglages par défaut */
 #ifndef MTP_DISABLE
@@ -26,4 +27,8 @@
 
 #ifndef REVERSE_MODE_CHANGE
 #define REVERSE_MODE_CHANGE false
+#endif
+
+#ifndef AUTO_PLAY
+#define AUTO_PLAY true
 #endif
