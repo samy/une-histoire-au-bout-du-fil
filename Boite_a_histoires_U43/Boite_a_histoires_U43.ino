@@ -44,9 +44,7 @@
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial)
-    ;
-    mySoftwareSerial.begin(9600);
+  mySoftwareSerial.begin(9600);
   /* Connexion série pour la remontée d'informations au PC */
   /* Connexion série pour la communication avec le DFPlayer */
   /* Initiation de la gestion du cadran rotatif */
@@ -188,7 +186,7 @@ void loop() {
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 0 == digitalRead(PIN_HANG);
+  return 1 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {
