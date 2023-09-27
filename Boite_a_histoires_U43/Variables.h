@@ -17,7 +17,6 @@ SoftwareSerial mySoftwareSerial(9, 10);  // RX, TX
 
 DFRobotDFPlayerMini myDFPlayer;
 int numberSpecified = -1;
-RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
 unsigned long timeSinceLastIntroPlay = 0;
 int phoneStatus = 0;
 int audioFilesCount = 0;
@@ -30,3 +29,8 @@ int dialedIndex = 0;
 
 int numberDialed = -1;
 int finalDialedNumber = 0;
+
+
+#ifndef IS_REAL_DFPLAYER
+#define IS_REAL_DFPLAYER true
+#endif

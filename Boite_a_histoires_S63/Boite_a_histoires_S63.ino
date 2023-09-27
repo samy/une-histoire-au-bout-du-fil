@@ -17,6 +17,7 @@ RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
 void setup() {
   /* Connexion série pour la remontée d'informations au PC */
   Serial.begin(9600);
+  while(!Serial);
 
   /* Connexion série pour la communication avec le DFPlayer */
   mySoftwareSerial.begin(9600);
@@ -41,6 +42,7 @@ void setup() {
 void loop() {
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp()) {
+    Serial.println("Raccroche");
     myDFPlayer.pause();
     return;
   }

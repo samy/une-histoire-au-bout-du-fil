@@ -5,18 +5,16 @@
 /* Bibliothèques requises */
 #include <SoftwareSerial.h>      /* Connexion série */
 #include "DFRobotDFPlayerMini.h" /* Lecteur MP3 */
-#include "RotaryDialer.h"        /* Gestion du cadran rotatif */
+#include "RotaryDial2.h"
 
 /* Définition des constantes */
 // Cadran FR
-#define PIN_READY A2
-#define PIN_PULSE 6
+#define PIN_PULSE D10
 #define PIN_HANG A3
 
 #define PIN_LED_INFO 1
 
 // Cadran UK
-//#define PIN_READY 1
 //#define PIN_PULSE 2
 //#define PIN_HANG 3
 
@@ -35,6 +33,8 @@
 #define IS_RP2040 true /* A faire seulement si le TX DFPlayer est bien branché sur le RX du Xiao */
 #endif
 
+#define IS_REAL_DFPLAYER false
+
 /* Gestion bouton supplémentaire */
 #define EXTRA_HANG false        /* Si le cadran doit lire au hasard */
 #define EXTRA_HANG_PIN A2       /* Si le cadran doit lire au hasard */
@@ -44,27 +44,20 @@
 
 void setup() {
   Serial.begin(9600);
+  while (!Serial)
+    ;
+    mySoftwareSerial.begin(9600);
   /* Connexion série pour la remontée d'informations au PC */
-
-
   /* Connexion série pour la communication avec le DFPlayer */
-  mySoftwareSerial.begin(9600);
   /* Initiation de la gestion du cadran rotatif */
-  dialer.setup();
+  RotaryDial2::setup(PIN_PULSE);
 
   /* Connexion au DFPlayer */
-  if (!myDFPlayer.begin(mySoftwareSerial, true, false)) {  //Use softwareSerial to communicate with mp3.
-    if (IS_RP2040) {
-      Serial1.println("bad");
-    } else {
-      Serial.println("bad");
-    }
+  if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
+    Serial.println("bad");
+    return;
   }
-  if (IS_RP2040) {
-    Serial1.println("OK");
-  } else {
-    Serial.println("OK");
-  }
+  Serial.println("OK");
   /* Etat initial du DFPlayer */
   myDFPlayer.pause();
   myDFPlayer.volume(7);
@@ -84,16 +77,9 @@ void setup() {
 }
 
 void loop() {
-  if (myDFPlayer.available()) {
-    //
-  }
   if (audioFilesCount <= 0) {
-    if (IS_RP2040) {
-      Serial1.println("Pas de fichiers audio dans le dossier MP3");
-    } else {
-      Serial.println("Pas de fichiers audio dans le dossier MP3");
-    }
-    return;
+    //Serial.println("Pas de fichiers audio dans le dossier MP3");
+    // return;
   }
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
@@ -101,6 +87,7 @@ void loop() {
     if (LED_ENABLE) {
       digitalWrite(PIN_LED_INFO, LOW);
     }
+    Serial.println("raccroche");
     delay(200);
     myDFPlayer.pause();
     phoneStatus = 0;
@@ -128,11 +115,12 @@ void loop() {
 
     /* Si un numéro a été composé sur le téléphone, on le stocke */
     if (strcmp(DIALER_TYPE, "FR") == 0) {
-      if (dialer.update()) {
+      if (RotaryDial2::available()) {
 
-        Serial.println("test_if_dialer_update");
+        Serial.println("check dial");
+        delay(200);
 
-        numberDialed = getDialedNumber(dialer);
+        numberDialed = RotaryDial2::read();
 
         Serial.print("numberDialed");
         Serial.println(numberDialed);
@@ -178,8 +166,7 @@ void loop() {
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
-        //myDFPlayer.playMp3Folder(finalDialedNumber);
-        myDFPlayer.playMp3Folder(1);
+        myDFPlayer.playMp3Folder(finalDialedNumber);
       }
 
       Serial.print("finalDialedNumber");
@@ -198,15 +185,10 @@ void loop() {
     delay(1000);
   }
 }
-/* Récupération du numéro composé (le DFPlayer démarre à 1, donc le 0 est converti en 10) */
-int getDialedNumber(RotaryDialer dialerObject) {
-  int number = dialer.getNextNumber();
-  return number;
-}
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 1 == digitalRead(PIN_HANG);
+  return 0 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {
@@ -267,4 +249,7 @@ int getUkDialerNumber() {
   }
   lastState = reading;
   return numberDialed;
+}
+void Handler() {
+  Serial.println("Pushed!");
 }
