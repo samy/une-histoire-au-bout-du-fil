@@ -9,7 +9,7 @@
 
 /* Définition des constantes */
 // Cadran FR
-#define PIN_PULSE D10
+#define PIN_PULSE D5
 #define PIN_HANG A3
 
 #define PIN_LED_INFO 1
@@ -115,13 +115,13 @@ void loop() {
     if (strcmp(DIALER_TYPE, "FR") == 0) {
       if (RotaryDial2::available()) {
 
-        Serial.println("check dial");
+        // Serial.println("check dial");
         delay(200);
 
         numberDialed = RotaryDial2::read();
 
-        Serial.print("numberDialed");
-        Serial.println(numberDialed);
+        // Serial.print("numberDialed");
+        // Serial.println(numberDialed);
       }
     }
     if (strcmp(DIALER_TYPE, "UK") == 0) {
@@ -130,8 +130,8 @@ void loop() {
 
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
-      Serial.print("dialedIndex");
-      Serial.println(dialedIndex);
+      //  Serial.print("dialedIndex");
+      //Serial.println(dialedIndex);
       dialedIndex++;
 
       /* We store dialed numbers */
@@ -139,7 +139,7 @@ void loop() {
         dialedNumbers[dialedIndex] = numberDialed;
         numberDialed = -1;
         if (dialedIndex < DIALED_NUMBERS_MAX) {
-          Serial.println("return");
+          //Serial.println("return");
 
           return;
         }
@@ -152,15 +152,12 @@ void loop() {
         return;
       }
 
-      for (int i = 1; i <= dialedIndex; i++) {
+      for (int i = 0; i < dialedIndex; i++) {
         finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i];
       }
       dialedIndex = 0;
       myDFPlayer.pause();
-      if (isFirstPlaySinceHangUp) {
-        delay(1000);
-        isFirstPlaySinceHangUp = false;
-      }
+      delay(250);
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
