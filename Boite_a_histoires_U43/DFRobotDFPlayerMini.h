@@ -30,6 +30,7 @@
 #define DFPLAYER_DEVICE_SLEEP 4
 #define DFPLAYER_DEVICE_FLASH 5
 
+
 #define DFPLAYER_RECEIVED_LENGTH 10
 #define DFPLAYER_SEND_LENGTH 10
 
@@ -121,6 +122,8 @@ class DFRobotDFPlayerMini {
   uint16_t read();
   
   void setTimeOut(unsigned long timeOutDuration);
+
+  void setDevice(int choosenDevice);
   
   void next();
   

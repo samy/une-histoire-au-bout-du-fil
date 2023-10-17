@@ -26,6 +26,7 @@
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
 #define NO_DIALER false            /* FR pour cadrans français, UK pour britanniques */
 #define DIALED_NUMBERS_MAX 2       /* FR pour cadrans français, UK pour britanniques */
+#define STORAGE_DEVICE 1 //2 pour SD, 1 pour clé USB
 
 #ifdef ARDUINO_ARCH_RP2040
 #define IS_RP2040 true
@@ -57,6 +58,7 @@ void setup() {
   }
   Serial.println("OK");
   /* Etat initial du DFPlayer */
+  myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
   myDFPlayer.pause();
   myDFPlayer.volume(7);
 
@@ -68,7 +70,7 @@ void setup() {
 
   randomSeed(analogRead(0));
   delay(2000);
-  audioFilesCount = myDFPlayer.readFileCounts();
+  audioFilesCount = myDFPlayer.readFileCounts(STORAGE_DEVICE);
   if (LED_ENABLE) {
     pinMode(PIN_LED_INFO, OUTPUT);
   }
