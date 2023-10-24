@@ -4,6 +4,7 @@ Dans l'IDE Arduino, choisir comme réglages:
 */
 
 #define REVERSE_MODE_CHANGE false
+#define RECORD_ON_DIAL true
 
 
 /* Les paramètres (n° de PIN, activation du MTP, etc) sont dans le fichier Settings.h */
@@ -162,8 +163,25 @@ void loop() {
         waveform.amplitude(0);
       }
 
-      Serial.println("Starting Recording");
-      guestbook.startRecording();
+      if (!RECORD_ON_DIAL) {
+        Serial.println("Starting Recording");
+
+        guestbook.startRecording();
+      } else {
+        if (dialer.update()) {
+          numberSpecified = getDialedNumber(dialer);
+          if (numberSpecified != -1) {
+            Serial.println("Cadran");
+            delay(500);
+            numberSpecified = -1;
+            guestbook.startRecording(numberSpecified);
+            return;
+          }
+        } else {
+          guestbook.setMode(Mode::Prompting);
+        }
+      }
+
 
       break;
 
@@ -345,7 +363,7 @@ void initEnvironnement() {
     guestbook.setFeature(Feature::Recorder);
 
   } else {
-    guestbook.setFeature(Feature::Player);
+    guestbook.setFeature(Feature::Recorder);
   }
   if (!guestbook.isRaccroche()) {
     if (guestbook.getFeature() == Feature::Recorder) {

@@ -32,3 +32,7 @@
 #ifndef AUTO_PLAY
 #define AUTO_PLAY true
 #endif
+
+#ifndef RECORD_ON_DIAL
+#define RECORD_ON_DIAL false
+#endif

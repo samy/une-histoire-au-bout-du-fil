@@ -16,7 +16,7 @@ Mode phoneMode = Mode::Initialising;
 
 /* Récupération de l'état de décroché/raccroché */
 bool PhoneGuestBook::isRaccroche() {
-  return 0 == digitalRead(PIN_HANG);
+  return 1 == digitalRead(PIN_HANG);
 }
 
 
@@ -292,6 +292,49 @@ void PhoneGuestBook::startRecording() {
   for (uint16_t i = 0; i < 9999; i++) {
     // Format the counter as a five-digit number with leading zeroes, followed by file extension
     snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME), "%s%05d.wav", RECORDS_FOLDER_NAME, i);
+    // Create if does not exist, do not open existing, write, sync after write
+    if (!SD.exists(filename)) {
+      break;
+    }
+  }
+
+  //Serial.print("filename ");
+  //Serial.println(filename);
+  frec = SD.open(filename, FILE_WRITE);
+  //Serial.println("Opened file !");
+  if (frec) {
+    Serial.print("Recording to ");
+    Serial.println(filename);
+    queue1.begin();
+    recByteSaved = 0L;
+  } else {
+    Serial.println("Couldn't open file to record!");
+  }
+}
+
+void PhoneGuestBook::startRecording(int subfolder) {
+  char subfolderPath[12];
+  snprintf(subfolderPath, strlen(RECORDS_FOLDER_NAME) + 3, "%s/%d", RECORDS_FOLDER_NAME, subfolder);
+  if (!SD.exists(subfolderPath)) {
+    SD.mkdir(subfolderPath);
+  }
+
+  guestbook.setMode(Mode::Recording);
+  print_mode();
+#ifdef MTP_ENABLE
+  setMTPdeviceChecks(false);  // disable MTP device checks while recording
+#endif
+
+  digitalWrite(PIN_LED, HIGH);
+#if defined(INSTRUMENT_SD_WRITE)
+  worstSDwrite = 0;
+  printNext = 0;
+#endif  // defined(INSTRUMENT_SD_WRITE)
+  // Find the first available file number
+  //  for (uint8_t i=0; i<9999; i++) { // BUGFIX uint8_t overflows if it reaches 255
+  for (uint16_t i = 0; i < 9999; i++) {
+    // Format the counter as a five-digit number with leading zeroes, followed by file extension
+    snprintf(filename, 12 + strlen(subfolderPath), "%s%05d.wav", subfolderPath, i);
     // Create if does not exist, do not open existing, write, sync after write
     if (!SD.exists(filename)) {
       break;

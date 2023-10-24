@@ -40,6 +40,8 @@ public:
   void setMTPdeviceChecks(bool nable);
   void startPlaying();
   void startRecording();
+  void startRecording(int subfolder);
+
   void continuePlaying();
   void continueRecording();
   void stopRecording();
