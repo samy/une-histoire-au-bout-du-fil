@@ -1,12 +1,3 @@
-/*
-Dans l'IDE Arduino, choisir comme réglages:
-- USB Type : Serial + MTP Disk
-*/
-
-#define REVERSE_MODE_CHANGE false
-#define RECORD_ON_DIAL true
-
-
 /* Les paramètres (n° de PIN, activation du MTP, etc) sont dans le fichier Settings.h */
 #include "Settings.h"
 

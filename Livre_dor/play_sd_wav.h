@@ -31,38 +31,40 @@
 #include "AudioStream.h"
 #include "SD.h"
 
-class AudioPlaySdWavX : public AudioStream
-{
+class AudioPlaySdWavX : public AudioStream {
 public:
-	AudioPlaySdWavX(void) : AudioStream(0, NULL), block_left(NULL), block_right(NULL) { begin(); }
-	void begin(void);
-	bool play(const char *filename);
-	void togglePlayPause(void);
-	void stop(void);
-	bool isPlaying(void);
-	bool isPaused(void);
-	bool isStopped(void);
-	uint32_t positionMillis(void);
-	uint32_t lengthMillis(void);
-	virtual void update(void);
+  AudioPlaySdWavX(void)
+    : AudioStream(0, NULL), block_left(NULL), block_right(NULL) {
+    begin();
+  }
+  void begin(void);
+  bool play(const char *filename);
+  void togglePlayPause(void);
+  void stop(void);
+  bool isPlaying(void);
+  bool isPaused(void);
+  bool isStopped(void);
+  uint32_t positionMillis(void);
+  uint32_t lengthMillis(void);
+  virtual void update(void);
 private:
-	File wavfile;
-	bool consume(uint32_t size);
-	bool parse_format(void);
-	uint32_t header[10];		// temporary storage of wav header data
-	uint32_t data_length;		// number of bytes remaining in current section
-	uint32_t total_length;		// number of audio data bytes in file
-	uint32_t bytes2millis;
-	audio_block_t *block_left;
-	audio_block_t *block_right;
-	uint16_t block_offset;		// how much data is in block_left & block_right
-	uint8_t buffer[AUDIO_BLOCK_SAMPLES*sizeof(int16_t)*2];		// buffer two blocks of data
-	uint16_t buffer_offset;		// where we're at consuming "buffer"
-	uint16_t buffer_length;		// how much data is in "buffer" 
-	uint8_t header_offset;		// number of bytes in header[]
-	uint8_t state;
-	uint8_t state_play;
-	uint8_t leftover_bytes;
+  File wavfile;
+  bool consume(uint32_t size);
+  bool parse_format(void);
+  uint32_t header[10];    // temporary storage of wav header data
+  uint32_t data_length;   // number of bytes remaining in current section
+  uint32_t total_length;  // number of audio data bytes in file
+  uint32_t bytes2millis;
+  audio_block_t *block_left;
+  audio_block_t *block_right;
+  uint16_t block_offset;                                      // how much data is in block_left & block_right
+  uint8_t buffer[AUDIO_BLOCK_SAMPLES * sizeof(int16_t) * 2];  // buffer two blocks of data
+  uint16_t buffer_offset;                                     // where we're at consuming "buffer"
+  uint16_t buffer_length;                                     // how much data is in "buffer"
+  uint8_t header_offset;                                      // number of bytes in header[]
+  uint8_t state;
+  uint8_t state_play;
+  uint8_t leftover_bytes;
 };
 
 #endif
