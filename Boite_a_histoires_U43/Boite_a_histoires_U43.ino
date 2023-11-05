@@ -9,8 +9,8 @@
 
 /* Définition des constantes */
 // Cadran FR
-#define PIN_PULSE D5
-#define PIN_HANG A3
+#define PIN_PULSE D10
+#define PIN_HANG D3
 
 #define PIN_LED_INFO 1
 
@@ -19,31 +19,38 @@
 //#define PIN_HANG 3
 
 /* Fonctionnalités */
-#define INTRO_ENABLE false /* Pour activer le message au décrochage */
-#define LED_ENABLE false
+#define INTRO_ENABLE false         /* Pour activer le message au décrochage */
+#define LED_ENABLE false           /* LED allumée quand le téléphone diffuse du son */
 #define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 #define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
-#define NO_DIALER false            /* FR pour cadrans français, UK pour britanniques */
-#define DIALED_NUMBERS_MAX 2       /* FR pour cadrans français, UK pour britanniques */
-#define STORAGE_DEVICE 1 //2 pour SD, 1 pour clé USB
+#define NO_DIALER false            /* Pour les téléphones sans cadran */
+#define DIALED_NUMBERS_MAX 1       /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define STORAGE_DEVICE 1           /* Support de stockage: 2 pour SD, 1 pour clé USB */
 
 #ifdef ARDUINO_ARCH_RP2040
 #define IS_RP2040 true
 #else
-#define IS_RP2040 true /* A faire seulement si le TX DFPlayer est bien branché sur le RX du Xiao */
+#define IS_RP2040 false /* A faire seulement si le TX DFPlayer est bien branché sur le RX du Xiao */
 #endif
 
-#define IS_REAL_DFPLAYER false
-
 /* Gestion bouton supplémentaire */
-#define EXTRA_HANG false        /* Si le cadran doit lire au hasard */
-#define EXTRA_HANG_PIN A2       /* Si le cadran doit lire au hasard */
-#define EXTRA_HANG_REVERSE true /* Si le cadran doit lire au hasard */
+#define EXTRA_HANG false        /* Pour la gestion d'un bouton secondaire pour le raccrochage */
+#define EXTRA_HANG_PIN A2       /* PIN du bouton supplémentaire de raccrochage */
+#define EXTRA_HANG_REVERSE true /* Si le fonctionnement de ce bouton supplémentaire est inversé */
 
+/* Fichier avec les valeurs par défaut, pour celles qui n'ont pas été personnalisées ci-dessus */
 #include "Variables.h"
 
 void setup() {
+  pinMode(PIN_LED_B, OUTPUT);
+
+
+  /* On écoute le décrochage sur le PIN indiqué */
+  pinMode(PIN_HANG, INPUT_PULLUP);
+  if (EXTRA_HANG) {
+    pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
+  }
   Serial.begin(9600);
   mySoftwareSerial.begin(9600);
   /* Connexion série pour la remontée d'informations au PC */
@@ -54,22 +61,19 @@ void setup() {
   /* Connexion au DFPlayer */
   if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
     Serial.println("bad");
+
     return;
   }
+
   Serial.println("OK");
   /* Etat initial du DFPlayer */
   myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
   myDFPlayer.pause();
+  delay(2000);
+
   myDFPlayer.volume(7);
 
-  /* On écoute le décrochage sur le PIN indiqué */
-  pinMode(PIN_HANG, INPUT_PULLUP);
-  if (EXTRA_HANG) {
-    pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
-  }
-
   randomSeed(analogRead(0));
-  delay(2000);
   audioFilesCount = myDFPlayer.readFileCounts(STORAGE_DEVICE);
   if (LED_ENABLE) {
     pinMode(PIN_LED_INFO, OUTPUT);
@@ -87,6 +91,8 @@ void loop() {
     if (LED_ENABLE) {
       digitalWrite(PIN_LED_INFO, LOW);
     }
+    digitalWrite(PIN_LED_B, LOW);
+
     Serial.println("raccroche");
     delay(200);
     myDFPlayer.pause();
@@ -95,6 +101,8 @@ void loop() {
 
     return;
   } else {
+    digitalWrite(PIN_LED_B, HIGH);
+
     if (LED_ENABLE) {
       digitalWrite(PIN_LED_INFO, HIGH);
     }
@@ -110,7 +118,6 @@ void loop() {
     playIntro();
   }
   phoneStatus = 2;
-
   if (!NO_DIALER) {
 
     /* Si un numéro a été composé sur le téléphone, on le stocke */
@@ -129,7 +136,6 @@ void loop() {
     if (strcmp(DIALER_TYPE, "UK") == 0) {
       numberDialed = getUkDialerNumber();
     }
-
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
       //  Serial.print("dialedIndex");
@@ -138,23 +144,23 @@ void loop() {
 
       /* We store dialed numbers */
       if (dialedIndex <= DIALED_NUMBERS_MAX) {
+        Serial.println("We store dialed numbers");
         dialedNumbers[dialedIndex] = numberDialed;
         numberDialed = -1;
         if (dialedIndex < DIALED_NUMBERS_MAX) {
-          //Serial.println("return");
+          Serial.print("dialedNumber :");
+          Serial.println(dialedNumbers[dialedIndex]);
 
           return;
         }
       }
-
       if (dialedIndex > DIALED_NUMBERS_MAX) {
         Serial.println("reset");
         dialedIndex = 0;
         numberDialed = -1;
         return;
       }
-
-      for (int i = 0; i < dialedIndex; i++) {
+      for (int i = 1; i <= dialedIndex; i++) {
         finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i];
       }
       dialedIndex = 0;

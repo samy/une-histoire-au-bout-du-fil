@@ -31,10 +31,6 @@ int numberDialed = -1;
 int finalDialedNumber = 0;
 
 
-#ifndef IS_REAL_DFPLAYER
-#define IS_REAL_DFPLAYER true
-#endif
-
 #ifndef STORAGE_DEVICE
-#define STORAGE_DEVICE 2 //2 pour SD, 1 pour USB
+#define STORAGE_DEVICE 1 //2 pour SD, 1 pour USB
 #endif
