@@ -7,11 +7,11 @@ Ce modèle date de 1943 (d'où son nom).
 *Photo par [Lulu La Lucette](https://lululalucette.com)*
 
 # Pré-requis
-Sur la carte micro-SD, créez un dossier nommé *MP3* et stockez-y vos fichiers à faire jouer par le téléphone.
+Sur la carte micro-SD ou la clé USB, créez un dossier nommé *MP3* et stockez-y vos fichiers à faire jouer par le téléphone.
 Ils doivent être prefixés par un numéro à 4 chiffres, qui les fera correspondre au chiffre composé sur le cadran : 0001.mp3 ou 0001 - cequevousvoulez.mp3 pour le morceau 1, etc)
 
 # Utilisation
-Il vous suffit de décrocher le combiné, de composer un (seul) chiffre et d'écouter l'histoire qui vous est racontée.
+Il vous suffit de décrocher le combiné, de composer un ou plusieurs chiffres et d'écouter l'histoire qui vous est racontée.
 
 # Principe de fonctionnement
 On reprend ici la logique du modèle S63 https://github.com/samy/une-histoire-au-bout-du-fil/blob/main/Boite_a_histoires_S63/README.md
@@ -25,7 +25,7 @@ Deux différences majeures par rapport à la version S63:
 - le boitier a du être réduit en hauteur, l'espace disponible étant plus réduit
 - afin d'éviter d'être parasité par le circuit du téléphone, on rajoute ici un sucre "maison" pour relier le cadran et l'Arduino
 
-Il est désormais possible de composer des numéros à X chiffres !
+Il est désormais possible de composer des numéros entrre 1 et 4 chiffres !
 
 # Schéma du circuit
 
@@ -40,7 +40,6 @@ La seule particularité ici est que le décrochage n'a pu être géré directeme
 
 # TODO
 - Améliorer le filtrage du circuit pour pouvoir dans tous les cas utiliser les contacts de décrochage classiques
-- Proposer une possibilité d'enregistrer du son via le combiné
-
+- 
 # Licence
 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Ce projet est partagé sous la licence <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>.
