@@ -24,8 +24,8 @@ bool PhoneGuestBook::needToPlayIntro() {
   if (this->introHasBeenPlayed) {
     return false;
   }
-  if ((this->getMode() == RECORD_MODE && this->introRecordEnabled)
-      || (this->getMode() == PLAY_MODE && this->introPlayEnabled)) {
+  if ((this->getFeature() == Feature::Recorder && this->introRecordEnabled)
+      || (this->getFeature() == Feature::Player && this->introPlayEnabled)) {
     introHasBeenPlayed = true;
     return true;
   }
@@ -75,6 +75,7 @@ void PhoneGuestBook::setMode(Mode mode) {
 }
 
 void PhoneGuestBook::setFeature(Feature feature) {
+  this->introHasBeenPlayed = false;
   this->feature = feature;
   if (feature == Feature::Recorder) {
     digitalWrite(PIN_LED, HIGH);

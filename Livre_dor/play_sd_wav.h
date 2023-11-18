@@ -29,7 +29,7 @@
 
 #include "Arduino.h"
 #include "AudioStream.h"
-#include "SD.h"
+#include <SD.h>
 
 class AudioPlaySdWavX : public AudioStream {
 public:

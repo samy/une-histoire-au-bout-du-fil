@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <SD.h>
 #include <Bounce.h>
-#include "RotaryDialer.h" /* Gestion du cadran rotatif */
+#include "RotaryDial2.h" /* Gestion du cadran rotatif */
 
 #ifndef PHONE_GUESTBOOK
 #define PHONE_GUESTBOOK

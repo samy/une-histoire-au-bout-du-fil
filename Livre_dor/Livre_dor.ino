@@ -1,7 +1,17 @@
+
+
+/* Constantes pour cadran UK */
+int needToPrint = 0;
+int count;
+int lastState = LOW;
+int trueState = LOW;
+long unsigned int lastStateChangeTime = 0;
+int cleared = 0;
+long unsigned int dialHasFinishedRotatingAfterMs = 100;
+long unsigned int debounceDelay = 10;
+
 /* Les paramètres (n° de PIN, activation du MTP, etc) sont dans le fichier Settings.h */
 #include "Settings.h"
-
-
 
 #include <Bounce.h>
 #include <Audio.h>
@@ -10,7 +20,7 @@
 #include <SD.h>
 #include <SerialFlash.h>
 #include <TimeLib.h>
-#include "RotaryDialer.h" /* Gestion du cadran rotatif */
+#include "RotaryDial2.h" /* Gestion du cadran rotatif */
 
 #ifdef MTP_ENABLE
 #include <MTP_Teensy.h>
@@ -21,23 +31,13 @@
 
 
 #define INTRO_RECORD_ENABLE true
-#define INTRO_FILENAME "intro.wav"
+#define INTRO_FILENAME "INTRO.WAV"
 
 #include "phone_guestbook.h"
 
 const int myInput = AUDIO_INPUT_MIC;
 
-RotaryDialer dialer = RotaryDialer(PIN_READY, PIN_PULSE);
 int numberSpecified = -1;
-/* Constantes pour cadran UK */
-int needToPrint = 0;
-int count;
-int lastState = LOW;
-int trueState = LOW;
-long unsigned int lastStateChangeTime = 0;
-int cleared = 0;
-long unsigned int dialHasFinishedRotatingAfterMs = 100;
-long unsigned int debounceDelay = 10;
 
 //------------------------------------------------------------------------------
 // Store error strings in flash to save RAM.
@@ -49,6 +49,12 @@ void setup() {
 }
 
 void loop() {
+  if (RotaryDial2::available()) {
+    numberSpecified = RotaryDial2::read();
+    Serial.print("Cadran");
+    Serial.println(numberSpecified);
+  }
+  return;
 
   guestbook.updateButtons();
 
@@ -120,7 +126,7 @@ void loop() {
         guestbook.stopPlaying();
       }
 
-      if (guestbook.getFeature() == Feature::Recorder) {
+      if (guestbook.getFeature() == Feature::Recorder && guestbook.needToPlayIntro()) {
         guestbook.playIntro();
         Serial.println("Fin intro");
       }
@@ -148,7 +154,7 @@ void loop() {
       }
 
       // Play the tone sound effect
-      if (guestbook.needToPlayBeep()) {
+      if (!RECORD_ON_DIAL && guestbook.needToPlayBeep()) {
         waveform.begin(0.10, 440, WAVEFORM_SINE);
         guestbook.wait(1250);
         waveform.amplitude(0);
@@ -159,8 +165,10 @@ void loop() {
 
         guestbook.startRecording();
       } else {
-        if (dialer.update()) {
-          numberSpecified = getDialedNumber(dialer);
+        if (RotaryDial2::available() || numberSpecified != -1) {
+          if (numberSpecified == -1) {
+            numberSpecified = RotaryDial2::read();
+          }
           if (numberSpecified != -1) {
             Serial.println("Cadran");
             delay(500);
@@ -169,7 +177,7 @@ void loop() {
             return;
           }
         } else {
-          guestbook.setMode(Mode::Prompting);
+          //guestbook.setMode(Mode::Prompting);
         }
       }
 
@@ -215,8 +223,11 @@ void loop() {
 
     case Mode::Playing:
 
-      if (dialer.update()) {
-        numberSpecified = getDialedNumber(dialer);
+      if (RotaryDial2::available() || numberSpecified != -1) {
+        if (numberSpecified == -1) {
+          numberSpecified = RotaryDial2::read();
+        }
+
         if (numberSpecified != -1) {
           Serial.println("Cadran");
           delay(500);
@@ -269,8 +280,11 @@ void loop() {
           guestbook.startPlayingRandomAudio();
           return;
         }
-        if (dialer.update()) {
-          numberSpecified = getDialedNumber(dialer);
+        if (RotaryDial2::available() || numberSpecified != -1) {
+          if (numberSpecified == -1) {
+            numberSpecified = RotaryDial2::read();
+          }
+
           if (numberSpecified != -1) {
             Serial.println("Cadran");
             delay(500);
@@ -311,8 +325,11 @@ void loop() {
 
 void initEnvironnement() {
   guestbook.phoneMode = Mode::Initialising;
+  guestbook.enableIntroBeforeRecord();
 
   Serial.begin(9600);
+  while (!Serial)
+    ;
   AudioMemory(60);
 
   audioShield.enable();
@@ -320,8 +337,8 @@ void initEnvironnement() {
 
   //Réglages pour Electret standard
   audioShield.volume(1.0);
-  mixer.gain(0, 1.5f);
-  mixer.gain(1, 1.5f);
+  mixer.gain(0, 2.0f);
+  mixer.gain(1, 2.0f);
   audioShield.micGain(10);
 
   //audioShield.lineInLevel(0);
@@ -366,7 +383,6 @@ void initEnvironnement() {
 
   digitalWrite(PIN_LED, LOW);
   guestbook.hasAnAudioBeenPlayedBefore = false;
-  dialer.setup();
 
   if (!SD.exists(RECORDS_FOLDER_NAME)) {
     if (SD.mkdir(RECORDS_FOLDER_NAME)) {
@@ -380,8 +396,9 @@ void initEnvironnement() {
   MTP.addFilesystem(SD, "Livre d'or");  // choose a nice name for the SD card volume to appear in your file explorer
   guestbook.MTPcheckInterval = MTP.storage()->get_DeltaDeviceCheckTimeMS();
   Serial.println("Added SD card via MTP");
-
 #endif
+  Serial.println("Activation cadran");
+  RotaryDial2::setup(PIN_PULSE);
 }
 
 time_t getTeensy3Time() {
@@ -400,11 +417,6 @@ void dateTime(uint16_t* date, uint16_t* time, uint8_t* ms10) {
   *ms10 = second() & 1 ? 100 : 0;
 }
 
-/* Récupération du numéro composé (le DFPlayer démarre à 1, donc le 0 est converti en 10) */
-int getDialedNumber(RotaryDialer dialerObject) {
-  int number = dialer.getNextNumber();
-  return number == 0 ? 10 : number;
-}
 
 int getUkDialerNumber() {
   int reading = digitalRead(PIN_PULSE);
@@ -441,19 +453,35 @@ int getUkDialerNumber() {
 }
 
 bool phoneSwitchedToRecordMode() {
-  return (REVERSE_MODE_CHANGE ? buttonChange.fallingEdge() : buttonChange.risingEdge()) && guestbook.getFeature() != Feature::Recorder;
+  bool var = (REVERSE_MODE_CHANGE ? buttonChange.fallingEdge() : buttonChange.risingEdge()) && guestbook.getFeature() != Feature::Recorder;
+  if (var) {
+    Serial.println("phoneSwitchedToRecordMode");
+  }
+  return var;
 }
 
 bool phoneSwitchedToPlayMode() {
-  return (REVERSE_MODE_CHANGE ? buttonChange.risingEdge() : buttonChange.fallingEdge()) && guestbook.getFeature() != Feature::Player;
+  bool var = (REVERSE_MODE_CHANGE ? buttonChange.risingEdge() : buttonChange.fallingEdge()) && guestbook.getFeature() != Feature::Player;
+  if (var) {
+    Serial.println("phoneSwitchedToPlayMode");
+  }
+  return var;
 }
 
 bool phoneClosed() {
-  return buttonHang.risingEdge() && guestbook.getMode() != Mode::Sleep;
+  bool var = buttonHang.risingEdge() && guestbook.getMode() != Mode::Sleep;
+  if (var) {
+    Serial.println("phoneClosed");
+  }
+  return var;
 }
 
 bool isInRecordModeAccordingToSwitch() {
-  return (REVERSE_MODE_CHANGE ? 0 : 1) == digitalRead(PIN_MODE_CHANGE);
+  bool var = (REVERSE_MODE_CHANGE ? 0 : 1) == digitalRead(PIN_MODE_CHANGE);
+  if (var) {
+    Serial.println("Yes, phone in record Mode according to switch");
+  }
+  return var;
 }
 
 bool switchToPlayMode() {
