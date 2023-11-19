@@ -22,7 +22,7 @@ long unsigned int debounceDelay = 10;
 #include <TimeLib.h>
 #include "RotaryDial2.h" /* Gestion du cadran rotatif */
 
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
 #include <MTP_Teensy.h>
 #endif
 
@@ -49,12 +49,6 @@ void setup() {
 }
 
 void loop() {
-  if (RotaryDial2::available()) {
-    numberSpecified = RotaryDial2::read();
-    Serial.print("Cadran");
-    Serial.println(numberSpecified);
-  }
-  return;
 
   guestbook.updateButtons();
 
@@ -82,7 +76,7 @@ void loop() {
     return;
   }
 
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
   if (guestbook.isOn) {
     MTP.loop();  // This is mandatory to be placed in the loop code.
   }
@@ -167,13 +161,16 @@ void loop() {
       } else {
         if (RotaryDial2::available() || numberSpecified != -1) {
           if (numberSpecified == -1) {
+            Serial.print("Lecture numéro");
             numberSpecified = RotaryDial2::read();
+            Serial.println(numberSpecified);
           }
           if (numberSpecified != -1) {
             Serial.println("Cadran");
             delay(500);
-            numberSpecified = -1;
+
             guestbook.startRecording(numberSpecified);
+            numberSpecified = -1;
             return;
           }
         } else {
@@ -207,7 +204,18 @@ void loop() {
           digitalWrite(PIN_LED, LOW);
           return;
         }
-        guestbook.continueRecording();
+        if (RotaryDial2::available()) {
+          Serial.println("Nouveau numéro pendant enregistrement");
+          numberSpecified = RotaryDial2::read();
+          Serial.println("Arrêt enregistrement");
+          guestbook.stopEverything();
+          guestbook.startRecording(numberSpecified);
+          numberSpecified = -1;
+
+        } else {
+                  guestbook.continueRecording();
+
+        }
       }
 #ifdef RESET_ENABLE
       if (buttonReset.fallingEdge()) {
@@ -391,7 +399,7 @@ void initEnvironnement() {
       Serial.println("Failed to create arduino/log directory");
     }
   }
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
   MTP.begin();
   MTP.addFilesystem(SD, "Livre d'or");  // choose a nice name for the SD card volume to appear in your file explorer
   guestbook.MTPcheckInterval = MTP.storage()->get_DeltaDeviceCheckTimeMS();

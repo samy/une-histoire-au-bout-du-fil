@@ -8,7 +8,7 @@
 #include "core_pins.h"
 #include "phone_guestbook.h"
 
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
 #include <MTP_Teensy.h>
 #endif
 
@@ -263,7 +263,7 @@ void PhoneGuestBook::continueRecording() {
   }
 #endif  // defined(INSTRUMENT_SD_WRITE)
 }
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
 void PhoneGuestBook::setMTPdeviceChecks(bool nable) {
   if (nable) {
     MTP.storage()->set_DeltaDeviceCheckTimeMS(this->MTPcheckInterval);
@@ -279,7 +279,7 @@ void PhoneGuestBook::setMTPdeviceChecks(bool nable) {
 void PhoneGuestBook::startRecording() {
   guestbook.setMode(Mode::Recording);
   print_mode();
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
   setMTPdeviceChecks(false);  // disable MTP device checks while recording
 #endif
 
@@ -314,15 +314,18 @@ void PhoneGuestBook::startRecording() {
 }
 
 void PhoneGuestBook::startRecording(int subfolder) {
-  char subfolderPath[12];
-  snprintf(subfolderPath, strlen(RECORDS_FOLDER_NAME) + 3, "%s/%d", RECORDS_FOLDER_NAME, subfolder);
+
+  char subfolderPath[strlen(RECORDS_FOLDER_NAME) + 3];
+  snprintf(subfolderPath, strlen(RECORDS_FOLDER_NAME) + 3, "%s%d/", RECORDS_FOLDER_NAME, subfolder);
+  Serial.print("Dossier ");
+  Serial.println(subfolderPath);
   if (!SD.exists(subfolderPath)) {
     SD.mkdir(subfolderPath);
   }
 
   guestbook.setMode(Mode::Recording);
   print_mode();
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
   setMTPdeviceChecks(false);  // disable MTP device checks while recording
 #endif
 
@@ -408,7 +411,7 @@ void PhoneGuestBook::stopRecording() {
   digitalWrite(PIN_LED, LOW);
   Serial.println("Desactivation LED (stopRecording)");
 
-#ifdef MTP_ENABLE
+#if MTP_ENABLE
   setMTPdeviceChecks(true);  // enable MTP device checks, recording is finished
 #endif
 }
