@@ -1,5 +1,3 @@
-
-
 /* Constantes pour cadran UK */
 int needToPrint = 0;
 int count;
@@ -213,8 +211,7 @@ void loop() {
           numberSpecified = -1;
 
         } else {
-                  guestbook.continueRecording();
-
+          guestbook.continueRecording();
         }
       }
 #ifdef RESET_ENABLE

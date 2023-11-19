@@ -19,26 +19,25 @@ void RotaryDial2::change() {
 
   //Ignore interrupts that do not change state
   int state = digitalRead(interruptPin);
-  if(state == last) return;
+  if (state == last) return;
   last = state;
 
   //Ignore interrupts if there's unread digit
-  if(available()) return;
+  if (available()) return;
 
   //Process signal edges
-  if(state) { //RISING
+  if (state) {  //RISING
 
     lastHigh = millis();
     return;
 
-  } else { //FALLING
+  } else {  //FALLING
 
     unsigned long highLen = millis() - lastHigh;
-    if(highLen > MS_DEBOUNCE) {
+    if (highLen > MS_DEBOUNCE) {
       //Serial.println(highLen);
       pulseCount++;
     }
-
   }
 
   return;
@@ -49,9 +48,9 @@ int RotaryDial2::available() {
 }
 
 int RotaryDial2::readPulses() {
-  if(available()) {
+  if (available()) {
     int ret = pulseCount;
-    pulseCount=0;
+    pulseCount = 0;
     return ret;
   }
   return -1;
@@ -59,6 +58,6 @@ int RotaryDial2::readPulses() {
 
 int RotaryDial2::read() {
   int ret = readPulses();
-  if(ret == 10) return 0;
+  if (ret == 10) return 0;
   return ret;
 }
