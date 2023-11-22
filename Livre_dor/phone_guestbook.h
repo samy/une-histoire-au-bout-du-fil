@@ -63,6 +63,7 @@ public:
   void print_feature();
   void playRandomAudio();
   void startPlayingRandomAudio();
+  void startPlayingRandomAudioFromNumberFolders();
   bool hasAnAudioBeenPlayedBefore;
   bool isOn;
 private:
@@ -135,6 +136,8 @@ extern AudioConnection patchCord3;
 extern AudioConnection patchCord4;
 extern AudioConnection patchCord5;
 extern PhoneGuestBook guestbook;
+extern AudioAmplifier amp;
+
 extern AudioSynthWaveform waveform;
 extern AudioMixer4 mixer;          // Allows merging several inputs to same output
 extern AudioFilterBiquad biquad1;  //xy=970,445

@@ -79,7 +79,6 @@ void loop() {
     MTP.loop();  // This is mandatory to be placed in the loop code.
   }
 #endif
-  //guestbook.adjustVolume();
   // First, read the buttons
   switch (guestbook.phoneMode) {
     case Mode::Sleep:
@@ -237,11 +236,14 @@ void loop() {
           Serial.println("Cadran");
           delay(500);
           numberSpecified = -1;
-          guestbook.startPlayingRandomAudio();
+          if (RECORD_ON_DIAL) {
+            guestbook.startPlayingRandomAudioFromNumberFolders();
+          } else {
+            guestbook.startPlayingRandomAudio();
+          }
           return;
         }
       }
-      guestbook.adjustVolume();
       if (phoneSwitchedToRecordMode()) {
 
         Serial.println("Bascule mode");
@@ -282,7 +284,11 @@ void loop() {
       } else {
         //On joue un audio
         if (playWav1.isStopped() && AUTO_PLAY) {
-          guestbook.startPlayingRandomAudio();
+          if (RECORD_ON_DIAL) {
+            guestbook.startPlayingRandomAudioFromNumberFolders();
+          } else {
+            guestbook.startPlayingRandomAudio();
+          }
           return;
         }
         if (RotaryDial2::available() || numberSpecified != -1) {
@@ -294,7 +300,11 @@ void loop() {
             Serial.println("Cadran");
             delay(500);
             numberSpecified = -1;
-            guestbook.startPlayingRandomAudio();
+            if (RECORD_ON_DIAL) {
+              guestbook.startPlayingRandomAudioFromNumberFolders();
+            } else {
+              guestbook.startPlayingRandomAudio();
+            }
             return;
           }
         }
@@ -333,8 +343,6 @@ void initEnvironnement() {
   guestbook.enableIntroBeforeRecord();
 
   Serial.begin(9600);
-  while (!Serial)
-    ;
   AudioMemory(60);
 
   audioShield.enable();
@@ -342,8 +350,7 @@ void initEnvironnement() {
 
   //Réglages pour Electret standard
   audioShield.volume(1.0);
-  mixer.gain(0, 2.0f);
-  mixer.gain(1, 2.0f);
+  amp.gain(2);
   audioShield.micGain(10);
 
   //audioShield.lineInLevel(0);

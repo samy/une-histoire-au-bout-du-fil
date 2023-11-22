@@ -159,17 +159,20 @@ void PhoneGuestBook::writeOutHeader() {  // update WAV header with final filesiz
 SdFat32 sd;
 File32 file;
 
-AudioSynthWaveform waveform;                        //xy=404,310
-AudioPlaySdWavX playWav1;                           //xy=412,441
-AudioMixer4 mixer;                                  //xy=752,329
-AudioOutputI2S i2s1;                                //xy=1048,323
-AudioRecordQueue queue1;                            // Creating an audio buffer in memory before saving to SD
-AudioInputI2S i2s2;                                 // I2S input from microphone on audio shield
+AudioSynthWaveform waveform;  //xy=404,310
+AudioPlaySdWavX playWav1;     //xy=412,441
+AudioMixer4 mixer;            //xy=752,329
+AudioOutputI2S i2s1;          //xy=1048,323
+AudioRecordQueue queue1;      // Creating an audio buffer in memory before saving to SD
+AudioInputI2S i2s2;           // I2S input from microphone on audio shield
+AudioAmplifier amp;           //xy=921,532
+
 AudioConnection patchCord1(waveform, 0, mixer, 0);  // wave to mixer
 AudioConnection patchCord3(playWav1, 0, mixer, 1);  // wav file playback mixer
-AudioConnection patchCord4(mixer, 0, i2s1, 0);      // mixer output to speaker (L)
-AudioConnection patchCord6(mixer, 0, i2s1, 1);      // mixer output to speaker (R)
-AudioConnection patchCord5(i2s2, 0, queue1, 0);     // mic input to queue (L)   // mic input to queue (L)
+AudioConnection patchCord2(mixer, amp);
+AudioConnection patchCord6(amp, 0, i2s1, 0);
+AudioConnection patchCord4(amp, 0, i2s1, 1);
+AudioConnection patchCord5(i2s2, 0, queue1, 0);  // mic input to queue (L)   // mic input to queue (L)
 
 PhoneGuestBook guestbook;
 char line[40];
@@ -436,6 +439,37 @@ void PhoneGuestBook::startPlayingRandomAudio() {
 
 
   snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME), "%s%05d.wav", RECORDS_FOLDER_NAME, (int)random(0, counter));
+  Serial.println(filename);
+  if (guestbook.hasAnAudioBeenPlayedBefore) {
+    delay(DELAY_BETWEEN_PLAYS);
+  }
+  guestbook.hasAnAudioBeenPlayedBefore = true;
+  playWav1.play(filename);
+}
+
+void PhoneGuestBook::startPlayingRandomAudioFromNumberFolders() {
+  guestbook.stopPlaying();
+  int chosenFolder = (int)random(0, 9);
+  // Find the first available file number
+  int counter = 0;
+  for (int i = 0; i < 9999; i++) {
+    snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME) + 3, "%s%d/%05d.wav", RECORDS_FOLDER_NAME, chosenFolder, i);
+
+    if (!SD.exists(filename)) {
+      counter = i;
+      break;
+    }
+  }
+  if (counter == 0) {
+    Serial.println("No files to play");
+
+    return;
+  }
+  Serial.println("startPlayingRandomAudio");
+
+
+
+  snprintf(filename, 12 + strlen(RECORDS_FOLDER_NAME), "%s%d/%05d.wav", RECORDS_FOLDER_NAME, chosenFolder, (int)random(0, counter));
   Serial.println(filename);
   if (guestbook.hasAnAudioBeenPlayedBefore) {
     delay(DELAY_BETWEEN_PLAYS);
