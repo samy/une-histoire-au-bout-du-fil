@@ -48,6 +48,7 @@ void setup() {
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
+
   if (EXTRA_HANG) {
     pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
   }
@@ -255,4 +256,12 @@ int getUkDialerNumber() {
 }
 void Handler() {
   Serial.println("Pushed!");
+}
+
+long getVolume() {
+  int val = analogRead(4);
+  Serial.println(val);
+  delay(500);
+  return map(val, 0, 1023, 0, 30);
+
 }
