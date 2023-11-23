@@ -37,6 +37,12 @@ Comme mon précédent modèle de téléphone, on utilise ici un DFPlayer, mais c
 
 La seule particularité ici est que le décrochage n'a pu être géré directement par les bornes situées sous l'appareil : en effet, comme pour le cadran, les parasites liés au circuit sont trop importants. J'ai donc du directement me brancher sur les contacts du système électromécanique qui s'enclenche quand on raccroche.
 
+# Gestion du volume (optionnelle)
+Celle-ci peut s'activer via la constante VOLUME_HANDLING dans le code.
+Il vous suffit ensuite de cabler un potentiomètre en reprenant la convention suivante:
+
+![potentiometre](https://github.com/samy/une-histoire-au-bout-du-fil/assets/1282106/678787c6-e8f7-41b2-8902-605a80f4285a)
+
 
 # TODO
 - Améliorer le filtrage du circuit pour pouvoir dans tous les cas utiliser les contacts de décrochage classiques
