@@ -35,7 +35,6 @@ void RotaryDial2::change() {
 
     unsigned long highLen = millis() - lastHigh;
     if(highLen > MS_DEBOUNCE) {
-      //Serial.println(highLen);
       pulseCount++;
     }
 

@@ -34,3 +34,7 @@ int finalDialedNumber = 0;
 #ifndef STORAGE_DEVICE
 #define STORAGE_DEVICE 1 //2 pour SD, 1 pour USB
 #endif
+
+#ifndef VOLUME_HANDLING
+#define VOLUME_HANDLING false //A activer pour avoir la gestion du volume sur le PIN A1
+#endif

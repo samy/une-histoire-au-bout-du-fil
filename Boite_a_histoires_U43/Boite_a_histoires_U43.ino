@@ -19,14 +19,15 @@
 //#define PIN_HANG 3
 
 /* Fonctionnalités */
-#define INTRO_ENABLE false         /* Pour activer le message au décrochage */
-#define LED_ENABLE false           /* LED allumée quand le téléphone diffuse du son */
-#define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
-#define DIALER_TYPE "FR"           /* FR pour cadrans français, UK pour britanniques */
-#define NO_DIALER false            /* Pour les téléphones sans cadran */
-#define DIALED_NUMBERS_MAX 1       /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
-#define STORAGE_DEVICE 1           /* Support de stockage: 2 pour SD, 1 pour clé USB */
+#define INTRO_ENABLE false                    /* Pour activer le message au décrochage */
+#define LED_ENABLE false                      /* LED allumée quand le téléphone diffuse du son */
+#define INTRO_DELTA 20 * 3600 * 24            /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define DIAL_RANDOM false                     /* Si le cadran doit lire au hasard */
+#define DIALER_TYPE "FR"                      /* FR pour cadrans français, UK pour britanniques */
+#define NO_DIALER false                       /* Pour les téléphones sans cadran */
+#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
+#define VOLUME_HANDLING true                  /* Activation de la molette de volume branchée sur le PIN A1 */
 
 #ifdef ARDUINO_ARCH_RP2040
 #define IS_RP2040 true
@@ -48,6 +49,7 @@ void setup() {
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
+
 
   if (EXTRA_HANG) {
     pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
@@ -71,10 +73,10 @@ void setup() {
   myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
   myDFPlayer.pause();
   delay(2000);
+  if (!VOLUME_HANDLING) {
+    myDFPlayer.volume(7);
+  }
 
-  myDFPlayer.volume(7);
-
-  randomSeed(analogRead(0));
   audioFilesCount = myDFPlayer.readFileCounts(STORAGE_DEVICE);
   if (LED_ENABLE) {
     pinMode(PIN_LED_INFO, OUTPUT);
@@ -82,9 +84,13 @@ void setup() {
 }
 
 void loop() {
+  if (VOLUME_HANDLING) {
+    myDFPlayer.volume(getVolume());
+  }
+
   if (audioFilesCount <= 0) {
-    //Serial.println("Pas de fichiers audio dans le dossier MP3");
-    // return;
+    Serial.println("Pas de fichiers audio dans le dossier MP3");
+    return;
   }
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
@@ -129,9 +135,6 @@ void loop() {
         delay(200);
 
         numberDialed = RotaryDial2::read();
-
-        // Serial.print("numberDialed");
-        // Serial.println(numberDialed);
       }
     }
     if (strcmp(DIALER_TYPE, "UK") == 0) {
@@ -139,13 +142,10 @@ void loop() {
     }
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
-      //  Serial.print("dialedIndex");
-      //Serial.println(dialedIndex);
       dialedIndex++;
 
       /* We store dialed numbers */
       if (dialedIndex <= DIALED_NUMBERS_MAX) {
-        Serial.println("We store dialed numbers");
         dialedNumbers[dialedIndex] = numberDialed;
         numberDialed = -1;
         if (dialedIndex < DIALED_NUMBERS_MAX) {
@@ -173,8 +173,6 @@ void loop() {
         myDFPlayer.playMp3Folder(finalDialedNumber);
       }
 
-      Serial.print("finalDialedNumber");
-      Serial.println(finalDialedNumber);
       numberDialed = -1;
       finalDialedNumber = 0;
       return;
@@ -259,9 +257,6 @@ void Handler() {
 }
 
 long getVolume() {
-  int val = analogRead(4);
-  Serial.println(val);
-  delay(500);
+  int val = analogRead(A1);
   return map(val, 0, 1023, 0, 30);
-
 }
