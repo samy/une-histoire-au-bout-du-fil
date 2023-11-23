@@ -89,8 +89,8 @@ void loop() {
   }
 
   if (audioFilesCount <= 0) {
-    Serial.println("Pas de fichiers audio dans le dossier MP3");
-    return;
+    //Serial.println("Pas de fichiers audio dans le dossier MP3");
+    //return;
   }
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
@@ -166,10 +166,10 @@ void loop() {
       }
       dialedIndex = 0;
       myDFPlayer.pause();
-      delay(250);
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
+        Serial.println("finalDialedNumber");
         myDFPlayer.playMp3Folder(finalDialedNumber);
       }
 

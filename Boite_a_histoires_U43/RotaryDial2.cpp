@@ -58,6 +58,6 @@ int RotaryDial2::readPulses() {
 
 int RotaryDial2::read() {
   int ret = readPulses();
-  if(ret == 10) return 0;
+  if(ret == 0) return 10;
   return ret;
 }
