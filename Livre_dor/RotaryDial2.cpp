@@ -44,6 +44,7 @@ void RotaryDial2::change() {
 }
 
 int RotaryDial2::available() {
+  return false;
   return (pulseCount > 0 && millis() - lastHigh > MS_DIGITEND);
 }
 

@@ -165,13 +165,11 @@ AudioMixer4 mixer;            //xy=752,329
 AudioOutputI2S i2s1;          //xy=1048,323
 AudioRecordQueue queue1;      // Creating an audio buffer in memory before saving to SD
 AudioInputI2S i2s2;           // I2S input from microphone on audio shield
-AudioAmplifier amp;           //xy=921,532
 
 AudioConnection patchCord1(waveform, 0, mixer, 0);  // wave to mixer
 AudioConnection patchCord3(playWav1, 0, mixer, 1);  // wav file playback mixer
-AudioConnection patchCord2(mixer, amp);
-AudioConnection patchCord6(amp, 0, i2s1, 0);
-AudioConnection patchCord4(amp, 0, i2s1, 1);
+AudioConnection patchCord6(mixer, 0, i2s1, 0);
+AudioConnection patchCord4(mixer, 0, i2s1, 1);
 AudioConnection patchCord5(i2s2, 0, queue1, 0);  // mic input to queue (L)   // mic input to queue (L)
 
 PhoneGuestBook guestbook;
@@ -218,6 +216,7 @@ void PhoneGuestBook::startPlaying() {
 }
 
 void PhoneGuestBook::playIntro() {
+  audioShield.unmuteHeadphone();
   playWav1.play(INTRO_FILENAME);
 }
 

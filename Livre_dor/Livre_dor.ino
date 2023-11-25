@@ -155,6 +155,8 @@ void loop() {
         Serial.println("Starting Recording");
 
         guestbook.startRecording();
+        audioShield.muteHeadphone();
+
       } else {
         if (RotaryDial2::available() || numberSpecified != -1) {
           if (numberSpecified == -1) {
@@ -343,14 +345,15 @@ void initEnvironnement() {
   guestbook.enableIntroBeforeRecord();
 
   Serial.begin(9600);
-  AudioMemory(60);
+  AudioMemory(40);
 
   audioShield.enable();
   audioShield.inputSelect(myInput);
 
   //Réglages pour Electret standard
-  audioShield.volume(1.0);
-  amp.gain(2);
+  audioShield.unmuteHeadphone();
+  audioShield.volume(0.5);
+  audioShield.muteLineout();
   audioShield.micGain(10);
 
   //audioShield.lineInLevel(0);
