@@ -47,7 +47,6 @@ void setup() {
 }
 
 void loop() {
-
   guestbook.updateButtons();
 
   /* Bascule en mode "livre d'or" */
