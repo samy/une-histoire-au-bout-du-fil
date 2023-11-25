@@ -25,7 +25,7 @@ bool PhoneGuestBook::needToPlayIntro() {
   }
   if ((this->getFeature() == Feature::Recorder && this->introRecordEnabled)
       || (this->getFeature() == Feature::Player && this->introPlayEnabled)) {
-    introHasBeenPlayed = true;
+    this->introHasBeenPlayed = true;
     return true;
   }
   return false;
@@ -46,6 +46,7 @@ void PhoneGuestBook::stopEverything() {
   }
   guestbook.hasAnAudioBeenPlayedBefore = false;
   digitalWrite(PIN_LED, LOW);
+  audioShield.muteHeadphone();
 }
 void PhoneGuestBook::enableIntroBeforeRecord() {
   this->introRecordEnabled = true;

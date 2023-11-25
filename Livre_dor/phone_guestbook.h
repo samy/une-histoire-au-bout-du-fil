@@ -66,7 +66,6 @@ public:
   void startPlayingRandomAudioFromNumberFolders();
   bool hasAnAudioBeenPlayedBefore;
   bool isOn;
-private:
   bool introHasBeenPlayed;
 };
 

@@ -84,6 +84,8 @@ void loop() {
     case Mode::Sleep:
       if (guestbook.isRaccroche()) {
         guestbook.isOn = false;
+        audioShield.muteHeadphone();
+        guestbook.introHasBeenPlayed = false;
         return;
       }
       if (!guestbook.isOn) {  //Si on décroche
@@ -118,6 +120,7 @@ void loop() {
       }
 
       if (guestbook.getFeature() == Feature::Recorder && guestbook.needToPlayIntro()) {
+        audioShield.unmuteHeadphone();
         guestbook.playIntro();
         Serial.println("Fin intro");
       }
