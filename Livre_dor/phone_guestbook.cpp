@@ -1,3 +1,4 @@
+#include "AudioControl.h"
 #include "Settings.h"
 
 #include "Bounce.h"
@@ -45,6 +46,7 @@ void PhoneGuestBook::stopEverything() {
     guestbook.setMode(Mode::Sleep);
   }
   guestbook.hasAnAudioBeenPlayedBefore = false;
+  guestbook.introHasBeenPlayed = false;
   digitalWrite(PIN_LED, LOW);
   audioShield.muteHeadphone();
 }
@@ -279,6 +281,8 @@ void PhoneGuestBook::setMTPdeviceChecks(bool nable) {
 #endif
 
 void PhoneGuestBook::startRecording() {
+  audioShield.muteHeadphone();
+
   guestbook.setMode(Mode::Recording);
   print_mode();
 #if MTP_ENABLE
@@ -316,7 +320,7 @@ void PhoneGuestBook::startRecording() {
 }
 
 void PhoneGuestBook::startRecording(int subfolder) {
-
+  audioShield.muteHeadphone();
   char subfolderPath[strlen(RECORDS_FOLDER_NAME) + 3];
   snprintf(subfolderPath, strlen(RECORDS_FOLDER_NAME) + 3, "%s%d/", RECORDS_FOLDER_NAME, subfolder);
   Serial.print("Dossier ");
@@ -409,10 +413,8 @@ void PhoneGuestBook::stopRecording() {
   frec.close();
   //Serial.println("Closed file");
   guestbook.setMode(Mode::Sleep);
-  //Serial.println("stopRecording");
   digitalWrite(PIN_LED, LOW);
   Serial.println("Desactivation LED (stopRecording)");
-
 #if MTP_ENABLE
   setMTPdeviceChecks(true);  // enable MTP device checks, recording is finished
 #endif

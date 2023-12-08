@@ -117,34 +117,38 @@ void loop() {
       if (guestbook.isPlaying()) {
         guestbook.stopPlaying();
       }
-
       if (guestbook.getFeature() == Feature::Recorder && guestbook.needToPlayIntro()) {
-        audioShield.unmuteHeadphone();
+        delay(200);
+        Serial.println("Debut intro");
         guestbook.playIntro();
+
+        // Wait until the  message has finished playing
+        while (!playWav1.isStopped()) {
+          // Check whether the handset is replaced
+          // guestbook.updateButtons();
+
+          //Si on raccroche le téléphone
+          if (guestbook.isRaccroche()) {
+            Serial.println("Raccrochage");
+            guestbook.stopEverything();
+            delay(2000);
+            return;
+          }
+
+          //Si on passe le téléphone en mode lecteur
+          if (switchToPlayMode()) {
+            Serial.println("Lecteur");
+            guestbook.stopEverything();
+            guestbook.setFeature(Feature::Player);
+            guestbook.setMode(Mode::Playing);
+            return;
+          }
+        }
         Serial.println("Fin intro");
-      }
-      // Wait until the  message has finished playing
-      while (!playWav1.isStopped()) {
-        // Check whether the handset is replaced
-        // guestbook.updateButtons();
 
-        //Si on raccroche le téléphone
-        if (guestbook.isRaccroche()) {
-          Serial.println("Raccrochage");
-          guestbook.stopEverything();
-          delay(2000);
-          return;
-        }
-
-        //Si on passe le téléphone en mode lecteur
-        if (switchToPlayMode()) {
-          Serial.println("Lecteur");
-          guestbook.stopEverything();
-          guestbook.setFeature(Feature::Player);
-          guestbook.setMode(Mode::Playing);
-          return;
-        }
+        audioShield.muteHeadphone();
       }
+
 
       // Play the tone sound effect
       if (!RECORD_ON_DIAL && guestbook.needToPlayBeep()) {
@@ -157,7 +161,6 @@ void loop() {
         Serial.println("Starting Recording");
 
         guestbook.startRecording();
-        audioShield.muteHeadphone();
 
       } else {
         if (RotaryDial2::available() || numberSpecified != -1) {
@@ -345,20 +348,19 @@ void loop() {
 void initEnvironnement() {
   guestbook.phoneMode = Mode::Initialising;
   guestbook.enableIntroBeforeRecord();
-
   Serial.begin(9600);
-  AudioMemory(40);
-
-  audioShield.enable();
+  AudioMemory(60);
+  audioShield.enable(); 
   audioShield.inputSelect(myInput);
+
+  
 
   //Réglages pour Electret standard
   audioShield.unmuteHeadphone();
   audioShield.volume(0.5);
-  audioShield.muteLineout();
-  audioShield.micGain(10);
+  audioShield.micGain(0);
 
-  //audioShield.lineInLevel(0);
+
 
   // Initialize the SD.
   SPI.setMOSI(SDCARD_MOSI_PIN);
