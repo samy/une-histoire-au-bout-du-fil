@@ -143,6 +143,24 @@ void loop() {
             guestbook.setMode(Mode::Playing);
             return;
           }
+
+          //Si l'utilisateur a composé un chiffre pendant l'intro
+          if (RotaryDial2::available() || numberSpecified != -1) {
+            if (numberSpecified == -1) {
+              Serial.print("Lecture numéro");
+              numberSpecified = RotaryDial2::read();
+              Serial.println(numberSpecified);
+            }
+            if (numberSpecified != -1) {
+              guestbook.stopPlaying();
+              Serial.println("Cadran");
+              delay(500);
+
+              guestbook.startRecording(numberSpecified);
+              numberSpecified = -1;
+              return;
+            }
+          }
         }
         Serial.println("Fin intro");
 
@@ -350,10 +368,10 @@ void initEnvironnement() {
   guestbook.enableIntroBeforeRecord();
   Serial.begin(9600);
   AudioMemory(60);
-  audioShield.enable(); 
+  audioShield.enable();
   audioShield.inputSelect(myInput);
 
-  
+
 
   //Réglages pour Electret standard
   audioShield.unmuteHeadphone();

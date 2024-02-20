@@ -218,6 +218,7 @@ void PhoneGuestBook::startPlaying() {
   //mode = 2;
 }
 
+
 void PhoneGuestBook::playIntro() {
   audioShield.unmuteHeadphone();
   playWav1.play(INTRO_FILENAME);
