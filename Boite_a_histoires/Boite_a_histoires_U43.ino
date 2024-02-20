@@ -12,7 +12,7 @@
 #define PIN_PULSE D10
 #define PIN_HANG D3
 
-#define PIN_LED_INFO 1
+#define PIN_LED_INFO 9
 
 // Cadran UK
 //#define PIN_PULSE 2
