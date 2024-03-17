@@ -12,7 +12,7 @@
 #define PIN_PULSE D10
 #define PIN_HANG D3
 
-#define PIN_LED_INFO 9
+#define PIN_LED_INFO D9
 
 // Cadran UK
 //#define PIN_PULSE 2
@@ -20,14 +20,13 @@
 
 /* Fonctionnalités */
 #define INTRO_ENABLE false                    /* Pour activer le message au décrochage */
-#define LED_ENABLE false                      /* LED allumée quand le téléphone diffuse du son */
 #define INTRO_DELTA 20 * 3600 * 24            /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 #define DIAL_RANDOM false                     /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"                      /* FR pour cadrans français, UK pour britanniques */
 #define NO_DIALER false                       /* Pour les téléphones sans cadran */
-#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define DIALED_NUMBERS_MAX 2                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define VOLUME_HANDLING true                  /* Activation de la molette de volume branchée sur le PIN A1 */
+#define VOLUME_HANDLING false                 /* Activation de la molette de volume branchée sur le PIN A1 */
 
 #ifdef ARDUINO_ARCH_RP2040
 #define IS_RP2040 true
@@ -44,11 +43,12 @@
 #include "Variables.h"
 
 void setup() {
-  pinMode(PIN_LED_B, OUTPUT);
+
 
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
+  pinMode(A1, INPUT);
 
 
   if (EXTRA_HANG) {
@@ -59,7 +59,7 @@ void setup() {
   /* Connexion série pour la remontée d'informations au PC */
   /* Connexion série pour la communication avec le DFPlayer */
   /* Initiation de la gestion du cadran rotatif */
-  RotaryDial2::setup(PIN_PULSE);
+  RotaryDial2::setup(PIN_PULSE, DIALED_NUMBERS_MAX);
 
   /* Connexion au DFPlayer */
   if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
@@ -78,9 +78,8 @@ void setup() {
   }
 
   audioFilesCount = myDFPlayer.readFileCounts(STORAGE_DEVICE);
-  if (LED_ENABLE) {
-    pinMode(PIN_LED_INFO, OUTPUT);
-  }
+  Serial.print("audioFilesCount");
+  Serial.println(audioFilesCount);
 }
 
 void loop() {
@@ -95,10 +94,6 @@ void loop() {
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
-    if (LED_ENABLE) {
-      digitalWrite(PIN_LED_INFO, LOW);
-    }
-    digitalWrite(PIN_LED_B, LOW);
 
     Serial.println("raccroche");
     delay(200);
@@ -108,11 +103,7 @@ void loop() {
 
     return;
   } else {
-    digitalWrite(PIN_LED_B, HIGH);
 
-    if (LED_ENABLE) {
-      digitalWrite(PIN_LED_INFO, HIGH);
-    }
     if (phoneStatus == 0) {
       dialedIndex = 0;
       phoneStatus = 1;
@@ -121,6 +112,7 @@ void loop() {
 
 
   if (timeSinceLastIntroPlay == 99999 || (phoneStatus == 1 && needToPlayIntro())) {
+    Serial.println("needToPlayIntro?");
     phoneStatus = 2;
     playIntro();
   }
@@ -135,6 +127,8 @@ void loop() {
         delay(200);
 
         numberDialed = RotaryDial2::read();
+        Serial.print("numberDialed");
+        Serial.println(numberDialed);
       }
     }
     if (strcmp(DIALER_TYPE, "UK") == 0) {
@@ -155,6 +149,8 @@ void loop() {
           return;
         }
       }
+      Serial.print("dialedIndex");
+      Serial.println(dialedIndex);
       if (dialedIndex > DIALED_NUMBERS_MAX) {
         Serial.println("reset");
         dialedIndex = 0;
@@ -165,6 +161,7 @@ void loop() {
         finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i];
       }
       dialedIndex = 0;
+
       myDFPlayer.pause();
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
@@ -191,7 +188,7 @@ void loop() {
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 1 == digitalRead(PIN_HANG);
+  return 0 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {
@@ -206,7 +203,7 @@ bool needToPlayIntro() {
   /* Si l'écart entre le compteur de temps actuel et la dernière lecture de l'introduction dépasse l'intervalle qu'on a configuré,
     et que le téléphone était décroché avant
     on joue l'intro */
-  if ((millis() - timeSinceLastIntroPlay) > INTRO_DELTA * 1000) {
+  if (timeSinceLastIntroPlay == 0 || (millis() - timeSinceLastIntroPlay) > INTRO_DELTA * 1000) {
     return true;
   }
   return false;
