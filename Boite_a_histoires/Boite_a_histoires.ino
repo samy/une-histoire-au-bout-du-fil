@@ -24,9 +24,11 @@
 #define DIAL_RANDOM false                     /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"                      /* FR pour cadrans français, UK pour britanniques */
 #define NO_DIALER false                       /* Pour les téléphones sans cadran */
-#define DIALED_NUMBERS_MAX 2                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define VOLUME_HANDLING false                 /* Activation de la molette de volume branchée sur le PIN A1 */
+#define VOLUME_HANDLING true                  /* Activation de la molette de volume branchée sur le PIN A1 */
+#define LED_PIN D9                            /* Activation de la molette de volume branchée sur le PIN A1 */
+
 
 #ifdef ARDUINO_ARCH_RP2040
 #define IS_RP2040 true
@@ -49,7 +51,7 @@ void setup() {
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
   pinMode(A1, INPUT);
-
+  pinMode(LED_PIN, OUTPUT);
 
   if (EXTRA_HANG) {
     pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
@@ -65,28 +67,32 @@ void setup() {
   if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
     Serial.println("bad");
 
+
     return;
   }
 
   Serial.println("OK");
   /* Etat initial du DFPlayer */
-  myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
-  myDFPlayer.pause();
-  delay(2000);
-  if (!VOLUME_HANDLING) {
-    myDFPlayer.volume(7);
-  }
 
+  myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
+  Serial.println("Pause78");
+  myDFPlayer.pause();
+  myDFPlayer.volume(7);
+  delay(2000);
   audioFilesCount = myDFPlayer.readFileCounts(STORAGE_DEVICE);
   Serial.print("audioFilesCount");
   Serial.println(audioFilesCount);
 }
 
 void loop() {
-  if (VOLUME_HANDLING) {
-    myDFPlayer.volume(getVolume());
-  }
+  digitalWrite(LED_PIN, HIGH);
 
+
+  if (VOLUME_HANDLING) {
+    int volume = getVolume();
+    delay(200);
+    myDFPlayer.volume(volume);
+  }
   if (audioFilesCount <= 0) {
     //Serial.println("Pas de fichiers audio dans le dossier MP3");
     //return;
@@ -97,12 +103,13 @@ void loop() {
 
     Serial.println("raccroche");
     delay(200);
-    myDFPlayer.pause();
+
     phoneStatus = 0;
     dialedIndex = 0;
-
+    myDFPlayer.pause();
     return;
   } else {
+
 
     if (phoneStatus == 0) {
       dialedIndex = 0;
@@ -123,7 +130,7 @@ void loop() {
     if (strcmp(DIALER_TYPE, "FR") == 0) {
       if (RotaryDial2::available()) {
 
-        // Serial.println("check dial");
+        Serial.println("check dial");
         delay(200);
 
         numberDialed = RotaryDial2::read();
@@ -134,6 +141,8 @@ void loop() {
     if (strcmp(DIALER_TYPE, "UK") == 0) {
       numberDialed = getUkDialerNumber();
     }
+    Serial.print("numberDialed :");
+    Serial.println(numberDialed);
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
       dialedIndex++;
@@ -161,7 +170,7 @@ void loop() {
         finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i];
       }
       dialedIndex = 0;
-
+      Serial.println("Pause 169");
       myDFPlayer.pause();
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
@@ -188,7 +197,7 @@ void loop() {
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
-  return 0 == digitalRead(PIN_HANG);
+  return 1 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {
@@ -256,5 +265,6 @@ void Handler() {
 
 long getVolume() {
   int val = analogRead(A1);
-  return map(val, 0, 1023, 0, 30);
+  int volume = map(val, 0, 1023, 0, 25);
+  return volume;
 }

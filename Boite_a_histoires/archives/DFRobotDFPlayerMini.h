@@ -7,7 +7,7 @@
  * @copyright	GNU Lesser General Public License
  *
  * @author [Angelo](Angelo.qiao@dfrobot.com)
- * @version  V1.0.6
+ * @version  V1.0.3
  * @date  2016-12-07
  */
 
@@ -29,6 +29,7 @@
 #define DFPLAYER_DEVICE_AUX 3
 #define DFPLAYER_DEVICE_SLEEP 4
 #define DFPLAYER_DEVICE_FLASH 5
+
 
 #define DFPLAYER_RECEIVED_LENGTH 10
 #define DFPLAYER_SEND_LENGTH 10
@@ -121,6 +122,8 @@ class DFRobotDFPlayerMini {
   uint16_t read();
   
   void setTimeOut(unsigned long timeOutDuration);
+
+  void setDevice(int choosenDevice);
   
   void next();
   
