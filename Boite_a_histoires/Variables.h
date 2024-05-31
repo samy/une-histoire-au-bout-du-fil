@@ -8,6 +8,9 @@ int cleared = 0;
 long unsigned int dialHasFinishedRotatingAfterMs = 100;
 long unsigned int debounceDelay = 10;
 
+int volume = 0;
+int lastVolume = -1;
+
 /* Déclaration des variables */
 #if (IS_RP2040)
 #define mySoftwareSerial Serial1

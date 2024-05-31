@@ -1,6 +1,7 @@
 #ifdef USE_TINYUSB
 #include <Adafruit_TinyUSB.h>
 #endif
+#include <Bounce2.h>
 
 /* Bibliothèques requises */
 #include <SoftwareSerial.h>      /* Connexion série */
@@ -28,6 +29,7 @@
 #define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
 #define VOLUME_HANDLING true                  /* Activation de la molette de volume branchée sur le PIN A1 */
 #define LED_PIN D9                            /* Activation de la molette de volume branchée sur le PIN A1 */
+#define USE_BOUNCE_INSTEAD_OF_DIRECT 1
 
 
 #ifdef ARDUINO_ARCH_RP2040
@@ -43,6 +45,7 @@
 
 /* Fichier avec les valeurs par défaut, pour celles qui n'ont pas été personnalisées ci-dessus */
 #include "Variables.h"
+Bounce2::Button button = Bounce2::Button();  // INSTANTIATE A Bounce2::Button OBJECT
 
 void setup() {
 
@@ -52,6 +55,7 @@ void setup() {
   pinMode(PIN_HANG, INPUT_PULLUP);
   pinMode(A1, INPUT);
   pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
 
   if (EXTRA_HANG) {
     pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
@@ -82,16 +86,30 @@ void setup() {
   audioFilesCount = myDFPlayer.readFileCounts(STORAGE_DEVICE);
   Serial.print("audioFilesCount");
   Serial.println(audioFilesCount);
+
+  button.attach(PIN_HANG, INPUT_PULLUP);
+  button.interval(5);
+  button.setPressedState(1);
 }
 
 void loop() {
-  digitalWrite(LED_PIN, HIGH);
-
+  button.update();
 
   if (VOLUME_HANDLING) {
     int volume = getVolume();
-    delay(200);
-    myDFPlayer.volume(volume);
+
+    if (lastVolume == -1 || abs(lastVolume - volume) > 30) {
+      Serial.print("volume=");
+      Serial.println(volume);
+      Serial.print("lastVolume=");
+      Serial.println(lastVolume);
+      lastVolume = volume;
+
+      Serial.print("Volume adjust=");
+      Serial.println(map(volume, 0, 1023, 0, 30));
+      delay(200);
+      myDFPlayer.volume(map(volume, 0, 1023, 0, 30));
+    }
   }
   if (audioFilesCount <= 0) {
     //Serial.println("Pas de fichiers audio dans le dossier MP3");
@@ -141,8 +159,6 @@ void loop() {
     if (strcmp(DIALER_TYPE, "UK") == 0) {
       numberDialed = getUkDialerNumber();
     }
-    Serial.print("numberDialed :");
-    Serial.println(numberDialed);
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
       dialedIndex++;
@@ -197,6 +213,9 @@ void loop() {
 
 /* Récupération de l'état de décroché/raccroché */
 bool isHangedUp() {
+  if (USE_BOUNCE_INSTEAD_OF_DIRECT) {
+    return button.pressed();
+  }
   return 1 == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
@@ -264,7 +283,5 @@ void Handler() {
 }
 
 long getVolume() {
-  int val = analogRead(A1);
-  int volume = map(val, 0, 1023, 0, 25);
-  return volume;
+  return analogRead(A1);
 }
