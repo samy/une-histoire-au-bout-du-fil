@@ -25,11 +25,17 @@
 #define DIAL_RANDOM false                     /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE "FR"                      /* FR pour cadrans français, UK pour britanniques */
 #define NO_DIALER false                       /* Pour les téléphones sans cadran */
-#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define DIALED_NUMBERS_MAX 2                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
 #define VOLUME_HANDLING true                  /* Activation de la molette de volume branchée sur le PIN A1 */
 #define LED_PIN D9                            /* Activation de la molette de volume branchée sur le PIN A1 */
-#define USE_BOUNCE_INSTEAD_OF_DIRECT 1
+#define USE_BOUNCE_INSTEAD_OF_DIRECT 0
+/* Lecture automatique et aléatoire au décrochage de l'appareil */
+#define RANDOM_PLAY_ON_HANG true
+/* Lecture automatique et aléatoire au décrochage de l'appareil */
+#define RANDOM_PLAY_ON_HANG true
+
+#define MAX_VOLUME 30
 
 
 #ifdef ARDUINO_ARCH_RP2040
@@ -49,7 +55,8 @@ Bounce2::Button button = Bounce2::Button();  // INSTANTIATE A Bounce2::Button OB
 
 void setup() {
 
-
+  Serial.print("IS_RP2040");
+  Serial.println(IS_RP2040);
 
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
@@ -74,7 +81,6 @@ void setup() {
 
     return;
   }
-
   Serial.println("OK");
   /* Etat initial du DFPlayer */
 
@@ -83,7 +89,8 @@ void setup() {
   myDFPlayer.pause();
   myDFPlayer.volume(7);
   delay(2000);
-  audioFilesCount = myDFPlayer.readFileCounts(STORAGE_DEVICE);
+
+  audioFilesCount = myDFPlayer.readFileCounts(1);
   Serial.print("audioFilesCount");
   Serial.println(audioFilesCount);
 
@@ -91,6 +98,7 @@ void setup() {
   button.interval(5);
   button.setPressedState(1);
 }
+
 
 void loop() {
   button.update();
@@ -106,9 +114,9 @@ void loop() {
       lastVolume = volume;
 
       Serial.print("Volume adjust=");
-      Serial.println(map(volume, 0, 1023, 0, 30));
+      Serial.println(map(volume, 0, 1023, 0, MAX_VOLUME));
       delay(200);
-      myDFPlayer.volume(map(volume, 0, 1023, 0, 30));
+      myDFPlayer.volume(map(volume, 0, 1023, 0, MAX_VOLUME));
     }
   }
   if (audioFilesCount <= 0) {
@@ -130,6 +138,12 @@ void loop() {
 
 
     if (phoneStatus == 0) {
+      /* Si l'option de lecture aléatoire au décrochage est activée, on joue un audio au hasard
+      le changement de phoneStatus évite qu'il soit joué plusieurs fois */
+      if (RANDOM_PLAY_ON_HANG) {
+        Serial.println("Lecture aleatoire au demarrage");
+        myDFPlayer.randomAll();
+      }
       dialedIndex = 0;
       phoneStatus = 1;
     }
@@ -205,7 +219,7 @@ void loop() {
     if (myDFPlayer.readState() == 514 || myDFPlayer.readState() == 512) {
       delay(1000);
 
-      myDFPlayer.playMp3Folder(random(0, audioFilesCount - 1));
+      myDFPlayer.randomAll();
     }
     delay(1000);
   }
