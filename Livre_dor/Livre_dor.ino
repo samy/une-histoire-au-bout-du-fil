@@ -69,7 +69,7 @@ void loop() {
   if (phoneClosed()) {
     guestbook.isOn = false;
     guestbook.stopEverything();
-    delay(1000);
+    delay(500);
     return;
   }
 
@@ -213,7 +213,7 @@ void loop() {
         Serial.println("Raccrochage");
         // Stop recording
         guestbook.stopEverything();
-        delay(2000);
+        delay(500);
         break;
       } else {
         if (switchToPlayMode()) {

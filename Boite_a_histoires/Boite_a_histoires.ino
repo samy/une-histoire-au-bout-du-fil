@@ -27,13 +27,11 @@
 #define NO_DIALER false                       /* Pour les téléphones sans cadran */
 #define DIALED_NUMBERS_MAX 2                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define VOLUME_HANDLING true                  /* Activation de la molette de volume branchée sur le PIN A1 */
+#define VOLUME_HANDLING false                  /* Activation de la molette de volume branchée sur le PIN A1 */
 #define LED_PIN D9                            /* Activation de la molette de volume branchée sur le PIN A1 */
 #define USE_BOUNCE_INSTEAD_OF_DIRECT 0
 /* Lecture automatique et aléatoire au décrochage de l'appareil */
-#define RANDOM_PLAY_ON_HANG true
-/* Lecture automatique et aléatoire au décrochage de l'appareil */
-#define RANDOM_PLAY_ON_HANG true
+#define RANDOM_PLAY_ON_HANG false
 
 #define MAX_VOLUME 30
 
