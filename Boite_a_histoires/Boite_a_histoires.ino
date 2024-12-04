@@ -20,16 +20,19 @@
 //#define PIN_HANG 3
 
 /* Fonctionnalités */
-#define INTRO_ENABLE false                    /* Pour activer le message au décrochage */
-#define INTRO_DELTA 20 * 3600 * 24            /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false                     /* Si le cadran doit lire au hasard */
-#define DIALER_TYPE "FR"                      /* FR pour cadrans français, UK pour britanniques */
-#define NO_DIALER false                       /* Pour les téléphones sans cadran */
-#define DIALED_NUMBERS_MAX 2                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define INTRO_ENABLE false         /* Pour activer le message au décrochage */
+#define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
+#define DIALER_ENABLE true
+#define DIALER_TYPE DIALER_TYPE_KEYPAD
+#define DIALER_COUNTRY "FR"                   /* FR pour cadrans français, UK pour britanniques */
+#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define VOLUME_HANDLING false                  /* Activation de la molette de volume branchée sur le PIN A1 */
+#define VOLUME_HANDLING false                 /* Activation de la molette de volume branchée sur le PIN A1 */
+#define LED_ENABLE false                      /* Activation de la LED d'indication de fonctionnement */
 #define LED_PIN D9                            /* Activation de la molette de volume branchée sur le PIN A1 */
 #define USE_BOUNCE_INSTEAD_OF_DIRECT 0
+
 /* Lecture automatique et aléatoire au décrochage de l'appareil */
 #define RANDOM_PLAY_ON_HANG false
 
@@ -42,6 +45,9 @@
 #define IS_RP2040 false /* A faire seulement si le TX DFPlayer est bien branché sur le RX du Xiao */
 #endif
 
+#define HANG_REVERSE true /* Pour la gestion d'un bouton secondaire pour le raccrochage */
+
+
 /* Gestion bouton supplémentaire */
 #define EXTRA_HANG false        /* Pour la gestion d'un bouton secondaire pour le raccrochage */
 #define EXTRA_HANG_PIN A2       /* PIN du bouton supplémentaire de raccrochage */
@@ -53,14 +59,21 @@ Bounce2::Button button = Bounce2::Button();  // INSTANTIATE A Bounce2::Button OB
 
 void setup() {
 
-  Serial.print("IS_RP2040");
-  Serial.println(IS_RP2040);
-
   /* On écoute le décrochage sur le PIN indiqué */
   pinMode(PIN_HANG, INPUT_PULLUP);
-  pinMode(A1, INPUT);
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
+  button.attach(PIN_HANG, INPUT_PULLUP);
+  button.interval(5);
+  button.setPressedState(HANG_REVERSE ? 0 : 1);
+
+  /* On écoute le PIN du réglage de volume */
+  if (VOLUME_HANDLING) {
+    pinMode(A1, INPUT);
+  }
+  if (LED_ENABLE) {
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, HIGH);
+  }
+
 
   if (EXTRA_HANG) {
     pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
@@ -69,21 +82,25 @@ void setup() {
   mySoftwareSerial.begin(9600);
   /* Connexion série pour la remontée d'informations au PC */
   /* Connexion série pour la communication avec le DFPlayer */
-  /* Initiation de la gestion du cadran rotatif */
-  RotaryDial2::setup(PIN_PULSE, DIALED_NUMBERS_MAX);
+  if (DIALER_ENABLE) {
+    if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
+
+    } else {
+      /* Initiation de la gestion du cadran rotatif */
+      RotaryDial2::setup(PIN_PULSE, DIALED_NUMBERS_MAX);
+    }
+  }
+
 
   /* Connexion au DFPlayer */
   if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
     Serial.println("bad");
-
-
     return;
   }
   Serial.println("OK");
   /* Etat initial du DFPlayer */
 
   myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
-  Serial.println("Pause78");
   myDFPlayer.pause();
   myDFPlayer.volume(7);
   delay(2000);
@@ -91,10 +108,6 @@ void setup() {
   audioFilesCount = myDFPlayer.readFileCounts(1);
   Serial.print("audioFilesCount");
   Serial.println(audioFilesCount);
-
-  button.attach(PIN_HANG, INPUT_PULLUP);
-  button.interval(5);
-  button.setPressedState(1);
 }
 
 
@@ -105,10 +118,6 @@ void loop() {
     int volume = getVolume();
 
     if (lastVolume == -1 || abs(lastVolume - volume) > 30) {
-      Serial.print("volume=");
-      Serial.println(volume);
-      Serial.print("lastVolume=");
-      Serial.println(lastVolume);
       lastVolume = volume;
 
       Serial.print("Volume adjust=");
@@ -154,23 +163,27 @@ void loop() {
     playIntro();
   }
   phoneStatus = 2;
-  if (!NO_DIALER) {
+  if (DIALER_ENABLE) {
+    if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
 
-    /* Si un numéro a été composé sur le téléphone, on le stocke */
-    if (strcmp(DIALER_TYPE, "FR") == 0) {
-      if (RotaryDial2::available()) {
+    } else {
+      /* Si un numéro a été composé sur le téléphone, on le stocke */
+      if (strcmp(DIALER_COUNTRY, "FR") == 0) {
+        if (RotaryDial2::available()) {
 
-        Serial.println("check dial");
-        delay(200);
+          Serial.println("check dial");
+          delay(200);
 
-        numberDialed = RotaryDial2::read();
-        Serial.print("numberDialed");
-        Serial.println(numberDialed);
+          numberDialed = RotaryDial2::read();
+          Serial.print("numberDialed");
+          Serial.println(numberDialed);
+        }
+      }
+      if (strcmp(DIALER_COUNTRY, "UK") == 0) {
+        numberDialed = getUkRotaryDialerNumber();
       }
     }
-    if (strcmp(DIALER_TYPE, "UK") == 0) {
-      numberDialed = getUkDialerNumber();
-    }
+
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
       dialedIndex++;
@@ -228,7 +241,7 @@ bool isHangedUp() {
   if (USE_BOUNCE_INSTEAD_OF_DIRECT) {
     return button.pressed();
   }
-  return 1 == digitalRead(PIN_HANG);
+  return (HANG_REVERSE ? 0 : 1) == digitalRead(PIN_HANG);
 }
 /* Récupération de l'état de décroché/raccroché */
 bool isExtraHangedUp() {
@@ -257,7 +270,7 @@ void playIntro() {
   myDFPlayer.playMp3Folder(0); /* L'intro est stockée dans le fichier commençant par 0000 dans le dossier MP3 */
 }
 
-int getUkDialerNumber() {
+int getUkRotaryDialerNumber() {
   int reading = digitalRead(PIN_PULSE);
   int numberDialed = -1;
   if ((millis() - lastStateChangeTime) > dialHasFinishedRotatingAfterMs) {

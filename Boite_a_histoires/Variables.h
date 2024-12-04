@@ -41,3 +41,10 @@ int finalDialedNumber = 0;
 #ifndef VOLUME_HANDLING
 #define VOLUME_HANDLING false //A activer pour avoir la gestion du volume sur le PIN A1
 #endif
+
+#ifndef USE_KEYPAD
+#define USE_KEYPAD false //A activer pour gérer un téléphone S63 à touches
+#endif
+
+#define DIALER_TYPE_ROTARY "rotary"
+#define DIALER_TYPE_KEYPAD "keypad"
