@@ -1,12 +1,13 @@
-#ifdef USE_TINYUSB
-#include <Adafruit_TinyUSB.h>
-#endif
+
 #include <Bounce2.h>
 
 /* Bibliothèques requises */
 #include <SoftwareSerial.h>      /* Connexion série */
 #include "DFRobotDFPlayerMini.h" /* Lecteur MP3 */
 #include "RotaryDial2.h"
+#include <Keypad_MC17.h>
+#include <Wire.h>
+#include <Keypad.h>
 
 /* Définition des constantes */
 // Cadran FR
@@ -38,13 +39,6 @@
 
 #define MAX_VOLUME 30
 
-
-#ifdef ARDUINO_ARCH_RP2040
-#define IS_RP2040 true
-#else
-#define IS_RP2040 false /* A faire seulement si le TX DFPlayer est bien branché sur le RX du Xiao */
-#endif
-
 #define HANG_REVERSE true /* Pour la gestion d'un bouton secondaire pour le raccrochage */
 
 
@@ -55,6 +49,7 @@
 
 /* Fichier avec les valeurs par défaut, pour celles qui n'ont pas été personnalisées ci-dessus */
 #include "Variables.h"
+Keypad_MC17 keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS, I2CADDR);
 Bounce2::Button button = Bounce2::Button();  // INSTANTIATE A Bounce2::Button OBJECT
 
 void setup() {
@@ -84,7 +79,8 @@ void setup() {
   /* Connexion série pour la communication avec le DFPlayer */
   if (DIALER_ENABLE) {
     if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
-
+      Wire.begin();  // now needed
+      keypad.begin();
     } else {
       /* Initiation de la gestion du cadran rotatif */
       RotaryDial2::setup(PIN_PULSE, DIALED_NUMBERS_MAX);
@@ -165,7 +161,12 @@ void loop() {
   phoneStatus = 2;
   if (DIALER_ENABLE) {
     if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
-
+      char key = keypad.getKey();
+      if (key) {
+        numberDialed = key;
+        Serial.print("numberDialedKeypad");
+        Serial.println(numberDialed);
+      }
     } else {
       /* Si un numéro a été composé sur le téléphone, on le stocke */
       if (strcmp(DIALER_COUNTRY, "FR") == 0) {
@@ -175,7 +176,7 @@ void loop() {
           delay(200);
 
           numberDialed = RotaryDial2::read();
-          Serial.print("numberDialed");
+          Serial.print("numberDialedRotary");
           Serial.println(numberDialed);
         }
       }
@@ -302,9 +303,6 @@ int getUkRotaryDialerNumber() {
   }
   lastState = reading;
   return numberDialed;
-}
-void Handler() {
-  Serial.println("Pushed!");
 }
 
 long getVolume() {

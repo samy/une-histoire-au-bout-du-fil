@@ -11,12 +11,7 @@ long unsigned int debounceDelay = 10;
 int volume = 0;
 int lastVolume = -1;
 
-/* Déclaration des variables */
-#if (IS_RP2040)
 #define mySoftwareSerial Serial1
-#else
-SoftwareSerial mySoftwareSerial(9, 10);  // RX, TX
-#endif
 
 DFRobotDFPlayerMini myDFPlayer;
 int numberSpecified = -1;
@@ -46,5 +41,31 @@ int finalDialedNumber = 0;
 #define USE_KEYPAD false //A activer pour gérer un téléphone S63 à touches
 #endif
 
+#ifndef KEYPAD_ROWS_NUMBER
+#define KEYPAD_ROWS_NUMBER 4
+#endif
+
+#ifndef KEYPAD_COLS_NUMBER
+#define KEYPAD_COLS_NUMBER 4
+#endif
+
 #define DIALER_TYPE_ROTARY "rotary"
 #define DIALER_TYPE_KEYPAD "keypad"
+
+#ifndef DIALER_TYPE
+#define DIALER_TYPE DIALER_TYPE_ROTARY
+#endif
+
+#define I2CADDR 0x20
+
+
+const byte ROWS = KEYPAD_ROWS_NUMBER;  //four rows
+const byte COLS = KEYPAD_COLS_NUMBER;  //three columns
+char keys[ROWS][COLS] = {
+  { '1', '2', '3', 'A' },
+  { '4', '5', '6', 'B' },
+  { '7', '8', '9', 'C' },
+  { '*', '0', '#', 'D' }
+};
+byte rowPins[ROWS] = { 7, 6, 5, 4 };  //connect to the row pinouts of the keypad
+byte colPins[COLS] = { 3, 2, 1, 0 };  //connect to the column pinouts of the keypad
