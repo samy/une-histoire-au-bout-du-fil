@@ -26,12 +26,12 @@
 #define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
 #define DIALER_ENABLE true
 #define DIALER_TYPE DIALER_TYPE_KEYPAD
-#define DIALER_COUNTRY "FR"                   /* FR pour cadrans français, UK pour britanniques */
-#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
-#define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define VOLUME_HANDLING false                 /* Activation de la molette de volume branchée sur le PIN A1 */
-#define LED_ENABLE false                      /* Activation de la LED d'indication de fonctionnement */
-#define LED_PIN D9                            /* Activation de la molette de volume branchée sur le PIN A1 */
+#define DIALER_COUNTRY "FR"   /* FR pour cadrans français, UK pour britanniques */
+#define DIALED_NUMBERS_MAX 1  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define STORAGE_DEVICE 1      /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
+#define VOLUME_HANDLING false /* Activation de la molette de volume branchée sur le PIN A1 */
+#define LED_ENABLE false      /* Activation de la LED d'indication de fonctionnement */
+#define LED_PIN D9            /* Activation de la molette de volume branchée sur le PIN A1 */
 #define USE_BOUNCE_INSTEAD_OF_DIRECT 0
 
 /* Lecture automatique et aléatoire au décrochage de l'appareil */
@@ -39,7 +39,7 @@
 
 #define MAX_VOLUME 30
 
-#define HANG_REVERSE true /* Pour la gestion d'un bouton secondaire pour le raccrochage */
+#define HANG_REVERSE false /* Pour la gestion d'un bouton secondaire pour le raccrochage */
 
 
 /* Gestion bouton supplémentaire */
@@ -93,17 +93,15 @@ void setup() {
     Serial.println("bad");
     return;
   }
-  Serial.println("OK");
-  /* Etat initial du DFPlayer */
+  Serial.println("Starting successfully");
 
   myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
   myDFPlayer.pause();
-  myDFPlayer.volume(7);
+  myDFPlayer.volume(8);
   delay(2000);
-
-  audioFilesCount = myDFPlayer.readFileCounts(1);
-  Serial.print("audioFilesCount");
-  Serial.println(audioFilesCount);
+  // audioFilesCount = myDFPlayer.readFileCounts(1);
+  // Serial.print("audioFilesCount");
+  // Serial.println(audioFilesCount);
 }
 
 
@@ -116,7 +114,6 @@ void loop() {
     if (lastVolume == -1 || abs(lastVolume - volume) > 30) {
       lastVolume = volume;
 
-      Serial.print("Volume adjust=");
       Serial.println(map(volume, 0, 1023, 0, MAX_VOLUME));
       delay(200);
       myDFPlayer.volume(map(volume, 0, 1023, 0, MAX_VOLUME));
@@ -130,7 +127,7 @@ void loop() {
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
 
-    Serial.println("raccroche");
+    Serial.println("Offline");
     delay(200);
 
     phoneStatus = 0;
@@ -144,7 +141,7 @@ void loop() {
       /* Si l'option de lecture aléatoire au décrochage est activée, on joue un audio au hasard
       le changement de phoneStatus évite qu'il soit joué plusieurs fois */
       if (RANDOM_PLAY_ON_HANG) {
-        Serial.println("Lecture aleatoire au demarrage");
+        Serial.println("Random play on start");
         myDFPlayer.randomAll();
       }
       dialedIndex = 0;
@@ -163,21 +160,16 @@ void loop() {
     if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
       char key = keypad.getKey();
       if (key) {
-        numberDialed = key;
-        Serial.print("numberDialedKeypad");
-        Serial.println(numberDialed);
+        numberDialed = convertKeypadToInt(key);
       }
     } else {
       /* Si un numéro a été composé sur le téléphone, on le stocke */
       if (strcmp(DIALER_COUNTRY, "FR") == 0) {
         if (RotaryDial2::available()) {
 
-          Serial.println("check dial");
           delay(200);
 
           numberDialed = RotaryDial2::read();
-          Serial.print("numberDialedRotary");
-          Serial.println(numberDialed);
         }
       }
       if (strcmp(DIALER_COUNTRY, "UK") == 0) {
@@ -191,33 +183,27 @@ void loop() {
 
       /* We store dialed numbers */
       if (dialedIndex <= DIALED_NUMBERS_MAX) {
-        dialedNumbers[dialedIndex] = numberDialed;
+        dialedNumbers[dialedIndex - 1] = numberDialed;
         numberDialed = -1;
         if (dialedIndex < DIALED_NUMBERS_MAX) {
-          Serial.print("dialedNumber :");
-          Serial.println(dialedNumbers[dialedIndex]);
-
           return;
         }
       }
-      Serial.print("dialedIndex");
-      Serial.println(dialedIndex);
       if (dialedIndex > DIALED_NUMBERS_MAX) {
-        Serial.println("reset");
         dialedIndex = 0;
         numberDialed = -1;
         return;
       }
-      for (int i = 1; i <= dialedIndex; i++) {
-        finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - i) * dialedNumbers[i];
+      for (int i = 0; i < dialedIndex; i++) {
+        finalDialedNumber += pow(10, DIALED_NUMBERS_MAX - 1 - i) * dialedNumbers[i];
+        dialedNumbers[i] = 0;
       }
       dialedIndex = 0;
-      Serial.println("Pause 169");
       myDFPlayer.pause();
       if (DIAL_RANDOM) {
         myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
       } else {
-        Serial.print("finalDialedNumber");
+        Serial.print("finalDialedNumber=");
         Serial.println(finalDialedNumber);
         myDFPlayer.playMp3Folder(finalDialedNumber);
       }
@@ -307,4 +293,38 @@ int getUkRotaryDialerNumber() {
 
 long getVolume() {
   return analogRead(A1);
+}
+int convertKeypadToInt(char key) {
+  switch (key) {
+    case '1':
+      return 1;
+      break;
+    case '2':
+      return 2;
+      break;
+    case '3':
+      return 3;
+      break;
+    case '4':
+      return 4;
+      break;
+    case '5':
+      return 5;
+      break;
+    case '6':
+      return 6;
+      break;
+    case '7':
+      return 7;
+      break;
+    case '8':
+      return 8;
+      break;
+    case '9':
+      return 9;
+      break;
+    default:
+      return 0;
+      break;
+  }
 }

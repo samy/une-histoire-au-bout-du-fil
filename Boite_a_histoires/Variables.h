@@ -22,7 +22,7 @@ bool currentState = 0;
 
 bool isFirstPlaySinceHangUp = true;
 
-int dialedNumbers[DIALED_NUMBERS_MAX];
+int dialedNumbers[DIALED_NUMBERS_MAX] = {};
 int dialedIndex = 0;
 
 int numberDialed = -1;
