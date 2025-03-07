@@ -30,15 +30,15 @@ int finalDialedNumber = 0;
 
 
 #ifndef STORAGE_DEVICE
-#define STORAGE_DEVICE 1 //2 pour SD, 1 pour USB
+#define STORAGE_DEVICE 1  //2 pour SD, 1 pour USB
 #endif
 
 #ifndef VOLUME_HANDLING
-#define VOLUME_HANDLING false //A activer pour avoir la gestion du volume sur le PIN A1
+#define VOLUME_HANDLING false  //A activer pour avoir la gestion du volume sur le PIN A1
 #endif
 
 #ifndef USE_KEYPAD
-#define USE_KEYPAD false //A activer pour gérer un téléphone S63 à touches
+#define USE_KEYPAD false  //A activer pour gérer un téléphone S63 à touches
 #endif
 
 #ifndef KEYPAD_ROWS_NUMBER
@@ -54,6 +54,14 @@ int finalDialedNumber = 0;
 
 #ifndef DIALER_TYPE
 #define DIALER_TYPE DIALER_TYPE_ROTARY
+#endif
+
+#ifndef RANDOM_PLAY_ON_HANG
+#define RANDOM_PLAY_ON_HANG false
+#endif
+
+#ifndef RANDOM_PLAY_ON_HANG_START_ON_TRACK
+#define RANDOM_PLAY_ON_HANG_START_ON_TRACK -1
 #endif
 
 #define I2CADDR 0x20

@@ -1,4 +1,3 @@
-
 #include <Bounce2.h>
 
 /* Bibliothèques requises */
@@ -21,21 +20,23 @@
 //#define PIN_HANG 3
 
 /* Fonctionnalités */
-#define INTRO_ENABLE false         /* Pour activer le message au décrochage */
-#define INTRO_DELTA 20 * 3600 * 24 /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false          /* Si le cadran doit lire au hasard */
+#define INTRO_ENABLE true /* Pour activer le message au décrochage */
+#define INTRO_DELTA 1     /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define DIAL_RANDOM false /* Si le cadran doit lire au hasard */
 #define DIALER_ENABLE true
 #define DIALER_TYPE DIALER_TYPE_KEYPAD
-#define DIALER_COUNTRY "FR"   /* FR pour cadrans français, UK pour britanniques */
-#define DIALED_NUMBERS_MAX 1  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
-#define STORAGE_DEVICE 1      /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define VOLUME_HANDLING false /* Activation de la molette de volume branchée sur le PIN A1 */
-#define LED_ENABLE false      /* Activation de la LED d'indication de fonctionnement */
-#define LED_PIN D9            /* Activation de la molette de volume branchée sur le PIN A1 */
+#define DIALER_COUNTRY "FR"                   /* FR pour cadrans français, UK pour britanniques */
+#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
+#define VOLUME_HANDLING false                 /* Activation de la molette de volume branchée sur le PIN A1 */
+#define LED_ENABLE true                       /* Activation de la LED d'indication de fonctionnement */
+#define LED_PIN D9                            /* Gestion de la LED */
 #define USE_BOUNCE_INSTEAD_OF_DIRECT 0
 
 /* Lecture automatique et aléatoire au décrochage de l'appareil */
 #define RANDOM_PLAY_ON_HANG false
+#define RANDOM_PLAY_ON_HANG_START_ON_TRACK 1
+
 
 #define MAX_VOLUME 30
 
@@ -60,33 +61,39 @@ void setup() {
   button.interval(5);
   button.setPressedState(HANG_REVERSE ? 0 : 1);
 
-  /* On écoute le PIN du réglage de volume */
+  /* Optionnel: Gestion du volume */
   if (VOLUME_HANDLING) {
     pinMode(A1, INPUT);
   }
+
+  /* Optionnel: LED d'indication de fonctionnement */
   if (LED_ENABLE) {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
   }
 
-
+  /* Optionnel: 2e dispositif de raccrochage */
   if (EXTRA_HANG) {
     pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
   }
-  Serial.begin(9600);
-  mySoftwareSerial.begin(9600);
+
   /* Connexion série pour la remontée d'informations au PC */
+  Serial.begin(9600);
+
   /* Connexion série pour la communication avec le DFPlayer */
+  mySoftwareSerial.begin(9600);
+
+  /* Gestion du clavier */
   if (DIALER_ENABLE) {
+    /* Clavier à touches */
     if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
       Wire.begin();  // now needed
       keypad.begin();
     } else {
-      /* Initiation de la gestion du cadran rotatif */
+      /* Cadran rotatif */
       RotaryDial2::setup(PIN_PULSE, DIALED_NUMBERS_MAX);
     }
   }
-
 
   /* Connexion au DFPlayer */
   if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
@@ -97,17 +104,14 @@ void setup() {
 
   myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
   myDFPlayer.pause();
-  myDFPlayer.volume(8);
+  myDFPlayer.volume(7);
   delay(2000);
-  // audioFilesCount = myDFPlayer.readFileCounts(1);
-  // Serial.print("audioFilesCount");
-  // Serial.println(audioFilesCount);
 }
-
 
 void loop() {
   button.update();
 
+  /* Optionnel: Actualisation du volume */
   if (VOLUME_HANDLING) {
     int volume = getVolume();
 
@@ -119,36 +123,40 @@ void loop() {
       myDFPlayer.volume(map(volume, 0, 1023, 0, MAX_VOLUME));
     }
   }
-  if (audioFilesCount <= 0) {
-    //Serial.println("Pas de fichiers audio dans le dossier MP3");
-    //return;
-  }
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
 
     Serial.println("Offline");
     delay(200);
+    if (phoneStatus != 0) {
+      myDFPlayer.pause();
+    }
 
     phoneStatus = 0;
     dialedIndex = 0;
-    myDFPlayer.pause();
     return;
   } else {
-
-
     if (phoneStatus == 0) {
+      myDFPlayer.available();
+
+      delay(300);
       /* Si l'option de lecture aléatoire au décrochage est activée, on joue un audio au hasard
       le changement de phoneStatus évite qu'il soit joué plusieurs fois */
       if (RANDOM_PLAY_ON_HANG) {
-        Serial.println("Random play on start");
-        myDFPlayer.randomAll();
+        if (RANDOM_PLAY_ON_HANG_START_ON_TRACK != -1) {
+          Serial.print("Play on start: track ");
+          Serial.println(RANDOM_PLAY_ON_HANG_START_ON_TRACK);
+          myDFPlayer.play(RANDOM_PLAY_ON_HANG_START_ON_TRACK);
+        } else {
+          Serial.println("Random play on start");
+          myDFPlayer.randomAll();
+        }
       }
       dialedIndex = 0;
       phoneStatus = 1;
     }
   }
-
 
   if (timeSinceLastIntroPlay == 99999 || (phoneStatus == 1 && needToPlayIntro())) {
     Serial.println("needToPlayIntro?");
@@ -201,7 +209,12 @@ void loop() {
       dialedIndex = 0;
       myDFPlayer.pause();
       if (DIAL_RANDOM) {
-        myDFPlayer.play(random(1, audioFilesCount + 1));  //We need to add 1 to let the last audio played
+        finalDialedNumber = random(1, audioFilesCount + 1);
+        myDFPlayer.available();
+        delay(300);
+        Serial.print("randomDialedNumber=");
+        Serial.println(finalDialedNumber);
+        myDFPlayer.randomAll();  //We need to add 1 to let the last audio played
       } else {
         Serial.print("finalDialedNumber=");
         Serial.println(finalDialedNumber);
