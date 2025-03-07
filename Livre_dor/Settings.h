@@ -1,8 +1,8 @@
 #include "Arduino.h"
 
-#define PIN_HANG 15         //Port lié au fil du décrochage
+#define PIN_HANG 17         //Port lié au fil du décrochage
 #define PIN_PULSE 2         //Correspond au C du cadran
-#define PIN_MODE_CHANGE 17  //Pour indiquer qu'on doit changer de mode
+#define PIN_MODE_CHANGE 15  //Pour indiquer qu'on doit changer de mode
 #define PIN_LED 14           //Pour indiquer que le mode enregistrement est actif
 
 /* Optionnels */

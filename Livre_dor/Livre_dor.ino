@@ -67,6 +67,7 @@ void loop() {
 
   /* Raccrochage */
   if (phoneClosed()) {
+    Serial.println("Phone closed");
     guestbook.isOn = false;
     guestbook.stopEverything();
     delay(500);
@@ -82,6 +83,7 @@ void loop() {
   switch (guestbook.phoneMode) {
     case Mode::Sleep:
       if (guestbook.isRaccroche()) {
+
         guestbook.isOn = false;
         audioShield.muteHeadphone();
         guestbook.introHasBeenPlayed = false;
@@ -423,7 +425,8 @@ void initEnvironnement() {
 
   if (!SD.exists(RECORDS_FOLDER_NAME)) {
     if (SD.mkdir(RECORDS_FOLDER_NAME)) {
-      Serial.println("Created arduino/log directory");
+      Serial.print("Created ");
+      Serial.println(RECORDS_FOLDER_NAME);
     } else {
       Serial.println("Failed to create arduino/log directory");
     }
@@ -434,8 +437,10 @@ void initEnvironnement() {
   guestbook.MTPcheckInterval = MTP.storage()->get_DeltaDeviceCheckTimeMS();
   Serial.println("Added SD card via MTP");
 #endif
-  Serial.println("Activation cadran");
-  RotaryDial2::setup(PIN_PULSE);
+  if (RECORD_ON_DIAL) {
+    Serial.println("Activation cadran");
+    RotaryDial2::setup(PIN_PULSE);
+  }
 }
 
 time_t getTeensy3Time() {
