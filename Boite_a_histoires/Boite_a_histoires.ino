@@ -1,111 +1,103 @@
-#include <Bounce2.h>
-
 /* Bibliothèques requises */
-#include <SoftwareSerial.h>      /* Connexion série */
-#include "DFRobotDFPlayerMini.h" /* Lecteur MP3 */
+#include <Bounce2.h>
 #include "RotaryDial2.h"
 #include <Keypad_MC17.h>
 #include <Wire.h>
 #include <Keypad.h>
+#include "DFRobotDFPlayerMini.h" /* Lecteur MP3 */
 
-/* Définition des constantes */
-// Cadran FR
-#define PIN_PULSE D10
-#define PIN_HANG D3
 
-#define PIN_LED_INFO D9
 
-// Cadran UK
-//#define PIN_PULSE 2
-//#define PIN_HANG 3
 
-/* Fonctionnalités */
-#define INTRO_ENABLE true /* Pour activer le message au décrochage */
-#define INTRO_DELTA 1     /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false /* Si le cadran doit lire au hasard */
-#define DIALER_ENABLE true
-#define DIALER_TYPE DIALER_TYPE_KEYPAD
-#define DIALER_COUNTRY "FR"                   /* FR pour cadrans français, UK pour britanniques */
-#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
-#define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define VOLUME_HANDLING false                 /* Activation de la molette de volume branchée sur le PIN A1 */
-#define LED_ENABLE true                       /* Activation de la LED d'indication de fonctionnement */
+// Fonctionnalités
+#define INTRO_ENABLE true              /* Pour activer le message au décrochage 
+#define INTRO_DELTA 1     /* Temps minimal en secondes entre deux diffusions du message de décrochage
+#define DIAL_RANDOM false /* Si le cadran doit lire au hasard
+#define DIALER_ENABLE true /* Pour activer le clavier
+#define DIALER_TYPE DIALER_TYPE_ROTARY /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif
+#define DIALER_COUNTRY "FR"                   /* FR pour cadrans français, UK pour britanniques
+#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc)
+#define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB
+#define LED_ENABLE true                       /* Activation de la LED d'indication de fonctionnement
 #define LED_PIN D9                            /* Gestion de la LED */
-#define USE_BOUNCE_INSTEAD_OF_DIRECT 0
+#define USE_BOUNCE_INSTEAD_OF_DIRECT 0 /* Pour des systèmes de raccrochage un peu sensibles
 
-/* Lecture automatique et aléatoire au décrochage de l'appareil */
-#define RANDOM_PLAY_ON_HANG false
-#define RANDOM_PLAY_ON_HANG_START_ON_TRACK 1
+#define RANDOM_PLAY_ON_HANG false /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil
+#define RANDOM_PLAY_ON_HANG_START_ON_TRACK 1 /* En mode aléatoire, le numéro du morceau joué au démarrage
 
+#define VOLUME_HANDLING false                 /* Activation de la molette de volume branchée sur le PIN A1
+#define MAX_VOLUME 30 /* Volume maximal quand la molette est au maximum
 
-#define MAX_VOLUME 30
+#define HANG_REVERSE false /* Inversion du raccrochage, selon les appareils
 
-#define HANG_REVERSE false /* Pour la gestion d'un bouton secondaire pour le raccrochage */
+// Gestion bouton supplémentaire
+#define EXTRA_HANG false        /* Activation du bouton secondaire pour le raccrochage
+#define EXTRA_HANG_PIN A2       /* PIN du bouton supplémentaire de raccrochage
+#define EXTRA_HANG_REVERSE true /* Si le fonctionnement de ce bouton supplémentaire est inversé
 
-
-/* Gestion bouton supplémentaire */
-#define EXTRA_HANG false        /* Pour la gestion d'un bouton secondaire pour le raccrochage */
-#define EXTRA_HANG_PIN A2       /* PIN du bouton supplémentaire de raccrochage */
-#define EXTRA_HANG_REVERSE true /* Si le fonctionnement de ce bouton supplémentaire est inversé */
-
-/* Fichier avec les valeurs par défaut, pour celles qui n'ont pas été personnalisées ci-dessus */
+// Inclusion des valeurs par défaut pour celles qui n'ont pas été personnalisées ci-dessus
 #include "Variables.h"
-Keypad_MC17 keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS, I2CADDR);
-Bounce2::Button button = Bounce2::Button();  // INSTANTIATE A Bounce2::Button OBJECT
+
+if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
+  Keypad_MC17 keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS, I2CADDR);
+}
+
+// "Bouton" utilisé pour gérer le décrochage
+Bounce2::Button button = Bounce2::Button();
 
 void setup() {
 
-  /* On écoute le décrochage sur le PIN indiqué */
-  pinMode(PIN_HANG, INPUT_PULLUP);
-  button.attach(PIN_HANG, INPUT_PULLUP);
-  button.interval(5);
-  button.setPressedState(HANG_REVERSE ? 0 : 1);
+/* On écoute le décrochage sur le PIN indiqué */
+pinMode(PIN_HANG, INPUT_PULLUP);
+button.attach(PIN_HANG, INPUT_PULLUP);
+button.interval(5);
+button.setPressedState(HANG_REVERSE ? 0 : 1);
 
-  /* Optionnel: Gestion du volume */
-  if (VOLUME_HANDLING) {
-    pinMode(A1, INPUT);
+/* Optionnel: Gestion du volume */
+if (VOLUME_HANDLING) {
+  pinMode(A1, INPUT);
+}
+
+/* Optionnel: LED d'indication de fonctionnement */
+if (LED_ENABLE) {
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
+}
+
+/* Optionnel: 2e dispositif de raccrochage */
+if (EXTRA_HANG) {
+  pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
+}
+
+/* Connexion série pour la remontée d'informations au PC */
+Serial.begin(9600);
+
+/* Connexion série pour la communication avec le DFPlayer */
+mySoftwareSerial.begin(9600);
+
+/* Gestion du clavier */
+if (DIALER_ENABLE) {
+  /* Clavier à touches */
+  if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
+    Wire.begin();  // now needed
+    keypad.begin();
+  } else {
+    /* Cadran rotatif */
+    RotaryDial2::setup(PIN_PULSE, DIALED_NUMBERS_MAX);
   }
+}
 
-  /* Optionnel: LED d'indication de fonctionnement */
-  if (LED_ENABLE) {
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
-  }
+/* Connexion au DFPlayer */
+if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
+  Serial.println("bad");
+  return;
+}
+Serial.println("Starting successfully");
 
-  /* Optionnel: 2e dispositif de raccrochage */
-  if (EXTRA_HANG) {
-    pinMode(EXTRA_HANG_PIN, INPUT_PULLUP);
-  }
-
-  /* Connexion série pour la remontée d'informations au PC */
-  Serial.begin(9600);
-
-  /* Connexion série pour la communication avec le DFPlayer */
-  mySoftwareSerial.begin(9600);
-
-  /* Gestion du clavier */
-  if (DIALER_ENABLE) {
-    /* Clavier à touches */
-    if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
-      Wire.begin();  // now needed
-      keypad.begin();
-    } else {
-      /* Cadran rotatif */
-      RotaryDial2::setup(PIN_PULSE, DIALED_NUMBERS_MAX);
-    }
-  }
-
-  /* Connexion au DFPlayer */
-  if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
-    Serial.println("bad");
-    return;
-  }
-  Serial.println("Starting successfully");
-
-  myDFPlayer.outputDevice(STORAGE_DEVICE);  //2 pour SD, 1 pour clé USB
-  myDFPlayer.pause();
-  myDFPlayer.volume(7);
-  delay(2000);
+myDFPlayer.outputDevice(STORAGE_DEVICE);
+myDFPlayer.pause();
+myDFPlayer.volume(7);
+delay(2000);
 }
 
 void loop() {

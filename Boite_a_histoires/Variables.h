@@ -28,6 +28,13 @@ int dialedIndex = 0;
 int numberDialed = -1;
 int finalDialedNumber = 0;
 
+// Cadran FR
+#define PIN_PULSE D10
+#define PIN_HANG D3
+
+// Cadran UK
+//#define PIN_PULSE 2
+//#define PIN_HANG 3
 
 #ifndef STORAGE_DEVICE
 #define STORAGE_DEVICE 1  //2 pour SD, 1 pour USB
@@ -62,6 +69,10 @@ int finalDialedNumber = 0;
 
 #ifndef RANDOM_PLAY_ON_HANG_START_ON_TRACK
 #define RANDOM_PLAY_ON_HANG_START_ON_TRACK -1
+#endif
+
+#ifndef MAX_VOLUME
+#define MAX_VOLUME 30
 #endif
 
 #define I2CADDR 0x20
