@@ -181,7 +181,7 @@ void loop() {
     if (numberDialed != -1) {
       dialedIndex++;
 
-      /* We store dialed numbers */
+      /* Stockage des numéros composés */
       if (dialedIndex <= DIALED_NUMBERS_MAX) {
         dialedNumbers[dialedIndex - 1] = numberDialed;
         numberDialed = -1;
@@ -206,7 +206,7 @@ void loop() {
         delay(300);
         Serial.print("randomDialedNumber=");
         Serial.println(finalDialedNumber);
-        myDFPlayer.randomAll();  //We need to add 1 to let the last audio played
+        myDFPlayer.randomAll();
       } else {
         Serial.print("finalDialedNumber=");
         Serial.println(finalDialedNumber);
@@ -266,7 +266,6 @@ int getUkRotaryDialerNumber() {
   int reading = digitalRead(PIN_PULSE);
   int numberDialed = -1;
   if ((millis() - lastStateChangeTime) > dialHasFinishedRotatingAfterMs) {
-    // the dial isn't being dialed, or has just finished being dialed.
     if (needToPrint) {
       // if it's only just finished being dialed, we need to send the number down the serial
       // line and reset the count. We mod the count by 10 because '0' will send 10 pulses.
