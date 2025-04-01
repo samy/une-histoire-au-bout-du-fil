@@ -10,17 +10,19 @@
 
 
 // Fonctionnalités
-#define INTRO_ENABLE true                     /* Pour activer le message au décrochage  */
+#define INTRO_ENABLE false                     /* Pour activer le message au décrochage  */
 #define INTRO_DELTA 1                         /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 #define DIAL_RANDOM false                     /* Si le cadran doit lire au hasard */
 #define DIALER_ENABLE true                    /* Pour activer le clavier */
-#define DIALER_TYPE DIALER_TYPE_ROTARY        /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
+#define DIALER_TYPE DIALER_TYPE_KEYPAD        /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
 #define DIALER_COUNTRY "FR"                   /* FR pour cadrans français, UK pour britanniques */
 #define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
 #define LED_ENABLE true                       /* Activation de la LED d'indication de fonctionnement */
 #define LED_PIN D9                            /* Gestion de la LED */
 #define USE_BOUNCE_INSTEAD_OF_DIRECT 0        /* Pour des systèmes de raccrochage un peu sensibles */
+
+#define KEYPAD_REVERSED_MATRIX true
 
 #define RANDOM_PLAY_ON_HANG false            /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
 #define RANDOM_PLAY_ON_HANG_START_ON_TRACK 1 /* En mode aléatoire, le numéro du morceau joué au démarrage */
@@ -93,7 +95,7 @@ void setup() {
 
   myDFPlayer.outputDevice(STORAGE_DEVICE);
   myDFPlayer.pause();
-  myDFPlayer.volume(7);
+  myDFPlayer.volume(9);
   delay(2000);
 }
 
