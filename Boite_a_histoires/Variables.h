@@ -53,7 +53,11 @@ int finalDialedNumber = 0;
 #endif
 
 #ifndef KEYPAD_COLS_NUMBER
-#define KEYPAD_COLS_NUMBER 4
+#define KEYPAD_COLS_NUMBER 3
+#endif
+
+#ifndef KEYPAD_REVERSED_MATRIX
+#define KEYPAD_REVERSED_MATRIX false
 #endif
 
 #define DIALER_TYPE_ROTARY "rotary"
@@ -80,11 +84,20 @@ int finalDialedNumber = 0;
 
 const byte ROWS = KEYPAD_ROWS_NUMBER;  //four rows
 const byte COLS = KEYPAD_COLS_NUMBER;  //three columns
+#if KEYPAD_REVERSED_MATRIX == false
 char keys[ROWS][COLS] = {
-  { '1', '2', '3', 'A' },
-  { '4', '5', '6', 'B' },
-  { '7', '8', '9', 'C' },
-  { '*', '0', '#', 'D' }
+  { '1', '2', '3' },
+  { '4', '5', '6' },
+  { '7', '8', '9' },
+  { '*', '0', '#' }
 };
+#else
+char keys[ROWS][COLS] = {
+  { '#', '0', '*' },
+  { '9', '8', '7' },
+  { '6', '5', '4' },
+  { '3', '2', '1' }
+};
+#endif
 byte rowPins[ROWS] = { 7, 6, 5, 4 };  //connect to the row pinouts of the keypad
-byte colPins[COLS] = { 3, 2, 1, 0 };  //connect to the column pinouts of the keypad
+byte colPins[COLS] = { 3, 2, 1 };     //connect to the column pinouts of the keypad
