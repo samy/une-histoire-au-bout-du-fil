@@ -79,6 +79,10 @@ int finalDialedNumber = 0;
 #define MAX_VOLUME 30
 #endif
 
+#ifndef USE_SOFTWARE_RANDOM
+#define USE_SOFTWARE_RANDOM false
+#endif
+
 #define I2CADDR 0x20
 
 

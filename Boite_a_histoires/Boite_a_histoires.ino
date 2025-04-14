@@ -10,22 +10,24 @@
 
 
 // Fonctionnalités
-#define INTRO_ENABLE false                     /* Pour activer le message au décrochage  */
-#define INTRO_DELTA 1                         /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false                     /* Si le cadran doit lire au hasard */
-#define DIALER_ENABLE true                    /* Pour activer le clavier */
-#define DIALER_TYPE DIALER_TYPE_KEYPAD        /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
-#define DIALER_COUNTRY "FR"                   /* FR pour cadrans français, UK pour britanniques */
-#define DIALED_NUMBERS_MAX 1                  /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
-#define STORAGE_DEVICE DFPLAYER_DEVICE_U_DISK /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define LED_ENABLE true                       /* Activation de la LED d'indication de fonctionnement */
-#define LED_PIN D9                            /* Gestion de la LED */
-#define USE_BOUNCE_INSTEAD_OF_DIRECT 0        /* Pour des systèmes de raccrochage un peu sensibles */
+#define INTRO_ENABLE false                /* Pour activer le message au décrochage  */
+#define INTRO_DELTA 1                     /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+#define DIAL_RANDOM false                 /* Si le cadran doit lire au hasard */
+#define DIALER_ENABLE true                /* Pour activer le clavier */
+#define DIALER_TYPE DIALER_TYPE_KEYPAD    /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
+#define DIALER_COUNTRY "FR"               /* FR pour cadrans français, UK pour britanniques */
+#define DIALED_NUMBERS_MAX 1              /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
+#define STORAGE_DEVICE DFPLAYER_DEVICE_SD /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
+#define LED_ENABLE true                   /* Activation de la LED d'indication de fonctionnement */
+#define LED_PIN D9                        /* Gestion de la LED */
+#define USE_BOUNCE_INSTEAD_OF_DIRECT 0    /* Pour des systèmes de raccrochage un peu sensibles */
 
 #define KEYPAD_REVERSED_MATRIX true
 
-#define RANDOM_PLAY_ON_HANG false            /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
-#define RANDOM_PLAY_ON_HANG_START_ON_TRACK 1 /* En mode aléatoire, le numéro du morceau joué au démarrage */
+#define RANDOM_PLAY_ON_HANG true              /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
+#define RANDOM_PLAY_ON_HANG_START_ON_TRACK -1 /* En mode aléatoire, le numéro du morceau joué au démarrage */
+#define USE_SOFTWARE_RANDOM true              /* Lecture aléatoire en se basant sur le nombre de fichiers, dans le cas ou randomAll() marche mal */
+
 
 #define VOLUME_HANDLING false /* Activation de la molette de volume branchée sur le PIN A1 */
 #define MAX_VOLUME 30         /* Volume maximal quand la molette est au maximum */
@@ -46,6 +48,7 @@ Keypad_MC17 keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS, I2CADDR);
 Bounce2::Button button = Bounce2::Button();
 
 void setup() {
+  delay(3000);
 
   pinMode(PIN_HANG, INPUT_PULLUP);
   button.attach(PIN_HANG, INPUT_PULLUP);
@@ -87,7 +90,7 @@ void setup() {
   }
 
   /* Connexion au DFPlayer */
-  if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
+  if (!myDFPlayer.begin(mySoftwareSerial, false, true)) {  //Use softwareSerial to communicate with mp3.
     Serial.println("bad");
     return;
   }
@@ -96,7 +99,8 @@ void setup() {
   myDFPlayer.outputDevice(STORAGE_DEVICE);
   myDFPlayer.pause();
   myDFPlayer.volume(9);
-  delay(2000);
+  delay(3000);
+  audioFilesCount = myDFPlayer.readFileCounts(DFPLAYER_DEVICE_SD);
 }
 
 void loop() {
@@ -140,12 +144,21 @@ void loop() {
           Serial.println(RANDOM_PLAY_ON_HANG_START_ON_TRACK);
           myDFPlayer.play(RANDOM_PLAY_ON_HANG_START_ON_TRACK);
         } else {
-          Serial.println("Random play on start");
-          myDFPlayer.randomAll();
+          if (!USE_SOFTWARE_RANDOM) {
+            Serial.println("Random play on start");
+
+            myDFPlayer.randomAll();
+          } else {
+            int randomFileNumber = random(1, audioFilesCount);
+            Serial.print("Random play (software) on start:");
+            Serial.println(randomFileNumber);
+
+            myDFPlayer.play(randomFileNumber);
+          }
         }
       }
       dialedIndex = 0;
-      phoneStatus = 1;
+      phoneStatus = 1;   
     }
   }
 
@@ -224,6 +237,9 @@ void loop() {
       myDFPlayer.randomAll();
     }
     delay(1000);
+  }
+  if (myDFPlayer.available()) {
+    printDetail(myDFPlayer.readType(), myDFPlayer.read());  //Print the detail message from DFPlayer to handle different errors and states.
   }
 }
 
@@ -328,6 +344,61 @@ int convertKeypadToInt(char key) {
       break;
     default:
       return 0;
+      break;
+  }
+}
+
+void printDetail(uint8_t type, int value) {
+  switch (type) {
+    case TimeOut:
+      Serial.println(F("Time Out!"));
+      break;
+    case WrongStack:
+      Serial.println(F("Stack Wrong!"));
+      break;
+    case DFPlayerCardInserted:
+      Serial.println(F("Card Inserted!"));
+      break;
+    case DFPlayerCardRemoved:
+      Serial.println(F("Card Removed!"));
+      break;
+    case DFPlayerCardOnline:
+      Serial.println(F("Card Online!"));
+      break;
+    case DFPlayerPlayFinished:
+      Serial.print(F("Number:"));
+      Serial.print(value);
+      Serial.println(F(" Play Finished!"));
+      break;
+    case DFPlayerError:
+      Serial.print(F("DFPlayerError:"));
+      switch (value) {
+        case Busy:
+          Serial.println(F("Card not found"));
+          break;
+        case Sleeping:
+          Serial.println(F("Sleeping"));
+          break;
+        case SerialWrongStack:
+          Serial.println(F("Get Wrong Stack"));
+          break;
+        case CheckSumNotMatch:
+          Serial.println(F("Check Sum Not Match"));
+          break;
+        case FileIndexOut:
+          Serial.println(F("File Index Out of Bound"));
+          break;
+        case FileMismatch:
+          Serial.println(F("Cannot Find File"));
+          break;
+        case Advertise:
+          Serial.println(F("In Advertise"));
+          break;
+        default:
+          break;
+      }
+      break;
+    default:
       break;
   }
 }
