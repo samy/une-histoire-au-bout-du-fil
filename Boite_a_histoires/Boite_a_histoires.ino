@@ -5,16 +5,16 @@
 #include <Wire.h>
 #include <Keypad.h>
 #include "DFRobotDFPlayerMini.h" /* Lecteur MP3 */
-
-
+#include <LibPrintf.h>
 
 
 // Fonctionnalités
-#define INTRO_ENABLE false                /* Pour activer le message au décrochage  */
-#define INTRO_DELTA 1                     /* Temps minimal en secondes entre deux diffusions du message de décrochage */
-#define DIAL_RANDOM false                 /* Si le cadran doit lire au hasard */
+#define INTRO_ENABLE false /* Pour activer le message au décrochage  */
+#define INTRO_DELTA 1      /* Temps minimal en secondes entre deux diffusions du message de décrochage */
+
 #define DIALER_ENABLE true                /* Pour activer le clavier */
-#define DIALER_TYPE DIALER_TYPE_KEYPAD    /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
+#define DIAL_RANDOM true                  /* Si le cadran doit lire au hasard */
+#define DIALER_TYPE DIALER_TYPE_ROTARY    /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
 #define DIALER_COUNTRY "FR"               /* FR pour cadrans français, UK pour britanniques */
 #define DIALED_NUMBERS_MAX 1              /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_SD /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
@@ -26,13 +26,13 @@
 
 #define RANDOM_PLAY_ON_HANG true              /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
 #define RANDOM_PLAY_ON_HANG_START_ON_TRACK -1 /* En mode aléatoire, le numéro du morceau joué au démarrage */
-#define USE_SOFTWARE_RANDOM true              /* Lecture aléatoire en se basant sur le nombre de fichiers, dans le cas ou randomAll() marche mal */
+#define USE_SOFTWARE_RANDOM false             /* Lecture aléatoire en se basant sur le nombre de fichiers, dans le cas ou randomAll() marche mal */
 
 
 #define VOLUME_HANDLING false /* Activation de la molette de volume branchée sur le PIN A1 */
 #define MAX_VOLUME 30         /* Volume maximal quand la molette est au maximum */
 
-#define HANG_REVERSE false /* Inversion du raccrochage, selon les appareils */
+#define HANG_REVERSE true /* Inversion du raccrochage, selon les appareils */
 
 // Gestion bouton supplémentaire
 #define EXTRA_HANG false        /* Activation du bouton secondaire pour le raccrochage */
@@ -98,12 +98,18 @@ void setup() {
 
   myDFPlayer.outputDevice(STORAGE_DEVICE);
   myDFPlayer.pause();
-  myDFPlayer.volume(9);
+  myDFPlayer.volume(15);
   delay(3000);
   audioFilesCount = myDFPlayer.readFileCounts(DFPLAYER_DEVICE_SD);
+  Serial.print("Audio files count");
+  Serial.println(audioFilesCount);
+  printSettingsToConsole();
 }
 
 void loop() {
+  if (myDFPlayer.available()) {
+    printDetail(myDFPlayer.readType(), myDFPlayer.read());  //Print the detail message from DFPlayer to handle different errors and states.
+  }
   button.update();
 
   /* Optionnel: Actualisation du volume */
@@ -156,9 +162,11 @@ void loop() {
             myDFPlayer.play(randomFileNumber);
           }
         }
+      } else {
+        Serial.println("No random");
       }
       dialedIndex = 0;
-      phoneStatus = 1;   
+      phoneStatus = 1;
     }
   }
 
@@ -238,9 +246,6 @@ void loop() {
     }
     delay(1000);
   }
-  if (myDFPlayer.available()) {
-    printDetail(myDFPlayer.readType(), myDFPlayer.read());  //Print the detail message from DFPlayer to handle different errors and states.
-  }
 }
 
 /* Récupération de l'état de décroché/raccroché */
@@ -314,38 +319,7 @@ long getVolume() {
   return analogRead(A1);
 }
 int convertKeypadToInt(char key) {
-  switch (key) {
-    case '1':
-      return 1;
-      break;
-    case '2':
-      return 2;
-      break;
-    case '3':
-      return 3;
-      break;
-    case '4':
-      return 4;
-      break;
-    case '5':
-      return 5;
-      break;
-    case '6':
-      return 6;
-      break;
-    case '7':
-      return 7;
-      break;
-    case '8':
-      return 8;
-      break;
-    case '9':
-      return 9;
-      break;
-    default:
-      return 0;
-      break;
-  }
+  return key - '0';
 }
 
 void printDetail(uint8_t type, int value) {
@@ -401,4 +375,59 @@ void printDetail(uint8_t type, int value) {
     default:
       break;
   }
+}
+
+const char* boolToEnabled(int value) {
+  return value ? "enabled" : "disabled";
+}
+
+void printSettingsToConsole() {
+  Serial.println();
+  Serial.println("# Settings summary");
+  printf("* Intro : %s\n", boolToEnabled(INTRO_ENABLE));
+  if (INTRO_ENABLE) {
+    printf("  * Delay after intro plays a new time : %d seconds\n", INTRO_DELTA);
+  }
+  printf("* Reversed hang : %s\n", boolToEnabled(HANG_REVERSE));
+
+  printf("* Dialer : %s\n", boolToEnabled(DIALER_ENABLE));
+  if (DIALER_ENABLE) {
+    if (DIAL_RANDOM) {
+      printf("  * Random mode: %s\n", boolToEnabled(DIAL_RANDOM));
+    } else {
+      printf("  * Max numbers: %d\n", pow(10, DIALED_NUMBERS_MAX));
+    }
+    printf("  * Type: %s\n", DIALER_TYPE);
+    if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
+      printf("  * Matrix reversed: %s\n", boolToEnabled(KEYPAD_REVERSED_MATRIX));
+    }
+    printf("  * Country: %s\n", DIALER_COUNTRY);
+  }
+  printf("* Storage type : %s\n", STORAGE_DEVICE == DFPLAYER_DEVICE_U_DISK ? "USB" : "SD");
+  printf("* LED : %s\n", boolToEnabled(LED_ENABLE));
+  if (LED_ENABLE) {
+    printf("  * LED pin: %s\n", LED_PIN);
+  }
+  printf("* Volume handling : %s\n", boolToEnabled(VOLUME_HANDLING));
+  if (VOLUME_HANDLING) {
+    printf("  * Max volume: %d\n", MAX_VOLUME);
+  }
+  printf("* Use software random : %s\n", boolToEnabled(USE_SOFTWARE_RANDOM));
+  printf("* Random play on hang : %s\n", boolToEnabled(RANDOM_PLAY_ON_HANG));
+  if (RANDOM_PLAY_ON_HANG && -1 != RANDOM_PLAY_ON_HANG_START_ON_TRACK) {
+    printf("  * First track on hang: %d\n", RANDOM_PLAY_ON_HANG_START_ON_TRACK);
+  }
+  if (EXTRA_HANG) {
+    printf("* Use extra hang switch : %s\n", boolToEnabled(EXTRA_HANG));
+    printf("  * Pin: %s\n", EXTRA_HANG_PIN);
+    printf("  * Reversed: %s\n", boolToEnabled(EXTRA_HANG_REVERSE));
+  }
+
+  //Extra settings
+  if (USE_BOUNCE_INSTEAD_OF_DIRECT) {
+    printf("* Use bounce instead of direct switch handling : %s\n", boolToEnabled(USE_BOUNCE_INSTEAD_OF_DIRECT));
+  }
+
+
+  Serial.println();
 }

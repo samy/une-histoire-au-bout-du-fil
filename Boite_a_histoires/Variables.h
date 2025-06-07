@@ -10,8 +10,17 @@ long unsigned int debounceDelay = 10;
 
 int volume = 0;
 int lastVolume = -1;
+#define IS_RP2040 true
 
+
+//#if !IS_RP2040  // Using a soft serial port
+//#include <SoftwareSerial.h>
+//SoftwareSerial softSerial(/*rx =*/9, /*tx =*/10);
+//#define mySoftwareSerial softSerial
+//#else
 #define mySoftwareSerial Serial1
+//#endif
+//#define mySoftwareSerial Serial1
 
 DFRobotDFPlayerMini myDFPlayer;
 int numberSpecified = -1;
