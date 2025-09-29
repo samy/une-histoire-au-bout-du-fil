@@ -1,9 +1,9 @@
 #include "Arduino.h"
 
-#define PIN_HANG 17         //Port lié au fil du décrochage
+#define PIN_HANG 14         //Port lié au fil du décrochage
 #define PIN_PULSE 2         //Correspond au C du cadran
 #define PIN_MODE_CHANGE 15  //Pour indiquer qu'on doit changer de mode
-#define PIN_LED 14           //Pour indiquer que le mode enregistrement est actif
+#define PIN_LED 17          //Pour indiquer que le mode enregistrement est actif
 
 /* Optionnels */
 #define PIN_RESET 4   //Pour annuler l'enregistrement courant - Nécessite RESET_ENABLE activé
@@ -12,7 +12,7 @@
 #define MTP_ENABLE false           //Activation du mode MTP
 #define AUTO_PLAY false            //Déclenchement automatique dès qu'on est en mode lecture
 #define REVERSE_MODE_CHANGE false  //A ajuster selon l'interrupteur choisi pour le changement de mode
-#define RECORD_ON_DIAL false        //Utiliser le cadran pour déclencher un enregistrement (rangement dans le dossier lié au numéro composé)
+#define RECORD_ON_DIAL false       //Utiliser le cadran pour déclencher un enregistrement (rangement dans le dossier lié au numéro composé)
 
 
 
@@ -42,5 +42,9 @@
 #endif
 
 #ifndef RECORD_ON_DIAL
-#define RECORD_ON_DIAL false
+#define RECORD_ON_DIAL true
+#endif
+
+#ifndef INTRO_RECORD_ENABLE
+#define INTRO_RECORD_ENABLE false
 #endif

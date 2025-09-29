@@ -25,7 +25,7 @@ public:
   void enableIntroBeforePlay();
   bool needToPlayIntro();
   bool needToPlayBeep();
-  bool introRecordEnabled;
+  bool introRecordEnabled = false;
   bool introPlayEnabled;
   uint32_t MTPcheckInterval;  // default value of device check interval [ms]
 
@@ -101,7 +101,7 @@ public:
 #endif
 
 #ifndef BEEP_ENABLE
-#define BEEP_ENABLE true
+#define BEEP_ENABLE false
 #endif
 
 #ifndef RECORD_LED_ENABLE

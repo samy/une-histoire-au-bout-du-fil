@@ -27,8 +27,6 @@ long unsigned int debounceDelay = 10;
 #include "play_sd_wav.h"  // local copy with fixes
 #define TOGGLE_WATCHDOG_LED()
 
-
-#define INTRO_RECORD_ENABLE true
 #define INTRO_FILENAME "INTRO.WAV"
 
 #include "phone_guestbook.h"
@@ -367,7 +365,10 @@ void loop() {
 
 void initEnvironnement() {
   guestbook.phoneMode = Mode::Initialising;
-  guestbook.enableIntroBeforeRecord();
+  if (INTRO_RECORD_ENABLE) {
+    guestbook.enableIntroBeforeRecord();
+  }
+
   Serial.begin(9600);
   AudioMemory(60);
   audioShield.enable();
