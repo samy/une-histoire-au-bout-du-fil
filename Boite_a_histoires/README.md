@@ -44,8 +44,10 @@ Il vous suffit ensuite de cabler un potentiomètre en reprenant la convention su
 ![potentiometre](https://github.com/samy/une-histoire-au-bout-du-fil/assets/1282106/678787c6-e8f7-41b2-8902-605a80f4285a)
 
 
-# TODO
-- Améliorer le filtrage du circuit pour pouvoir dans tous les cas utiliser les contacts de décrochage classiques
-- 
+# Compatibilité avec d'autres cadrans
+Si vous avez un autre modèle qu'un Socotel S63 ou un U43, les cablâges sont sans doute tout de même similaires à l'image ci-dessous. Seuls les cables rouge et blanc-rouge sont utiles dans notre cas.
+
+<img width="380" height="363" alt="image" src="https://github.com/user-attachments/assets/5b1c4eda-4c46-4537-a720-988bc1fd461c" />
+
 # Licence
 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Ce projet est partagé sous la licence <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>.
