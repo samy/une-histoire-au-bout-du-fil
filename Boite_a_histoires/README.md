@@ -51,3 +51,7 @@ Si vous avez un autre modèle qu'un Socotel S63 ou un U43, les cablâges sont sa
 
 # Licence
 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Ce projet est partagé sous la licence <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr">Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International</a>.
+
+# Ressources:
+- Autre projet, réalisé par [comeetie](https://github.com/comeetie/), qui utilise un U43, mais directement avec un Raspberry Pi: [https://github.com/comeetie/Monvieuxtelephone/](https://github.com/comeetie/Monvieuxtelephone/) (et qui ajoute pas mal de fonctionnalités: météo, horaires de passage du RER, etc)
+- Source d'inspiration: [Le projet S63 de Revolunet](https://github.com/revolunet/s63)
