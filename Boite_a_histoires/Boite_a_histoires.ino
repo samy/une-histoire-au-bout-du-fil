@@ -12,25 +12,25 @@
 #define INTRO_ENABLE false /* Pour activer le message au décrochage  */
 #define INTRO_DELTA 1      /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 
-#define DIALER_ENABLE true                /* Pour activer le clavier */
-#define DIAL_RANDOM true                  /* Si le cadran doit lire au hasard */
+#define DIALER_ENABLE true               /* Pour activer le clavier */
+#define DIAL_RANDOM false                  /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE DIALER_TYPE_ROTARY    /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
 #define DIALER_COUNTRY "FR"               /* FR pour cadrans français, UK pour britanniques */
 #define DIALED_NUMBERS_MAX 1              /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
 #define STORAGE_DEVICE DFPLAYER_DEVICE_SD /* Support de stockage: DFPLAYER_DEVICE_SD pour SD, DFPLAYER_DEVICE_U_DISK pour clé USB */
-#define LED_ENABLE true                   /* Activation de la LED d'indication de fonctionnement */
+#define LED_ENABLE false                  /* Activation de la LED d'indication de fonctionnement */
 #define LED_PIN D9                        /* Gestion de la LED */
 #define USE_BOUNCE_INSTEAD_OF_DIRECT 0    /* Pour des systèmes de raccrochage un peu sensibles */
 
 #define KEYPAD_REVERSED_MATRIX true
 
-#define RANDOM_PLAY_ON_HANG true              /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
+#define RANDOM_PLAY_ON_HANG false              /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
 #define RANDOM_PLAY_ON_HANG_START_ON_TRACK -1 /* En mode aléatoire, le numéro du morceau joué au démarrage */
 #define USE_SOFTWARE_RANDOM false             /* Lecture aléatoire en se basant sur le nombre de fichiers, dans le cas ou randomAll() marche mal */
 
 
 #define VOLUME_HANDLING false /* Activation de la molette de volume branchée sur le PIN A1 */
-#define MAX_VOLUME 30         /* Volume maximal quand la molette est au maximum */
+#define MAX_VOLUME 10         /* Volume maximal quand la molette est au maximum */
 
 #define HANG_REVERSE true /* Inversion du raccrochage, selon les appareils */
 
@@ -53,7 +53,7 @@ void setup() {
   pinMode(PIN_HANG, INPUT_PULLUP);
   button.attach(PIN_HANG, INPUT_PULLUP);
   button.interval(5);
-  button.setPressedState(HANG_REVERSE ? 0 : 1);
+  button.setPressedState(HANG_REVERSE ? 1 : 0);
 
   /* Optionnel: Gestion du volume */
   if (VOLUME_HANDLING) {
@@ -90,7 +90,7 @@ void setup() {
   }
 
   /* Connexion au DFPlayer */
-  if (!myDFPlayer.begin(mySoftwareSerial, false, true)) {  //Use softwareSerial to communicate with mp3.
+  if (!myDFPlayer.begin(mySoftwareSerial, true, true)) {  //Use softwareSerial to communicate with mp3.
     Serial.println("bad");
     return;
   }
@@ -98,20 +98,16 @@ void setup() {
 
   myDFPlayer.outputDevice(STORAGE_DEVICE);
   myDFPlayer.pause();
-  myDFPlayer.volume(15);
+
   delay(3000);
   audioFilesCount = myDFPlayer.readFileCounts(DFPLAYER_DEVICE_SD);
   Serial.print("Audio files count");
   Serial.println(audioFilesCount);
+  myDFPlayer.volume(20);
   printSettingsToConsole();
 }
 
 void loop() {
-  if (myDFPlayer.available()) {
-    printDetail(myDFPlayer.readType(), myDFPlayer.read());  //Print the detail message from DFPlayer to handle different errors and states.
-  }
-  button.update();
-
   /* Optionnel: Actualisation du volume */
   if (VOLUME_HANDLING) {
     int volume = getVolume();
@@ -122,8 +118,15 @@ void loop() {
       Serial.println(map(volume, 0, 1023, 0, MAX_VOLUME));
       delay(200);
       myDFPlayer.volume(map(volume, 0, 1023, 0, MAX_VOLUME));
+      delay(100);
     }
   }
+  if (myDFPlayer.available()) {
+    printDetail(myDFPlayer.readType(), myDFPlayer.read());  //Print the detail message from DFPlayer to handle different errors and states.
+  }
+  button.update();
+
+
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
@@ -395,7 +398,7 @@ void printSettingsToConsole() {
     if (DIAL_RANDOM) {
       printf("  * Random mode: %s\n", boolToEnabled(DIAL_RANDOM));
     } else {
-      printf("  * Max numbers: %d\n", pow(10, DIALED_NUMBERS_MAX));
+      printf("  * Max numbers: %d\n", int(pow(10, DIALED_NUMBERS_MAX)));
     }
     printf("  * Type: %s\n", DIALER_TYPE);
     if (DIALER_TYPE == DIALER_TYPE_KEYPAD) {
