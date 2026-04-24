@@ -36,10 +36,12 @@ int dialedIndex = 0;
 
 int numberDialed = -1;
 int finalDialedNumber = 0;
+int randomFileToPlay = 0;
 
 // Cadran FR
 #define PIN_PULSE D10
 #define PIN_HANG D3
+#define PIN_VOLUME A1
 
 // Cadran UK
 //#define PIN_PULSE 2
@@ -50,7 +52,7 @@ int finalDialedNumber = 0;
 #endif
 
 #ifndef VOLUME_HANDLING
-#define VOLUME_HANDLING false  //A activer pour avoir la gestion du volume sur le PIN A1
+#define VOLUME_HANDLING false  //A activer pour avoir la gestion du volume sur le PIN PIN_VOLUME
 #endif
 
 #ifndef USE_KEYPAD
@@ -84,6 +86,10 @@ int finalDialedNumber = 0;
 #define RANDOM_PLAY_ON_HANG_START_ON_TRACK -1
 #endif
 
+#ifndef RANDOM_IN_FOLDER_BY_DIAL_NUMBER
+#define RANDOM_IN_FOLDER_BY_DIAL_NUMBER false
+#endif
+
 #ifndef MAX_VOLUME
 #define MAX_VOLUME 30
 #endif
@@ -114,3 +120,5 @@ char keys[ROWS][COLS] = {
 #endif
 byte rowPins[ROWS] = { 7, 6, 5, 4 };  //connect to the row pinouts of the keypad
 byte colPins[COLS] = { 3, 2, 1 };     //connect to the column pinouts of the keypad
+const int possibleFoldersForRandomByTrack = 10;
+int tracks[possibleFoldersForRandomByTrack] = {0, 0};

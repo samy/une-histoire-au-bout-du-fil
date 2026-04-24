@@ -477,6 +477,7 @@ int DFRobotDFPlayerMini::readCurrentFileNumber(uint8_t device) {
 
 int DFRobotDFPlayerMini::readFileCountsInFolder(int folderNumber) {
   sendStack(0x4E, folderNumber);
+  delay(100);
   if (waitAvailable()) {
     if (readType() == DFPlayerFeedBack) {
       return read();

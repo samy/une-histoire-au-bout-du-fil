@@ -12,8 +12,8 @@
 #define INTRO_ENABLE false /* Pour activer le message au décrochage  */
 #define INTRO_DELTA 1      /* Temps minimal en secondes entre deux diffusions du message de décrochage */
 
-#define DIALER_ENABLE true               /* Pour activer le clavier */
-#define DIAL_RANDOM false                  /* Si le cadran doit lire au hasard */
+#define DIALER_ENABLE true                /* Pour activer le clavier */
+#define DIAL_RANDOM false                 /* Si le cadran doit lire au hasard */
 #define DIALER_TYPE DIALER_TYPE_ROTARY    /* Type : DIALER_TYPE_KEYPAD clavier à touches, DIALER_TYPE_ROTARY cadran rotatif */
 #define DIALER_COUNTRY "FR"               /* FR pour cadrans français, UK pour britanniques */
 #define DIALED_NUMBERS_MAX 1              /* Nombre maximal de numéros (1 : 10 chiffres, 2 : 100 chiffres, etc) */
@@ -24,20 +24,23 @@
 
 #define KEYPAD_REVERSED_MATRIX true
 
-#define RANDOM_PLAY_ON_HANG false              /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
+#define RANDOM_PLAY_ON_HANG false             /* Activation du mode Lecture automatique et aléatoire au décrochage de l'appareil */
 #define RANDOM_PLAY_ON_HANG_START_ON_TRACK -1 /* En mode aléatoire, le numéro du morceau joué au démarrage */
 #define USE_SOFTWARE_RANDOM false             /* Lecture aléatoire en se basant sur le nombre de fichiers, dans le cas ou randomAll() marche mal */
 
+#define VOLUME_HANDLING true /* Activation de la molette de volume branchée sur le PIN PIN_VOLUME */
+#define MAX_VOLUME 25        /* Volume maximal quand la molette est au maximum */
 
-#define VOLUME_HANDLING false /* Activation de la molette de volume branchée sur le PIN A1 */
-#define MAX_VOLUME 10         /* Volume maximal quand la molette est au maximum */
-
-#define HANG_REVERSE true /* Inversion du raccrochage, selon les appareils */
+#define HANG_REVERSE false /* Inversion du raccrochage, selon les appareils */
 
 // Gestion bouton supplémentaire
 #define EXTRA_HANG false        /* Activation du bouton secondaire pour le raccrochage */
 #define EXTRA_HANG_PIN A2       /* PIN du bouton supplémentaire de raccrochage */
 #define EXTRA_HANG_REVERSE true /* Si le fonctionnement de ce bouton supplémentaire est inversé */
+
+#define RANDOM_IN_FOLDER_BY_DIAL_NUMBER true       /* Permet de jouer en aléatoire les fichiers du dossier indiqué par le cadran */
+#define RANDOM_IN_FOLDER_BY_DIAL_NUMBER_INTRO true /* Permet de jouer une intro si RANDOM_IN_FOLDER_BY_DIAL_NUMBER est activé */
+
 
 // Inclusion des valeurs par défaut pour celles qui n'ont pas été personnalisées ci-dessus
 #include "Variables.h"
@@ -57,7 +60,7 @@ void setup() {
 
   /* Optionnel: Gestion du volume */
   if (VOLUME_HANDLING) {
-    pinMode(A1, INPUT);
+    pinMode(PIN_VOLUME, INPUT);
   }
 
   /* Optionnel: LED d'indication de fonctionnement */
@@ -100,22 +103,41 @@ void setup() {
   myDFPlayer.pause();
 
   delay(3000);
-  audioFilesCount = myDFPlayer.readFileCounts(DFPLAYER_DEVICE_SD);
-  Serial.print("Audio files count");
-  Serial.println(audioFilesCount);
-  myDFPlayer.volume(20);
+  if (RANDOM_PLAY_ON_HANG) {
+    audioFilesCount = myDFPlayer.readFileCounts(DFPLAYER_DEVICE_SD);
+    Serial.print("Audio files count");
+    Serial.println(audioFilesCount);
+  }
   printSettingsToConsole();
+
+  if (RANDOM_IN_FOLDER_BY_DIAL_NUMBER) {
+    for (int i = 1; i < possibleFoldersForRandomByTrack; i++) {
+      // Query the total number of microSD card files
+      tracks[i - 1] = myDFPlayer.readFileCountsInFolder(i);
+      if (tracks[i - 1] == -1) {
+        tracks[i - 1] = 0;
+      }
+      delay(200);
+
+      Serial.print("Find ");
+      Serial.print(tracks[i - 1]);
+      Serial.print(" tracks in folder 0");
+      Serial.print(i - 1);
+      Serial.println(".");
+    }
+  }
+  myDFPlayer.volume(14);
 }
 
 void loop() {
   /* Optionnel: Actualisation du volume */
   if (VOLUME_HANDLING) {
+
     int volume = getVolume();
 
-    if (lastVolume == -1 || abs(lastVolume - volume) > 30) {
+    if (lastVolume <= 0 || abs(lastVolume - volume) > 30) {
       lastVolume = volume;
 
-      Serial.println(map(volume, 0, 1023, 0, MAX_VOLUME));
       delay(200);
       myDFPlayer.volume(map(volume, 0, 1023, 0, MAX_VOLUME));
       delay(100);
@@ -125,8 +147,6 @@ void loop() {
     printDetail(myDFPlayer.readType(), myDFPlayer.read());  //Print the detail message from DFPlayer to handle different errors and states.
   }
   button.update();
-
-
 
   /* Si le téléphone est raccroché, on stoppe la lecture du MP3 (il n'a pas de véritable stop() et on passe à l'itération suivante */
   if (isHangedUp() || (EXTRA_HANG && isExtraHangedUp())) {
@@ -202,6 +222,8 @@ void loop() {
 
     /* Si un numéro a été composé, alors on joue le MP3 correspondant */
     if (numberDialed != -1) {
+      myDFPlayer.pause();
+
       dialedIndex++;
 
       /* Stockage des numéros composés */
@@ -233,7 +255,29 @@ void loop() {
       } else {
         Serial.print("finalDialedNumber=");
         Serial.println(finalDialedNumber);
-        myDFPlayer.playMp3Folder(finalDialedNumber);
+        if (RANDOM_IN_FOLDER_BY_DIAL_NUMBER) {
+          Serial.println("RANDOM_IN_FOLDER_BY_DIAL_NUMBER");
+          Serial.print("How many files in this folder ? ");
+          Serial.println(tracks[finalDialedNumber]);
+          randomFileToPlay = random(1, tracks[finalDialedNumber]);
+
+          // if (RANDOM_IN_FOLDER_BY_DIAL_NUMBER_INTRO) {
+          //   Serial.print("Intro from folder ");
+          //   Serial.println(finalDialedNumber);
+          //   myDFPlayer.playMp3Folder(finalDialedNumber);
+          // }
+          // Serial.println(myDFPlayer.readState());
+          // //myDFPlayer.playFolder(finalDialedNumber, randomFileToPlay);
+
+
+          Serial.print("File played from folder ");
+          Serial.print(finalDialedNumber);
+          Serial.print(" : #");
+          Serial.println(randomFileToPlay);
+          myDFPlayer.playFolder(finalDialedNumber, randomFileToPlay);
+        } else {
+          myDFPlayer.playMp3Folder(finalDialedNumber);
+        }
       }
 
       numberDialed = -1;
@@ -319,7 +363,7 @@ int getUkRotaryDialerNumber() {
 }
 
 long getVolume() {
-  return analogRead(A1);
+  return analogRead(PIN_VOLUME);
 }
 int convertKeypadToInt(char key) {
   return key - '0';
